@@ -1,8 +1,11 @@
-from igraph import *
 import csv
 import operator
+import time
 
+from igraph import *
 from labelprop import LabelProp
+
+start_time = time.time()
 
 assembly_graph_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/assembly_graph_with_scaffolds.gfa"
 contig_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.fasta"
@@ -113,7 +116,7 @@ print("\nMaxBin result\n----------------")
 
 for i in range(n_bins):
     bins[i].sort()
-    print("Bin", i+1, ":\n", bins[i])
+    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
 
 # ---Remove labels of ambiguous vertices---
@@ -127,68 +130,62 @@ for b in range(n_bins):
         my_bin = b
 
 
-        # dist = {}
+        dist = {}
 
-        # for j in range(node_count):
-        #     dis = g.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
-        #     if dis != 0:
-        #         print(i, j, dis)
-        #         dist[i] = dis
+        for j in range(node_count):
+            dis = g.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
+            if dis != 0:
+                dist[j] = dis
 
-        # sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
+        sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
 
-        # print(i, dist)
+        closest_neighbours = []
 
-        # distances = [1000000 for x in range(n_bins)]
+        distances = [1000000 for x in range(n_bins)]
 
-        # for element in sorted_dist:
+        for element in sorted_dist:
 
-        #     count_is_million = True
+            count_is_million = True
 
-        #     for k in range(n_bins):
-        #         if distances[k] == 1000000:
-        #             count_is_million = False
+            for k in range(n_bins):
+                if distances[k] == 1000000:
+                    count_is_million = False
 
-        #     if not count_is_million:
+            if not count_is_million:
 
-        #         for h in range(n_bins):
-        #             if element[0] in bins[h] and distances[h] == 1000000:
-        #                 distances[h] = element[1]
+                for h in range(n_bins):
+                    if element[0] in bins[h] and distances[h] == 1000000:
+                        distances[h] = element[1]
 
-        # min_dist = 100000
-        # min_index = 1000
+        min_dist = 100000
+        min_index = 1000
 
-        # for k in range(n_bins):
+        for j in range(n_bins):
 
-        #     if distances[k] < min_dist:
-        #         min_dist = distances[k]
-        #         min_index = k
-
-        # if min_index != my_bin:
-        #     remove_labels.append(i)
-
-
-
-        neighbours = g.neighbors(i, mode=ALL)
+            if distances[j] < min_dist:
+                min_dist = distances[j]
+                min_index = j
         
-        counts = [0 for x in range(n_bins)]
+        for element in sorted_dist:
+            if element[1] == min_dist:
+                closest_neighbours.append(element[0])
 
-        for neighbour in neighbours:
-
-            for j in range(n_bins):
+        neighbours_have_same_label = True
+    
+        
+    
+        for neigh in closest_neighbours:
+            
+            for k in range(n_bins):
                 
-                if neighbour in bins[j]:
-                    counts[j] += 1
+                if neigh in bins[k]:
                     
-        other_counts_zero = True
-
-        for k in range(n_bins):
-
-            if counts[k]!=0 and k!=my_bin:
-                other_counts_zero = False
-
-        if not other_counts_zero:
-             remove_labels.append(i)
+                    if k != my_bin:
+                        neighbours_have_same_label = False
+                        break
+                        
+        if not neighbours_have_same_label:
+            remove_labels.append(i)
 
 
 remove_labels.sort()
@@ -200,10 +197,11 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-print("\nRefined MaxBin result\n---------------------")
+print("\nRefined MaxBin result\n----------------------")
 
 for i in range(n_bins):
-    print("Bin", i+1, ":\n", bins[i])
+    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+        
 
 
 
@@ -248,7 +246,7 @@ lp = LabelProp()
 
 lp.load_data_from_mem(data)
 
-print("\nStarting label propagation\n---------------------")
+print("\nStarting label propagation\n---------------------------")
 
 ans = lp.run(0.00001, 100, show_log=True, clean_result=False) 
 
@@ -261,7 +259,12 @@ for l in ans:
             bins[i].append(l[0])
 
 
-print("\nLabel Propagation result\n---------------------")
+print("\nLabel Propagation result\n-------------------------")
 
 for i in range(n_bins):
-    print("Bin", i+1, ":\n", bins[i])
+    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+
+
+elapsed_time = time.time() - start_time
+
+print("\nElapsed time: ", elapsed_time, " seconds")
