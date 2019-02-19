@@ -8,13 +8,13 @@ from igraph import *
 from labelprop import LabelProp
 
 # Sample command
-# -------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------
 # python main.py    --graph /path/to/graph_file.gfa
 #                   --contigs /path/to/contigs_file.fasta
 #                   --paths /path/to/paths_file.paths
 #                   --binned /path/to/binning_result.csv
 #                   --output /path/to/output_folder
-# -------------------------------------------------------------------------------------------------------------------------------
+# ------------------------------------------------------------------
 
 start_time = time.time()
 
