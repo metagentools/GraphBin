@@ -31,7 +31,6 @@ ap.add_argument("--output", required=True, help="path to the output folder")
 
 args = vars(ap.parse_args())
 
-
 assembly_graph_file = args["graph"]
 contig_file = args["contigs"]
 contig_paths = args["paths"]
@@ -44,10 +43,8 @@ print("\nGraphBin started\n----------------")
 print("Assembly graph file:", assembly_graph_file)
 print("Contigs file:", contig_file)
 print("Contig paths file:", contig_paths)
-print("Number of bins:", n_bins)
 print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
-print("\n")
 
 
 # Get number of bins from the initial binning result
@@ -88,12 +85,11 @@ with open(contig_paths) as file:
 
 node_count = int(len(paths)/2)
 
-print("Total number of contigs available:", node_count)
+print("\nTotal number of contigs available:", node_count)
 
 
-
-## Construct assembly graph
-#---------------------------
+## Construct the assembly graph
+#-------------------------------
 
 # Get links from assembly_graph_with_scaffolds.gfa
 with open(assembly_graph_file) as file:
@@ -108,14 +104,14 @@ with open(assembly_graph_file) as file:
         line = file.readline()
 
 # Create the graph
-g = Graph()
+assembly_graph = Graph()
 
 # Add vertices
-g.add_vertices(node_count)
+assembly_graph.add_vertices(node_count)
 
-for i in range(len(g.vs)):
-    g.vs[i]["id"]= i
-    g.vs[i]["label"]= str(i)
+for i in range(len(assembly_graph.vs)):
+    assembly_graph.vs[i]["id"]= i
+    assembly_graph.vs[i]["label"]= str(i)
 
 # Iterate paths
 for i in range(len(paths)):
@@ -148,9 +144,9 @@ for i in range(len(paths)):
     
     # Add connections in graph
     for connection in connections:
-        g.add_edge(int(i/2),connection)
+        assembly_graph.add_edge(int(i/2),connection)
 
-g.simplify(multiple=True, loops=False, combine_edges=None)
+assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 
 # Get initial binning result
@@ -188,7 +184,7 @@ for b in range(n_bins):
         dist = {}
 
         for j in range(node_count):
-            dis = g.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
+            dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
             if dis != 0:
                 dist[j] = dis
 
@@ -238,7 +234,7 @@ for b in range(n_bins):
             remove_labels.append(i)
 
 remove_labels.sort()
-print("\nRemove labels of:", remove_labels)
+print("\nRemove labels of contigs:", remove_labels)
 
 for i in remove_labels:
 
@@ -259,7 +255,7 @@ data = []
 
 for contig in range(node_count):
     
-    neighbours = g.neighbors(contig, mode=ALL)
+    neighbours = assembly_graph.neighbors(contig, mode=ALL)
     
     if len(neighbours) > 0:
         line = []
@@ -275,7 +271,7 @@ for contig in range(node_count):
         if not assigned:
             line.append(0)
 
-        neighbours = g.neighbors(contig, mode=ALL)
+        neighbours = assembly_graph.neighbors(contig, mode=ALL)
 
         neighs = []
 
