@@ -9,12 +9,11 @@ from labelprop import LabelProp
 
 # Sample command
 # -------------------------------------------------------------------------------------------------------------------------------
-# python main.py    --graph /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/assembly_graph_with_scaffolds.gfa 
-#                   --contigs /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/contigs.fasta 
-#                   --paths /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/contigs.paths 
-#                   --n_bins 2 
-#                   --binned /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/MaxBin_Result/contig_bins.csv 
-#                   --output /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/
+# python main.py    --graph /path/to/graph_file.gfa
+#                   --contigs /path/to/contigs_file.fasta
+#                   --paths /path/to/paths_file.paths
+#                   --binned /path/to/binning_result.csv
+#                   --output /path/to/output_folder
 # -------------------------------------------------------------------------------------------------------------------------------
 
 start_time = time.time()
@@ -27,7 +26,7 @@ ap.add_argument("--graph", required=True, help="path to the assembly graph file"
 ap.add_argument("--contigs", required=True, help="path to the contigs.fasta file")
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
-ap.add_argument("--output", required=True, help="path to the output file")
+ap.add_argument("--output", required=True, help="path to the output folder")
 
 args = vars(ap.parse_args())
 
@@ -48,12 +47,6 @@ print("Number of bins:", n_bins)
 print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
 print("\n")
-
-# assembly_graph_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/assembly_graph_with_scaffolds.gfa"
-# contig_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.fasta"
-# contig_paths = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.paths"
-# contig_bins_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/MaxBin_Result/contig_bins.csv"
-# n_bins = 3
 
 
 # Get number of bins from the initial binning result
