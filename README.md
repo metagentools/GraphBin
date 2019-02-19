@@ -43,7 +43,7 @@ GraphBin takes in 4 files as inputs.
 * Paths of contigs (in .paths format)
 * Binning output from an existing tool (in .csv format)
 
-**Note:** The binning output file should have comma separated values ```(node_number, bin_number)``` for each contig. For example,
+**Note:** The binning output file should have comma separated values ```(node_number, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below.
 
 ```
 1,1
