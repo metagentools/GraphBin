@@ -340,18 +340,19 @@ for b in range(n_bins):
 
         for element in sorted_dist:
 
-            count_is_million = True
+            count_is_large = True
 
             for k in range(n_bins):
                 if distances[k] == sys.maxsize:
-                    count_is_million = False
+                    count_is_large = False
 
-            if not count_is_million:
+            if not count_is_large:
 
                 for h in range(n_bins):
                     if element[0] in bins[h] and distances[h] == sys.maxsize:
                         distances[h] = element[1]
 
+        # Get the minimum distance to binned neighboring vertices
         min_dist = sys.maxsize
         min_index = sys.maxsize
 
@@ -361,12 +362,12 @@ for b in range(n_bins):
                 min_dist = distances[j]
                 min_index = j
         
-        # Get the closest neighboring vertices
+        # Get the closest binned neighboring vertices
         for element in sorted_dist:
             if element[1] == min_dist:
                 closest_neighbours.append(element[0])
 
-        # Determine whether all the closest neighboring vertices have the same label as its own
+        # Determine whether all the closest binned neighboring vertices have the same label as its own
         neighbours_have_same_label = True
         
         for neighbour in closest_neighbours:
