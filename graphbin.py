@@ -61,20 +61,25 @@ print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
 
 
-# Get number of bins from the initial binning result
+# Get the number of bins from the initial binning result
 #---------------------------------------------------
 
-all_bins_list = []
+try:
+    all_bins_list = []
 
-with open(contig_bins_file) as csvfile:
-    readCSV = csv.reader(csvfile, delimiter=',')
-    for row in readCSV:
-        all_bins_list.append(row[1])
-        
-bins_list = list(set(all_bins_list))
-bins_list.sort()
+    with open(contig_bins_file) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            all_bins_list.append(row[1])
+            
+    bins_list = list(set(all_bins_list))
+    bins_list.sort()
 
-n_bins = len(bins_list)
+    n_bins = len(bins_list)
+except:
+    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
 
 
 # Get contig paths from contigs.paths
@@ -83,19 +88,24 @@ n_bins = len(bins_list)
 paths = []
 links = []
 
-with open(contig_paths) as file:
-    name = file.readline()
-    path = file.readline()
-    
-    while name != "" and path != "":
-            
-        while ";" in path:
-            path = path[:-2]+","+file.readline()
-            
-        paths.append(path.split("\n")[0])
-        
+try:
+    with open(contig_paths) as file:
         name = file.readline()
         path = file.readline()
+        
+        while name != "" and path != "":
+                
+            while ";" in path:
+                path = path[:-2]+","+file.readline()
+                
+            paths.append(path.split("\n")[0])
+            
+            name = file.readline()
+            path = file.readline()
+except:
+    print("\nPlease make sure that the correct path to the contig paths file is provided")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
 
 node_count = int(len(paths)/2)
 
@@ -105,62 +115,67 @@ print("\nTotal number of contigs available:", node_count)
 ## Construct the assembly graph
 #-------------------------------
 
-# Get links from assembly_graph_with_scaffolds.gfa
-with open(assembly_graph_file) as file:
-    line = file.readline()
-    
-    while line != "":
-        
-        # Identify lines with link information
-        if "L" in line:
-            strings = line.split("\t")
-            links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
+try:
+    # Get links from assembly_graph_with_scaffolds.gfa
+    with open(assembly_graph_file) as file:
         line = file.readline()
-
-# Create the graph
-assembly_graph = Graph()
-
-# Add vertices
-assembly_graph.add_vertices(node_count)
-
-for i in range(len(assembly_graph.vs)):
-    assembly_graph.vs[i]["id"]= i
-    assembly_graph.vs[i]["label"]= str(i)
-
-# Iterate paths
-for i in range(len(paths)):
-    segments = paths[i].split(",")
-    start = segments[0]
-    end = segments[len(segments)-1]
-    
-    new_links = []
-    connections = []
-    
-    # Iterate links
-    for link in links:
-        link_list = link.split()
         
-        if start in link_list[0]:
-            new_links.append(link_list[1])
-        elif start in link_list[1]:
-            new_links.append(link_list[0])
-        if end in link_list[0]:
-            new_links.append(link_list[1])
-        elif end in link_list[1]:
-            new_links.append(link_list[0])
-    
-    # Determine connections
-    for new_link in new_links:
-        for j in range(len(paths)):
-            if new_link in paths[j] and int(j/2) not in connections and int(j/2)!=int(i/2):
-                ind = int(j/2)
-                connections.append(ind)
-    
-    # Add connections in graph
-    for connection in connections:
-        assembly_graph.add_edge(int(i/2),connection)
+        while line != "":
+            
+            # Identify lines with link information
+            if "L" in line:
+                strings = line.split("\t")
+                links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
+            line = file.readline()
 
-assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
+    # Create the graph
+    assembly_graph = Graph()
+
+    # Add vertices
+    assembly_graph.add_vertices(node_count)
+
+    for i in range(len(assembly_graph.vs)):
+        assembly_graph.vs[i]["id"]= i
+        assembly_graph.vs[i]["label"]= str(i)
+
+    # Iterate paths
+    for i in range(len(paths)):
+        segments = paths[i].split(",")
+        start = segments[0]
+        end = segments[len(segments)-1]
+        
+        new_links = []
+        connections = []
+        
+        # Iterate links
+        for link in links:
+            link_list = link.split()
+            
+            if start in link_list[0]:
+                new_links.append(link_list[1])
+            elif start in link_list[1]:
+                new_links.append(link_list[0])
+            if end in link_list[0]:
+                new_links.append(link_list[1])
+            elif end in link_list[1]:
+                new_links.append(link_list[0])
+        
+        # Determine connections
+        for new_link in new_links:
+            for j in range(len(paths)):
+                if new_link in paths[j] and int(j/2) not in connections and int(j/2)!=int(i/2):
+                    ind = int(j/2)
+                    connections.append(ind)
+        
+        # Add connections in graph
+        for connection in connections:
+            assembly_graph.add_edge(int(i/2),connection)
+
+    assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
+except:
+    print("\nPlease make sure that the correct path to the assembly graph file is provided")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
 
 
 # Get initial binning result
@@ -168,19 +183,24 @@ assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 bins = [[] for x in range(n_bins)]
 
-with open(contig_bins_file) as contig_bins:
-    readCSV = csv.reader(contig_bins, delimiter=',')
-    for row in readCSV:
-        bin_num = int(row[1])-1
-        contig_num = int(row[0])
-        # print(contig_num,bin_num)
-        bins[bin_num].append(contig_num)
+try:
+    with open(contig_bins_file) as contig_bins:
+        readCSV = csv.reader(contig_bins, delimiter=',')
+        for row in readCSV:
+            bin_num = int(row[1])-1
+            contig_num = int(row[0])
+            # print(contig_num,bin_num)
+            bins[bin_num].append(contig_num)
 
-print("\nInitial Binning result\n----------------")
+    print("\nInitial Binning result\n----------------")
 
-for i in range(n_bins):
-    bins[i].sort()
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+    for i in range(n_bins):
+        bins[i].sort()
+        print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+except:
+    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
 
 
 # Remove labels of ambiguous vertices
