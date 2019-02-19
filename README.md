@@ -4,7 +4,6 @@
 
 ## Dependencies
 To run GraphBin, you will need to install the following python modules.
-* [BioPython](https://biopython.org/)
 * [python-igraph](https://igraph.org/python/)
 * [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation)
 
