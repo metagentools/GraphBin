@@ -1,24 +1,55 @@
+import sys, getopt
 import csv
 import operator
 import time
+import argparse
 
 from igraph import *
 from labelprop import LabelProp
 
 start_time = time.time()
 
-assembly_graph_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/assembly_graph_with_scaffolds.gfa"
-contig_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.fasta"
-contig_paths = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.paths"
-contig_bins_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/MaxBin_Result/contig_bins.csv"
-n_bins = 3
 
+# Setup argument parser
+
+ap = argparse.ArgumentParser()
+
+ap.add_argument("--graph", required=True, help="path to the assembly graph file")
+ap.add_argument("--contigs", required=True, help="path to the contigs.fasta file")
+ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
+ap.add_argument("--n_bins", required=True, help="number of bins")
+ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
+
+args = vars(ap.parse_args())
+
+
+assembly_graph_file = args["graph"]
+contig_file = args["contigs"]
+contig_paths = args["paths"]
+n_bins = int(args["n_bins"])
+contig_bins_file = args["binned"]
+
+print("\nGraphBin started\n----------------")
+
+print("Assembly graph file:", assembly_graph_file)
+print("Contigs file:", contig_file)
+print("Contig paths file:", contig_paths)
+print("Number of bins:", n_bins)
+print("Binning output file:", contig_bins_file)
+print("\n")
+
+# assembly_graph_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/assembly_graph_with_scaffolds.gfa"
+# contig_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.fasta"
+# contig_paths = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.paths"
+# contig_bins_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/MaxBin_Result/contig_bins.csv"
+# n_bins = 3
+
+
+# Get contig paths from contigs.paths
 
 paths = []
 links = []
 
-
-# Get contig paths from contigs.paths
 with open(contig_paths) as file:
     name = file.readline()
     path = file.readline()
