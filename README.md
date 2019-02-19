@@ -29,7 +29,6 @@ usage: graphbin.py [-h] --graph GRAPH --contigs CONTIGS --paths PATHS --n_bins N
 optional arguments:
   -h, --help         show this help message and exit
   --graph GRAPH      path to the assembly graph file
-  --contigs CONTIGS  path to the contigs.fasta file
   --paths PATHS      path to the contigs.paths file
   --binned BINNED    path to the .csv file with the initial binning output
                      from an existing tool
@@ -37,9 +36,8 @@ optional arguments:
 ```
 ## Input Format
 
-GraphBin takes in 4 files as inputs.
+GraphBin takes in 3 files as inputs.
 * Assembly graph file (in .gfa format)
-* Nucleotide sequences of contigs(in .fasta format)
 * Paths of contigs (in .paths format)
 * Binning output from an existing tool (in .csv format)
 
@@ -57,7 +55,7 @@ GraphBin takes in 4 files as inputs.
 ## Example Usage
 
 ```
-python graphbin.py --graph /path/to/graph_file.gfa --contigs /path/to/contigs_file.fasta --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
+python graphbin.py --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## References
