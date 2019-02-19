@@ -180,14 +180,15 @@ for b in range(n_bins):
 
         my_bin = b
 
-
         dist = {}
 
+        # Get distant to connected vertices
         for j in range(node_count):
             dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
             if dis != 0:
                 dist[j] = dis
-
+        
+        # Sort the vertices in the ascending order of their distance
         sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
 
         closest_neighbours = []
@@ -217,15 +218,17 @@ for b in range(n_bins):
                 min_dist = distances[j]
                 min_index = j
         
+        # Get the closest neighboring vertices
         for element in sorted_dist:
             if element[1] == min_dist:
                 closest_neighbours.append(element[0])
 
+        # Determine whether all the closest neighboring vertices have the same label as its own
         neighbours_have_same_label = True
-    
-        for neigh in closest_neighbours:
+        
+        for neighbour in closest_neighbours:
             for k in range(n_bins):
-                if neigh in bins[k]:
+                if neighbour in bins[k]:
                     if k != my_bin:
                         neighbours_have_same_label = False
                         break
@@ -236,8 +239,8 @@ for b in range(n_bins):
 remove_labels.sort()
 print("\nRemove labels of contigs:", remove_labels)
 
+# Remove labels of ambiguous vertices
 for i in remove_labels:
-
     for n in range(n_bins):
         if i in bins[n]:
             bins[n].remove(i)
@@ -257,6 +260,8 @@ for contig in range(node_count):
     
     neighbours = assembly_graph.neighbors(contig, mode=ALL)
     
+    # Consider vertices that are not isolated
+
     if len(neighbours) > 0:
         line = []
         line.append(contig)
@@ -318,14 +323,15 @@ for b in range(n_bins):
 
         my_bin = b
 
-
         dist = {}
 
+        # Get distant to connected vertices
         for j in range(node_count):
             dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
             if dis != 0:
                 dist[j] = dis
-
+        
+        # Sort the vertices in the ascending order of their distance
         sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
 
         closest_neighbours = []
@@ -355,15 +361,17 @@ for b in range(n_bins):
                 min_dist = distances[j]
                 min_index = j
         
+        # Get the closest neighboring vertices
         for element in sorted_dist:
             if element[1] == min_dist:
                 closest_neighbours.append(element[0])
 
+        # Determine whether all the closest neighboring vertices have the same label as its own
         neighbours_have_same_label = True
-    
-        for neigh in closest_neighbours:
+        
+        for neighbour in closest_neighbours:
             for k in range(n_bins):
-                if neigh in bins[k]:
+                if neighbour in bins[k]:
                     if k != my_bin:
                         neighbours_have_same_label = False
                         break
@@ -374,11 +382,15 @@ for b in range(n_bins):
 remove_labels.sort()
 print("\nRemove labels of contigs:", remove_labels)
 
+# Remove labels of ambiguous vertices
 for i in remove_labels:
-
     for n in range(n_bins):
         if i in bins[n]:
             bins[n].remove(i)
+
+
+# Print the final result
+#------------------------
 
 print("\nFinal Refined Binning result\n----------------------")
 
