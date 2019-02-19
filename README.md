@@ -33,12 +33,12 @@ optional arguments:
   --paths PATHS      path to the contigs.paths file
   --binned BINNED    path to the .csv file with the initial binning output
                      from an existing tool
-  --output OUTPUT    path to the output file
+  --output OUTPUT    path to the output folder
 ```
 ## Example Usage
 
 ```
-python graphbin.py --graph /media/vijinim/data/Binning/Output/assembly_graph_with_scaffolds.gfa --contigs /media/vijinim/data/Binning/Output/contigs.fasta --paths /media/vijinim/data/Binning/Output/contigs.paths --binned /media/vijinim/data/Binning/Output/MaxBin_Result/contig_bins.csv --output /media/vijinim/data/Binning/Output/
+python graphbin.py --graph /path/to/graph_file.gfa --contigs /path/to/contigs_file.fasta --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## References
