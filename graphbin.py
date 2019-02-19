@@ -76,6 +76,7 @@ try:
     bins_list.sort()
 
     n_bins = len(bins_list)
+    print("Number of bins available in binning result:", n_bins)
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
     print("Exiting GraphBin...\n")
