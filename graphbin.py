@@ -31,7 +31,6 @@ __status__ = "Prototype"
 # Sample command
 # ------------------------------------------------------------------
 # python main.py    --graph /path/to/graph_file.gfa
-#                   --contigs /path/to/contigs_file.fasta
 #                   --paths /path/to/paths_file.paths
 #                   --binned /path/to/binning_result.csv
 #                   --output /path/to/output_folder
@@ -45,7 +44,6 @@ start_time = time.time()
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
-ap.add_argument("--contigs", required=True, help="path to the contigs.fasta file")
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
@@ -53,7 +51,6 @@ ap.add_argument("--output", required=True, help="path to the output folder")
 args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
-contig_file = args["contigs"]
 contig_paths = args["paths"]
 n_bins = 0
 contig_bins_file = args["binned"]
@@ -62,7 +59,6 @@ output_path = args["output"]
 print("\nGraphBin started\n----------------")
 
 print("Assembly graph file:", assembly_graph_file)
-print("Contigs file:", contig_file)
 print("Contig paths file:", contig_paths)
 print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
