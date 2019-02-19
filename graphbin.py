@@ -306,6 +306,7 @@ for i in range(n_bins):
 
 elapsed_time = time.time() - start_time
 
+
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
