@@ -7,8 +7,17 @@ import argparse
 from igraph import *
 from labelprop import LabelProp
 
-start_time = time.time()
+# Sample command
+# -------------------------------------------------------------------------------------------------------------------------------
+# python main.py    --graph /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/assembly_graph_with_scaffolds.gfa 
+#                   --contigs /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/contigs.fasta 
+#                   --paths /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/contigs.paths 
+#                   --n_bins 2 
+#                   --binned /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/MaxBin_Result/contig_bins.csv 
+#                   --output /media/vijinim/data/Experiments/Data/1_Data_For_Paper/2G_Output/
+# -------------------------------------------------------------------------------------------------------------------------------
 
+start_time = time.time()
 
 # Setup argument parser
 
@@ -19,6 +28,7 @@ ap.add_argument("--contigs", required=True, help="path to the contigs.fasta file
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--n_bins", required=True, help="number of bins")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
+ap.add_argument("--output", required=True, help="path to the output file")
 
 args = vars(ap.parse_args())
 
@@ -28,6 +38,7 @@ contig_file = args["contigs"]
 contig_paths = args["paths"]
 n_bins = int(args["n_bins"])
 contig_bins_file = args["binned"]
+output_path = args["output"]
 
 print("\nGraphBin started\n----------------")
 
@@ -35,7 +46,8 @@ print("Assembly graph file:", assembly_graph_file)
 print("Contigs file:", contig_file)
 print("Contig paths file:", contig_paths)
 print("Number of bins:", n_bins)
-print("Binning output file:", contig_bins_file)
+print("Existing binning output file:", contig_bins_file)
+print("Final binning output file:", output_path)
 print("\n")
 
 # assembly_graph_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/assembly_graph_with_scaffolds.gfa"
@@ -172,24 +184,24 @@ for b in range(n_bins):
 
         closest_neighbours = []
 
-        distances = [1000000 for x in range(n_bins)]
+        distances = [sys.maxsize for x in range(n_bins)]
 
         for element in sorted_dist:
 
             count_is_million = True
 
             for k in range(n_bins):
-                if distances[k] == 1000000:
+                if distances[k] == sys.maxsize:
                     count_is_million = False
 
             if not count_is_million:
 
                 for h in range(n_bins):
-                    if element[0] in bins[h] and distances[h] == 1000000:
+                    if element[0] in bins[h] and distances[h] == sys.maxsize:
                         distances[h] = element[1]
 
-        min_dist = 100000
-        min_index = 1000
+        min_dist = sys.maxsize
+        min_index = sys.maxsize
 
         for j in range(n_bins):
 
@@ -299,3 +311,29 @@ for i in range(n_bins):
 elapsed_time = time.time() - start_time
 
 print("\nElapsed time: ", elapsed_time, " seconds")
+
+
+
+## Write result to output file
+
+output_bins = []
+
+for i in range(node_count):
+    for k in range(n_bins):
+        if i in bins[k]:
+            line = []
+            line.append("NODE_"+str(i+1))
+            line.append(k+1)
+            output_bins.append(line)
+
+output_file = output_path + 'graphbin_output.csv'
+
+with open(output_file, mode='w') as output_file:
+    output_writer = csv.writer(output_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    
+    for row in output_bins:
+        output_writer.writerow(row)
+
+print("\nFinal binning results can be found at", output_file.name)
+
+print("\nThank you for using GraphBin!\n")
