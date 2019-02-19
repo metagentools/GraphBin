@@ -162,7 +162,7 @@ with open(contig_bins_file) as contig_bins:
         # print(contig_num,bin_num)
         bins[bin_num].append(contig_num)
 
-print("\nMaxBin result\n----------------")
+print("\nInitial Binning result\n----------------")
 
 for i in range(n_bins):
     bins[i].sort()
@@ -242,7 +242,7 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-print("\nRefined MaxBin result\n----------------------")
+print("\nRefined Binning result\n----------------------")
 
 for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
