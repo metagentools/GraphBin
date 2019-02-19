@@ -31,7 +31,6 @@ optional arguments:
   --graph GRAPH      path to the assembly graph file
   --contigs CONTIGS  path to the contigs.fasta file
   --paths PATHS      path to the contigs.paths file
-  --n_bins N_BINS    number of bins
   --binned BINNED    path to the .csv file with the initial binning output
                      from an existing tool
   --output OUTPUT    path to the output file
@@ -39,7 +38,7 @@ optional arguments:
 ## Example Usage
 
 ```
-python graphbin.py --graph /media/vijinim/data/Binning/Output/assembly_graph_with_scaffolds.gfa --contigs /media/vijinim/data/Binning/Output/contigs.fasta --paths /media/vijinim/data/Binning/Output/contigs.paths --n_bins 2 --binned /media/vijinim/data/Binning/Output/MaxBin_Result/contig_bins.csv --output /media/vijinim/data/Binning/Output/
+python graphbin.py --graph /media/vijinim/data/Binning/Output/assembly_graph_with_scaffolds.gfa --contigs /media/vijinim/data/Binning/Output/contigs.fasta --paths /media/vijinim/data/Binning/Output/contigs.paths --binned /media/vijinim/data/Binning/Output/MaxBin_Result/contig_bins.csv --output /media/vijinim/data/Binning/Output/
 ```
 
 ## References
