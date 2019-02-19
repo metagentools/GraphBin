@@ -26,7 +26,6 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
 ap.add_argument("--contigs", required=True, help="path to the contigs.fasta file")
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
-ap.add_argument("--n_bins", required=True, help="number of bins")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output file")
 
@@ -36,7 +35,7 @@ args = vars(ap.parse_args())
 assembly_graph_file = args["graph"]
 contig_file = args["contigs"]
 contig_paths = args["paths"]
-n_bins = int(args["n_bins"])
+n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
 
@@ -55,6 +54,22 @@ print("\n")
 # contig_paths = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/contigs.paths"
 # contig_bins_file = "/media/vijinim/data/Experiments/Data/1_Data_For_Paper/3G_Output/MaxBin_Result/contig_bins.csv"
 # n_bins = 3
+
+
+# Get number of bins from the initial binning result
+
+all_bins_list = []
+
+with open(contig_bins_file) as csvfile:
+    readCSV = csv.reader(csvfile, delimiter=',')
+    for row in readCSV:
+        all_bins_list.append(row[1])
+        
+        
+bins_list = list(set(all_bins_list))
+bins_list.sort()
+
+n_bins = len(bins_list)
 
 
 # Get contig paths from contigs.paths
