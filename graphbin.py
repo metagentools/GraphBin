@@ -19,6 +19,7 @@ from labelprop import LabelProp
 start_time = time.time()
 
 # Setup argument parser
+#-----------------------
 
 ap = argparse.ArgumentParser()
 
@@ -50,6 +51,7 @@ print("\n")
 
 
 # Get number of bins from the initial binning result
+#---------------------------------------------------
 
 all_bins_list = []
 
@@ -58,7 +60,6 @@ with open(contig_bins_file) as csvfile:
     for row in readCSV:
         all_bins_list.append(row[1])
         
-        
 bins_list = list(set(all_bins_list))
 bins_list.sort()
 
@@ -66,6 +67,7 @@ n_bins = len(bins_list)
 
 
 # Get contig paths from contigs.paths
+#-------------------------------------
 
 paths = []
 links = []
@@ -90,7 +92,8 @@ print("Total number of contigs available:", node_count)
 
 
 
-## ---Construct assembly graph---
+## Construct assembly graph
+#---------------------------
 
 # Get links from assembly_graph_with_scaffolds.gfa
 with open(assembly_graph_file) as file:
@@ -104,12 +107,11 @@ with open(assembly_graph_file) as file:
             links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
         line = file.readline()
 
-# Create graph
+# Create the graph
 g = Graph()
 
 # Add vertices
 g.add_vertices(node_count)
-
 
 for i in range(len(g.vs)):
     g.vs[i]["id"]= i
@@ -151,7 +153,8 @@ for i in range(len(paths)):
 g.simplify(multiple=True, loops=False, combine_edges=None)
 
 
-# ---Get initial binning result---
+# Get initial binning result
+#----------------------------
 
 bins = [[] for x in range(n_bins)]
 
@@ -170,7 +173,8 @@ for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
 
-# ---Remove labels of ambiguous vertices---
+# Remove labels of ambiguous vertices
+#-------------------------------------
 
 remove_labels = []
 
@@ -223,21 +227,15 @@ for b in range(n_bins):
 
         neighbours_have_same_label = True
     
-        
-    
         for neigh in closest_neighbours:
-            
             for k in range(n_bins):
-                
                 if neigh in bins[k]:
-                    
                     if k != my_bin:
                         neighbours_have_same_label = False
                         break
                         
         if not neighbours_have_same_label:
             remove_labels.append(i)
-
 
 remove_labels.sort()
 print("\nRemove labels of:", remove_labels)
@@ -254,9 +252,8 @@ for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
         
 
-
-
-# ---Run label propagation---
+# Run label propagation
+#-----------------------
 
 data = []
 
@@ -292,7 +289,6 @@ for contig in range(node_count):
 
         data.append(line)
 
-
 lp = LabelProp()
 
 lp.load_data_from_mem(data)
@@ -300,29 +296,26 @@ lp.load_data_from_mem(data)
 print("\nStarting label propagation\n---------------------------")
 
 ans = lp.run(0.00001, 100, show_log=True, clean_result=False) 
-
 ans.sort()
-
 
 for l in ans:
     for i in range(n_bins):
         if l[1]==i+1 and l[0] not in bins[i]:
             bins[i].append(l[0])
 
-
 print("\nLabel Propagation result\n-------------------------")
 
 for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
-
 elapsed_time = time.time() - start_time
 
+# Print elapsed time for the process
 print("\nElapsed time: ", elapsed_time, " seconds")
 
 
-
-## Write result to output file
+# Write result to output file
+#-----------------------------
 
 output_bins = []
 
@@ -343,5 +336,9 @@ with open(output_file, mode='w') as output_file:
         output_writer.writerow(row)
 
 print("\nFinal binning results can be found at", output_file.name)
+
+
+# Exit program
+#--------------
 
 print("\nThank you for using GraphBin!\n")
