@@ -11,7 +11,7 @@ To run GraphBin, you will need to install the following python modules.
 You can go to these links and follow the instructions to download these modules.
 
 ## Downloading GraphBin
-To download GraphBin, you have to clone the GraphBin repo to your machine.
+To download GraphBin, you have to clone the GraphBin repository to your machine.
 
 ```
 git clone https://github.com/Vini2/GraphBin.git
@@ -22,7 +22,7 @@ Use [**SPAdes**](http://cab.spbu.ru/software/spades/) software to assemble reads
 Once you have obtained the assembly output, you can run GraphBin.
 
 ## Using GraphBin
-You can see the usage options of GraphBin can be viewed by typing ```python graphbin.py -h``` on the command line.
+You can see the usage options of GraphBin by typing ```python graphbin.py -h``` on the command line.
 
 ```
 usage: graphbin.py [-h] --graph GRAPH --contigs CONTIGS --paths PATHS --n_bins N_BINS --binned BINNED --output OUTPUT
