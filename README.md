@@ -24,7 +24,7 @@ Once you have obtained the assembly output, you can run GraphBin.
 You can see the usage options of GraphBin by typing ```python graphbin.py -h``` on the command line.
 
 ```
-usage: graphbin.py [-h] --graph GRAPH --contigs CONTIGS --paths PATHS --n_bins N_BINS --binned BINNED --output OUTPUT
+usage: graphbin.py [-h] --graph GRAPH --paths PATHS --n_bins N_BINS --binned BINNED --output OUTPUT
 
 optional arguments:
   -h, --help         show this help message and exit
