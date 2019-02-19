@@ -192,22 +192,6 @@ for b in range(n_bins):
         sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
 
         closest_neighbours = []
-
-        distances = [sys.maxsize for x in range(n_bins)]
-
-        for element in sorted_dist:
-
-            count_is_million = True
-
-            for k in range(n_bins):
-                if distances[k] == sys.maxsize:
-                    count_is_million = False
-
-            if not count_is_million:
-
-                for h in range(n_bins):
-                    if element[0] in bins[h] and distances[h] == sys.maxsize:
-                        distances[h] = element[1]
         
         # Get the closest neighboring vertices
         for element in sorted_dist:
@@ -277,12 +261,12 @@ for b in range(n_bins):
                 min_dist = distances[j]
                 min_index = j
         
-        # Get the closest neighboring vertices
+        # Get the closest vertices
         for element in sorted_dist:
             if element[1] == min_dist:
                 closest_neighbours.append(element[0])
 
-        # Determine whether all the closest neighboring vertices have the same label as its own
+        # Determine whether all the closest vertices have the same label as its own
         neighbours_have_same_label = True
         
         for neighbour in closest_neighbours:
