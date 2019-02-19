@@ -35,6 +35,25 @@ optional arguments:
                      from an existing tool
   --output OUTPUT    path to the output folder
 ```
+## Input Format
+
+GraphBin takes in 4 files as inputs.
+* Assembly graph file (in .gfa format)
+* Nucleotide sequences of contigs(in .fasta format)
+* Paths of contigs (in .paths format)
+* Binning output from an existing tool (in .csv format)
+
+**Note:** The binning output file should have comma separated values ```(node_number, bin_number)``` for each contig. For example,
+
+```
+1,1
+2,1
+3,2
+4,2
+5,1
+...
+```
+
 ## Example Usage
 
 ```
