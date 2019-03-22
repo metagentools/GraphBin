@@ -5,7 +5,8 @@
 ## Dependencies
 GraphBin is coded in Python 3.6. To run GraphBin, you will need to install the following python modules.
 * [python-igraph](https://igraph.org/python/)
-* [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation)
+
+The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation) module supporting Python 3 is provided in the source code.
 
 You can go to these links and follow the instructions to download these modules.
 
