@@ -1,12 +1,14 @@
 #!/usr/bin/python
 
-"""graphbin.py: Improved binning of metagenomic contigs using assembly graphs.
+"""graphbin_SPAdes.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
 the binning result of an existing binning tool and a label propagation algorithm 
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
+
+graphbin_SPAdes.py makes use of the assembly graphs produced by SPAdes.
 """
 
 import sys, getopt
@@ -29,12 +31,12 @@ __status__ = "Prototype"
 
 
 # Sample command
-# ------------------------------------------------------------------
-# python main.py    --graph /path/to/graph_file.gfa
-#                   --paths /path/to/paths_file.paths
-#                   --binned /path/to/binning_result.csv
-#                   --output /path/to/output_folder
-# ------------------------------------------------------------------
+# -------------------------------------------------------------------
+# python graphbin_SPAdes.py     --graph /path/to/graph_file.gfa
+#                               --paths /path/to/paths_file.paths
+#                               --binned /path/to/binning_result.csv
+#                               --output /path/to/output_folder
+# -------------------------------------------------------------------
 
 start_time = time.time()
 
