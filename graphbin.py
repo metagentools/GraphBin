@@ -16,7 +16,7 @@ import time
 import argparse
 
 from igraph import *
-from labelprop import LabelProp
+from labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
