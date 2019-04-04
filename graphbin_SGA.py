@@ -199,12 +199,17 @@ for b in range(n_bins):
         if not neighbours_have_same_label:
             remove_labels.append(i)
 
-# Further remove labels of ambiguous vertices
 for i in remove_labels:
     for n in range(n_bins):
         if i in bins[n]:
             bins[n].remove(i)
 
+# Further remove labels of ambiguous vertices
+binned_contigs = []
+
+for n in range(n_bins):
+    binned_contigs = sorted(binned_contigs+bins[n])
+            
 for b in range(n_bins):
 
     for i in bins[b]:
@@ -214,7 +219,7 @@ for b in range(n_bins):
         dist = {}
 
         # Get the distant to all the vertices
-        for j in range(node_count):
+        for j in binned_contigs:
             dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
             if dis != 0:
                 dist[j] = dis
@@ -400,7 +405,7 @@ for i in range(node_count):
     for k in range(n_bins):
         if i in bins[k]:
             line = []
-            line.append("NODE_"+str(i+1))
+            line.append("contig-"+str(i+1))
             line.append(k+1)
             output_bins.append(line)
 
