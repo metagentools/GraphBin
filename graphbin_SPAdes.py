@@ -212,7 +212,40 @@ except:
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
+def getClosestBinnedNeighbours(graph, node, binned_contigs):
+    queu_l = [graph.neighbors(node, mode='ALL')]
+    visited_l = [node]
+    labelled = []
+
+    while len(queu_l) > 0:
+        active_level = queu_l.pop(0)
+        is_finish = False
+        visited_l += active_level
+
+        for n in active_level:
+            if n in binned_contigs:
+                is_finish = True
+                labelled.append(n)
+        if is_finish:
+            return labelled
+        else:
+            temp = []
+            for n in active_level:
+                temp += graph.neighbors(n, mode='ALL')
+            temp = list(set(temp))
+            temp2 = []
+
+            for n in temp:
+                if n not in visited_l:
+                    temp2.append(n)
+            if len(temp2) > 0:
+                queu_l.append(temp2)
+    return labelled
+
+
 remove_labels = []
+
+neighbours_have_same_label_list = []
 
 for b in range(n_bins):
 
@@ -222,34 +255,26 @@ for b in range(n_bins):
 
         dist = {}
 
-        # Get the distance to all the vertices
-        for j in range(node_count):
-            dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
-            if dis != 0:
-                dist[j] = dis
-        
-        # Sort the vertices in the ascending order of their distance
-        sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
-
-        closest_neighbours = []
-        
-        # Get the closest neighboring vertices
-        for element in sorted_dist:
-            if element[1] == 1:
-                closest_neighbours.append(element[0])
+        # Get set of closest binned neighbours with distance = 1
+        closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
 
         # Determine whether all the closest neighboring vertices have the same label as its own
         neighbours_have_same_label = True
         
+        neighbours_binned = False
+        
         for neighbour in closest_neighbours:
             for k in range(n_bins):
                 if neighbour in bins[k]:
+                    neighbours_binned = True
                     if k != my_bin:
                         neighbours_have_same_label = False
                         break
                         
         if not neighbours_have_same_label:
             remove_labels.append(i)
+        elif neighbours_binned:
+            neighbours_have_same_label_list.append(i)
 
 for i in remove_labels:
     for n in range(n_bins):
@@ -265,64 +290,28 @@ for n in range(n_bins):
 for b in range(n_bins):
 
     for i in bins[b]:
-
-        my_bin = b
-
-        dist = {}
-
-        # Get the distant to all the vertices
-        for j in binned_contigs:
-            dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
-            if dis != 0:
-                dist[j] = dis
         
-        # Sort the vertices in the ascending order of their distance
-        sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
+        if i not in neighbours_have_same_label_list:
 
-        closest_neighbours = []
+            my_bin = b
 
-        distances = [sys.maxsize for x in range(n_bins)]
+            # Get set of closest binned neighbours
+            closest_neighbours = getClosestBinnedNeighbours(assembly_graph, i, binned_contigs)
 
-        for element in sorted_dist:
+            if len(closest_neighbours) > 0:
 
-            count_is_million = True
+                # Determine whether all the closest vertices have the same label as its own
+                neighbours_have_same_label = True
 
-            for k in range(n_bins):
-                if distances[k] == sys.maxsize:
-                    count_is_million = False
+                for neighbour in closest_neighbours:
+                    for k in range(n_bins):
+                        if neighbour in bins[k]:
+                            if k != my_bin:
+                                neighbours_have_same_label = False
+                                break
 
-            if not count_is_million:
-
-                for h in range(n_bins):
-                    if element[0] in bins[h] and distances[h] == sys.maxsize:
-                        distances[h] = element[1]
-
-        min_dist = sys.maxsize
-        min_index = sys.maxsize
-
-        for j in range(n_bins):
-
-            if distances[j] < min_dist:
-                min_dist = distances[j]
-                min_index = j
-        
-        # Get the closest vertices
-        for element in sorted_dist:
-            if element[1] == min_dist:
-                closest_neighbours.append(element[0])
-
-        # Determine whether all the closest vertices have the same label as its own
-        neighbours_have_same_label = True
-        
-        for neighbour in closest_neighbours:
-            for k in range(n_bins):
-                if neighbour in bins[k]:
-                    if k != my_bin:
-                        neighbours_have_same_label = False
-                        break
-                        
-        if not neighbours_have_same_label and i not in remove_labels:
-            remove_labels.append(i)
+                if not neighbours_have_same_label and i not in remove_labels:
+                    remove_labels.append(i)
 
 remove_labels.sort()
 print("\nRemove labels of contigs:", remove_labels)
