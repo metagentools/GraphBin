@@ -290,6 +290,51 @@ for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
         
 
+# Get isolated vertices and components without labels
+#-----------------------------------------------------
+
+isolated = []
+
+for i in range(node_count):
+    
+    if i not in isolated:
+
+        component = []
+        component.append(i)
+        length = len(component)
+        neighbours = assembly_graph.neighbors(i, mode=ALL)
+
+        for neighbor in neighbours:
+            if neighbor not in component:
+                component.append(neighbor)
+
+        component = list(set(component))
+
+        while length!= len(component):
+
+            length = len(component)
+
+            for j in component:
+
+                neighbours = assembly_graph.neighbors(j, mode=ALL)
+
+                for neighbor in neighbours:
+                    if neighbor not in component:
+                        component.append(neighbor)
+
+        labelled = False
+        for j in component:
+            if j in binned_contigs:
+                labelled = True
+                break
+
+        if not labelled:
+            for j in component:
+                if j not in isolated:
+                    isolated.append(j)
+
+print("\nNumber of isolated contigs:", len(isolated))
+
 # Run label propagation
 #-----------------------
 
@@ -297,11 +342,9 @@ data = []
 
 for contig in range(node_count):
     
-    neighbours = assembly_graph.neighbors(contig, mode=ALL)
-    
     # Consider vertices that are not isolated
 
-    if len(neighbours) > 0:
+    if contig not in isolated:
         line = []
         line.append(contig)
 
