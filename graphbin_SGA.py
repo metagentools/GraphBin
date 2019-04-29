@@ -297,8 +297,6 @@ for i in range(n_bins):
 isolated = []
 
 for i in range(node_count):
-
-    print("Current node:", i)
     
     if i not in isolated:
 
