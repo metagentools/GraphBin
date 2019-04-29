@@ -33,7 +33,6 @@ __status__ = "Prototype"
 # Sample command
 # -------------------------------------------------------------------
 # python graphbin_SGA.py     --graph /path/to/graph_file.asqg
-#                            --n_contigs INT
 #                            --binned /path/to/binning_result.csv
 #                            --output /path/to/output_folder
 # -------------------------------------------------------------------
@@ -46,14 +45,13 @@ start_time = time.time()
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
-ap.add_argument("--n_contigs", required=True, help="number of contigs")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
 
 args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
-n_contigs = int(args["n_contigs"])
+n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
@@ -61,7 +59,6 @@ output_path = args["output"]
 print("\nGraphBin started\n----------------")
 
 print("Assembly graph file:", assembly_graph_file)
-print("Total number of contigs available:", n_contigs)
 print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
 
@@ -94,14 +91,18 @@ except:
 links = []
 
 try:
-    # Get contig paths from contigs.paths
+    # Get contig connections from .asqg file
     with open(assembly_graph_file) as file:
         line = file.readline()
         
         while line != "":
+
+            # Count the number of contigs
+            if "VT" in line:
+                n_contigs += 1
             
             # Identify lines with link information
-            if "ED" in line:
+            elif "ED" in line:
                 link = []
                 strings = line.split("\t")[1].split()
                 link.append(int(strings[0][7:]))
@@ -296,6 +297,8 @@ for i in range(n_bins):
 isolated = []
 
 for i in range(node_count):
+
+    print("Current node:", i)
     
     if i not in isolated:
 
