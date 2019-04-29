@@ -47,7 +47,6 @@ usage: graphbin_SGA.py [-h] --graph GRAPH --n_contigs N_CONTIGS --binned BINNED 
 optional arguments:
   -h, --help             show this help message and exit
   --graph GRAPH          path to the assembly graph file
-  --n_contigs N_CONTIGS  number of available contigs
   --binned BINNED        path to the .csv file with the initial binning output
                          from an existing tool
   --output OUTPUT        path to the output folder
@@ -59,9 +58,8 @@ graphbin_SPAdes.py takes in 3 files as inputs.
 * Paths of contigs (in .paths format)
 * Binning output from an existing tool (in .csv format)
 
-graphbin_SGA.py takes in 2 files and a value as inputs.
+graphbin_SGA.py takes in 1 file and 1 value as inputs.
 * Assembly graph file (in .asqg format)
-* Number of available contigs
 * Binning output from an existing tool (in .csv format)
 
 **Note:** The binning output file should have comma separated values ```(node_number, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. The numbering of contigs starts from 0 and numbering of bins starts from 1.
@@ -82,7 +80,7 @@ graphbin_SGA.py takes in 2 files and a value as inputs.
 python graphbin_SPAdes.py --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python graphbin_SGA.py --graph /path/to/graph_file.gfa --n_contigs n --binned /path/to/binning_result.csv --output /path/to/output_folder
+python graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## References
