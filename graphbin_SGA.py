@@ -298,7 +298,7 @@ isolated = []
 
 for i in range(node_count):
     
-    if i not in isolated:
+    if i not in isolated and i not in binned_contigs:
 
         component = []
         component.append(i)

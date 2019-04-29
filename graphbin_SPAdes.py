@@ -335,7 +335,7 @@ isolated = []
 
 for i in range(node_count):
     
-    if i not in isolated:
+    if i not in isolated and i not in binned_contigs:
 
         component = []
         component.append(i)
@@ -443,49 +443,7 @@ for b in range(n_bins):
 
         my_bin = b
 
-        dist = {}
-
-        # Get distant to connected vertices
-        for j in range(node_count):
-            dis = assembly_graph.shortest_paths_dijkstra(source=i, target=j, weights=None, mode=OUT)[0][0]
-            if dis != 0:
-                dist[j] = dis
-        
-        # Sort the vertices in the ascending order of their distance
-        sorted_dist = sorted(dist.items(), key=operator.itemgetter(1))
-
-        closest_neighbours = []
-
-        distances = [sys.maxsize for x in range(n_bins)]
-
-        for element in sorted_dist:
-
-            count_is_large = True
-
-            for k in range(n_bins):
-                if distances[k] == sys.maxsize:
-                    count_is_large = False
-
-            if not count_is_large:
-
-                for h in range(n_bins):
-                    if element[0] in bins[h] and distances[h] == sys.maxsize:
-                        distances[h] = element[1]
-
-        # Get the minimum distance to binned neighboring vertices
-        min_dist = sys.maxsize
-        min_index = sys.maxsize
-
-        for j in range(n_bins):
-
-            if distances[j] < min_dist:
-                min_dist = distances[j]
-                min_index = j
-        
-        # Get the closest binned neighboring vertices
-        for element in sorted_dist:
-            if element[1] == min_dist:
-                closest_neighbours.append(element[0])
+        closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
 
         # Determine whether all the closest binned neighboring vertices have the same label as its own
         neighbours_have_same_label = True
