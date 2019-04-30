@@ -58,7 +58,7 @@ graphbin_SPAdes.py takes in 3 files as inputs.
 * Paths of contigs (in .paths format)
 * Binning output from an existing tool (in .csv format)
 
-graphbin_SGA.py takes in 1 file and 1 value as inputs.
+graphbin_SGA.py takes in 2 files as inputs.
 * Assembly graph file (in .asqg format)
 * Binning output from an existing tool (in .csv format)
 
@@ -88,6 +88,7 @@ python graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning
 The data used to test GraphBin can be found in the `test data` folder. The test data for each of the datasets include the following files.
 * Contigs file
 * Assembly graph file
+* Paths file for the assembly graph (for the datasets assembled using SPAdes)
 * Initial binning result from MaxBin 2.0
 * Initial binning result from MetaWatt
 * Ground truth labelling of contigs from TAXAassign
