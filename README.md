@@ -83,6 +83,10 @@ python graphbin_SPAdes.py --graph /path/to/graph_file.gfa --paths /path/to/paths
 python graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
+## Test Data
+
+The data used to test GraphBin can be found in the `test data` folder. You can try running GraphBin using this test data.
+
 ## References
 [1] Wu, Y.W., Tang, Y.H., Tringe, S.G., Simmons, B.A., Singer, S.W.: MaxBin: an automated binning method to recover individual genomes from metagenomes using an expectation-maximization algorithm. Microbiome 2(26), (2014)
 
