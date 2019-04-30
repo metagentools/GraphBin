@@ -291,8 +291,8 @@ for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
         
 
-# Get isolated vertices and components without labels
-#-----------------------------------------------------
+# Get vertices which are not isolated and not in components without any labels
+#-----------------------------------------------------------------------------
 
 non_isolated = []
 
