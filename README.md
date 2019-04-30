@@ -85,7 +85,14 @@ python graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning
 
 ## Test Data
 
-The data used to test GraphBin can be found in the `test data` folder. You can try running GraphBin using this test data.
+The data used to test GraphBin can be found in the `test data` folder. The test data for each of the datasets include the following files.
+* Contigs file
+* Assembly graph file
+* Initial binning result from MaxBin 2.0
+* Initial binning result from MetaWatt
+* Ground truth labelling of contigs from TAXAassign
+
+You can try running GraphBin using these test data files.
 
 ## References
 [1] Wu, Y.W., Tang, Y.H., Tringe, S.G., Simmons, B.A., Singer, S.W.: MaxBin: an automated binning method to recover individual genomes from metagenomes using an expectation-maximization algorithm. Microbiome 2(26), (2014)
