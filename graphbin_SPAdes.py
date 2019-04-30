@@ -331,11 +331,11 @@ for i in range(n_bins):
 # Get isolated vertices and components without labels
 #-----------------------------------------------------
 
-isolated = []
+non_isolated = []
 
 for i in range(node_count):
     
-    if i not in isolated and i not in binned_contigs:
+    if i not in non_isolated and i in binned_contigs:
 
         component = []
         component.append(i)
@@ -366,12 +366,12 @@ for i in range(node_count):
                 labelled = True
                 break
 
-        if not labelled:
+        if labelled:
             for j in component:
-                if j not in isolated:
-                    isolated.append(j)
+                if j not in non_isolated:
+                    non_isolated.append(j)
 
-print("\nNumber of isolated contigs:", len(isolated))
+print("\nNumber of isolated contigs:", len(non_isolated))
 
 # Run label propagation
 #-----------------------
@@ -382,7 +382,7 @@ for contig in range(node_count):
     
     # Consider vertices that are not isolated
 
-    if contig not in isolated:
+    if contig in non_isolated:
         line = []
         line.append(contig)
 
