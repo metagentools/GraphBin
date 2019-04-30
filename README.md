@@ -17,13 +17,13 @@ To download GraphBin, you have to clone the GraphBin repository to your machine.
 git clone https://github.com/Vini2/GraphBin.git
 ```
 ## Assembly
-The assembly of contigs can be done using 2 software
+The assembly of contigs can be done using 2 assembly software.
 
 ### SPAdes
-Use [**SPAdes**](http://cab.spbu.ru/software/spades/) software to assemble reads into contigs. Use the metagenomics mode for assembly.
+[**SPAdes**](http://cab.spbu.ru/software/spades/) is an assembler based on the de Bruijn graph approach. Use SPAdes software to assemble reads into contigs. Use the metagenomics mode for assembly.
 
 ### SGA
-Use [**SGA**](https://github.com/jts/sga) (String Graph Assembler) software to assemble reads into contigs.
+[**SGA**](https://github.com/jts/sga) (String Graph Assembler) is an assembler based on the overlap-layout-consensus (more recently string graph) approach. Use SGA software to assemble reads into contigs.
 
 Once you have obtained the assembly output, you can run GraphBin.
 
