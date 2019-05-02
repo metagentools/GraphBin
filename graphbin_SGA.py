@@ -56,7 +56,10 @@ n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
 
-print("\nGraphBin started\n----------------")
+print("\nWelcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs")
+print("This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.\n")
+
+print("GraphBin started\n-----------------")
 
 print("Assembly graph file:", assembly_graph_file)
 print("Existing binning output file:", contig_bins_file)
@@ -161,7 +164,7 @@ try:
             # print(contig_num,bin_num)
             bins[bin_num].append(contig_num)
 
-    print("\nInitial Binning result\n----------------")
+    print("\nInitial Binning result\n-----------------------")
 
     for i in range(n_bins):
         bins[i].sort()
@@ -285,7 +288,7 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-print("\nRefined Binning result\n----------------------")
+print("\nRefined Binning result\n-----------------------")
 
 for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
@@ -434,7 +437,7 @@ for i in remove_labels:
 # Print the final result
 #------------------------
 
-print("\nFinal Refined Binning result\n----------------------")
+print("\nFinal Refined Binning result\n-----------------------------")
 
 for i in range(n_bins):
     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
