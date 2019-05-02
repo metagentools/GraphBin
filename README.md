@@ -17,13 +17,13 @@ To download GraphBin, you have to clone the GraphBin repository to your machine.
 git clone https://github.com/Vini2/GraphBin.git
 ```
 ## Assembly
-The assembly of contigs can be done using 2 software
+The assembly of contigs can be done using 2 assembly software.
 
 ### SPAdes
-Use [**SPAdes**](http://cab.spbu.ru/software/spades/) software to assemble reads into contigs. Use the metagenomics mode for assembly.
+[**SPAdes**](http://cab.spbu.ru/software/spades/) is an assembler based on the de Bruijn graph approach. Use SPAdes software to assemble reads into contigs. Use the metagenomics mode for assembly.
 
 ### SGA
-Use [**SGA**](https://github.com/jts/sga) (String Graph Assembler) software to assemble reads into contigs.
+[**SGA**](https://github.com/jts/sga) (String Graph Assembler) is an assembler based on the overlap-layout-consensus (more recently string graph) approach. Use SGA software to assemble reads into contigs.
 
 Once you have obtained the assembly output, you can run GraphBin.
 
@@ -58,7 +58,7 @@ graphbin_SPAdes.py takes in 3 files as inputs.
 * Paths of contigs (in .paths format)
 * Binning output from an existing tool (in .csv format)
 
-graphbin_SGA.py takes in 1 file and 1 value as inputs.
+graphbin_SGA.py takes in 2 files as inputs.
 * Assembly graph file (in .asqg format)
 * Binning output from an existing tool (in .csv format)
 
@@ -85,7 +85,15 @@ python graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning
 
 ## Test Data
 
-The data used to test GraphBin can be found in the `test data` folder. You can try running GraphBin using this test data.
+The data used to test GraphBin can be found in the `test data` folder. The test data for each of the datasets include the following files.
+* Contigs file
+* Assembly graph file
+* Paths file for the assembly graph (for the datasets assembled using SPAdes)
+* Initial binning result from MaxBin 2.0
+* Initial binning result from MetaWatt
+* Ground truth labelling of contigs from TAXAassign
+
+You can try running GraphBin using these test data files.
 
 ## References
 [1] Wu, Y.W., Tang, Y.H., Tringe, S.G., Simmons, B.A., Singer, S.W.: MaxBin: an automated binning method to recover individual genomes from metagenomes using an expectation-maximization algorithm. Microbiome 2(26), (2014)
