@@ -31,7 +31,7 @@ Once you have obtained the assembly output, you can run GraphBin.
 You can see the usage options of GraphBin by typing ```python3 graphbin_SPAdes.py -h``` or ```python3 graphbin_SGA.py -h``` on the command line.
 
 ```
-usage: graphbin_SGA.py [-h] --graph GRAPH --paths PATHS --binned BINNED --output OUTPUT
+usage: graphbin_SPAdes.py [-h] --graph GRAPH --paths PATHS --binned BINNED --output OUTPUT
 
 optional arguments:
   -h, --help         show this help message and exit
