@@ -80,7 +80,7 @@ optional arguments:
 python3 graphbin_SPAdes.py --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python3 graphbin_SGA.py --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
+python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Test Data
