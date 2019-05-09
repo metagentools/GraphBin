@@ -45,11 +45,11 @@ optional arguments:
 usage: graphbin_SGA.py [-h] --graph GRAPH --binned BINNED --output OUTPUT
 
 optional arguments:
-  -h, --help             show this help message and exit
-  --graph GRAPH          path to the assembly graph file
-  --binned BINNED        path to the .csv file with the initial binning output
-                         from an existing tool
-  --output OUTPUT        path to the output folder
+  -h, --help         show this help message and exit
+  --graph GRAPH      path to the assembly graph file
+  --binned BINNED    path to the .csv file with the initial binning output
+                     from an existing tool
+  --output OUTPUT    path to the output folder
 ```
 ## Input Format
 
