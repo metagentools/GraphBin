@@ -95,6 +95,27 @@ The data used to test GraphBin can be found in the `test data` folder. The test 
 
 You can try running GraphBin using these test data files.
 
+## Visualization of the Assembly Graph of ESC+SPAdes Test Dataset
+
+### Initial assembly graph
+<p align="center">
+  <img src="images/3G_SPAdes_graph_plot.png" width="350" title="Initial assembly graph" alt="Initial assembly graph">
+</p>
+
+### Original MaxBin Labelling and Refined Labels
+<p align="center">
+  <img src="images/3G_SPAdes_maxbin_graph_plot_edit.png" width="350" title="MaxBin Labelling" alt="MaxBin Labelling">
+  &nbsp &nbsp &nbsp &nbsp &nbsp
+  <img src="images/3G_SPAdes_maxbin_graph_plot_correct.png" width="350" title="Refined Labels" alt="Refined Labels">
+</p>
+
+### Final Labelling of GraphBin and compared with TAXAassign Labelling
+<p align="center">
+  <img src="images/3G_SPAdes_after_label_prop_graph_plot.png" width="350" title="Final Labelling" alt="Final Labelling">
+  &nbsp &nbsp &nbsp &nbsp &nbsp
+  <img src="images/3G_SPAdes_taxaassign_graph_plot.png" width="350" title="TAXAassign Labelling" alt="TAXAassign Labelling">
+</p>
+
 ## References
 [1] Wu, Y.W., Tang, Y.H., Tringe, S.G., Simmons, B.A., Singer, S.W.: MaxBin: an automated binning method to recover individual genomes from metagenomes using an expectation-maximization algorithm. Microbiome 2(26), (2014)
 
