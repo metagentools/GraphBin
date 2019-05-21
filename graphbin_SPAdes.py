@@ -377,6 +377,20 @@ for i in range(node_count):
 print("\nNumber of isolated contigs:", len(non_isolated))
 
 
+# Get vertices which are isolated
+#---------------------------------
+
+isolated=[]
+
+for i in range(node_count):
+    
+    neighbours = assembly_graph.neighbors(i, mode=ALL)
+    
+    if len(neighbours)==0:
+        isolated.append(i)
+
+
+
 # Run label propagation
 #-----------------------
 
@@ -386,7 +400,7 @@ for contig in range(node_count):
     
     # Consider vertices that are not isolated
 
-    if contig in non_isolated:
+    if contig in non_isolated and contig not in isolated:
         line = []
         line.append(contig)
 
