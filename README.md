@@ -97,7 +97,7 @@ You can try running GraphBin using these test data files.
 
 ## Visualization of the Assembly Graph of ESC+SPAdes Test Dataset
 
-### Initial assembly graph
+### Initial Assembly Graph
 <p align="center">
   <img src="images/3G_SPAdes_graph_plot.png" width="400" title="Initial assembly graph" alt="Initial assembly graph">
 </p>
@@ -107,7 +107,7 @@ You can try running GraphBin using these test data files.
   <img src="images/3G_SPAdes_taxaassign_graph_plot.png" width="400" title="TAXAassign Labelling" alt="TAXAassign Labelling">
 </p>
 
-### Original MaxBin Labelling
+### Original MaxBin Labelling with 2 Mis-binned Contigs
 <p align="center">
   <img src="images/3G_SPAdes_maxbin_graph_plot_edit.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
 </p>
