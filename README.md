@@ -99,21 +99,27 @@ You can try running GraphBin using these test data files.
 
 ### Initial assembly graph
 <p align="center">
-  <img src="images/3G_SPAdes_graph_plot.png" width="350" title="Initial assembly graph" alt="Initial assembly graph">
+  <img src="images/3G_SPAdes_graph_plot.png" width="400" title="Initial assembly graph" alt="Initial assembly graph">
 </p>
 
-### Original MaxBin Labelling and Refined Labels
+### TAXAassign Labelling
 <p align="center">
-  <img src="images/3G_SPAdes_maxbin_graph_plot_edit.png" width="350" title="MaxBin Labelling" alt="MaxBin Labelling">
-  &nbsp &nbsp &nbsp &nbsp &nbsp
-  <img src="images/3G_SPAdes_maxbin_graph_plot_correct.png" width="350" title="Refined Labels" alt="Refined Labels">
+  <img src="images/3G_SPAdes_taxaassign_graph_plot.png" width="400" title="TAXAassign Labelling" alt="TAXAassign Labelling">
 </p>
 
-### Final Labelling of GraphBin and compared with TAXAassign Labelling
+### Original MaxBin Labelling
 <p align="center">
-  <img src="images/3G_SPAdes_after_label_prop_graph_plot.png" width="350" title="Final Labelling" alt="Final Labelling">
-  &nbsp &nbsp &nbsp &nbsp &nbsp
-  <img src="images/3G_SPAdes_taxaassign_graph_plot.png" width="350" title="TAXAassign Labelling" alt="TAXAassign Labelling">
+  <img src="images/3G_SPAdes_maxbin_graph_plot_edit.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
+</p>
+
+### Refined Labels
+<p align="center">
+  <img src="images/3G_SPAdes_maxbin_graph_plot_correct.png" width="400" title="Refined Labels" alt="Refined Labels">
+</p>
+
+### Final Labelling of GraphBin
+<p align="center">
+  <img src="images/3G_SPAdes_after_label_prop_graph_plot.png" width="400" title="Final Labelling" alt="Final Labelling">
 </p>
 
 ## References
