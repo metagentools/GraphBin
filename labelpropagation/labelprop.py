@@ -194,7 +194,7 @@ class LabelProp():
                 break
 
         if show_log:
-            self.show_detail(diff, eps, max_iter) 
+            self.show_detail(diff, eps, i, max_iter) 
 
         ans = self.debug()
 
@@ -214,14 +214,14 @@ class LabelProp():
 #   Show Info.
 ################################################################################
 
-    def show_detail(self, diff, eps, max_iter):
+    def show_detail(self, diff, eps, i, max_iter):
         print("Number of vertices:            ", self.vertex_size)
         print("Number of class labels:        ", self.label_size)
         print("Number of unlabeled vertices:  ", (self.vertex_size - self.labelled_size))
         print("Numebr of labeled vertices:    ", self.labelled_size)
         print("eps:                           ", eps)
-        print("max iteration                  ", max_iter)
-        print("\niter = ", max_iter, ", eps = ", diff)
+        print("max_iteration:                  ", max_iter)
+        print("\niter = ", i+1, ", diff = ", diff)
 
     def show_vertex_adj(self):
         for k, v in self.vertex_adj_map.items():
