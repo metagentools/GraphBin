@@ -12,6 +12,8 @@ graphbin_SGA.py makes use of the assembly graphs produced by SGA (String Graph A
 """
 
 import sys, getopt
+import os
+import subprocess
 import csv
 import operator
 import time
@@ -47,6 +49,8 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
+ap.add_argument("--max_iteration", required=False, help="maximum label propagation algorithm iteration number. Default 100")
+ap.add_argument("--diff_threshold", required=False, help="difference threshold for label propagation algorithm. Default 0.00001")
 
 args = vars(ap.parse_args())
 
@@ -56,6 +60,10 @@ n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
 
+max_iteration = 100
+diff_threshold = 0.00001
+
+
 print("\nWelcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs")
 print("This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.\n")
 
@@ -64,6 +72,44 @@ print("GraphBin started\n-----------------")
 print("Assembly graph file:", assembly_graph_file)
 print("Existing binning output file:", contig_bins_file)
 print("Final binning output file:", output_path)
+
+
+# Validate max_iteration and diff_threshold
+#---------------------------------------------------
+try:
+
+    if args["max_iteration"] is not None:
+        max_iteration = int(args["max_iteration"])
+
+except:
+    print("\nPlease enter a valid number for max_iterations")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
+
+try:
+
+    if args["diff_threshold"] is not None:
+        diff_threshold = float(args["diff_threshold"])
+
+except:
+    print("\nPlease enter a valid number for diff_threshold")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
+
+print("Maximum number of iterations:", max_iteration)
+print("Difference threshold:", diff_threshold)
+
+
+# Check if output folder exists
+#---------------------------------------------------
+
+# Handle for missing trailing forwardslash in output folder path
+if output_path[-1:] != "/":
+    output_path = output_path + "/"
+
+# Create output folder if it does not exist
+if not os.path.isdir(output_path):
+    subprocess.run("mkdir -p "+output_path, shell=True)
 
 
 # Get the number of bins from the initial binning result
@@ -166,9 +212,9 @@ try:
 
     print("\nInitial Binning result\n-----------------------")
 
-    for i in range(n_bins):
-        bins[i].sort()
-        print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+    # for i in range(n_bins):
+    #     bins[i].sort()
+    #     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
     print("Exiting GraphBin...\n")
@@ -290,8 +336,8 @@ for i in remove_labels:
 
 print("\nRefined Binning result\n-----------------------")
 
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+# for i in range(n_bins):
+#     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
         
 
 # Get vertices which are not isolated and not in components without any labels
@@ -382,7 +428,7 @@ lp.load_data_from_mem(data)
 
 print("\nStarting label propagation\n---------------------------")
 
-ans = lp.run(0.00001, 100, show_log=True, clean_result=False) 
+ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False) 
 ans.sort()
 
 for l in ans:
@@ -392,8 +438,8 @@ for l in ans:
 
 print("\nLabel Propagation result\n-------------------------")
 
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+# for i in range(n_bins):
+#     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
 elapsed_time = time.time() - start_time
 
@@ -439,8 +485,8 @@ for i in remove_labels:
 
 print("\nFinal Refined Binning result\n-----------------------------")
 
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+# for i in range(n_bins):
+#     print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
 # Print elapsed time for the process
 print("\nElapsed time: ", elapsed_time, " seconds")
