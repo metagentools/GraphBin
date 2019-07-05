@@ -43,8 +43,8 @@ optional arguments:
                         from an existing tool
   --output OUTPUT       path to the output folder
   --max_iteration [MAX_ITERATION]
-                        maximum label propagation algorithm iteration number.
-                        [default: 100]
+                        maximum number of iterations for label propagation
+                        algorithm. [default: 100]
   --diff_threshold [DIFF_THRESHOLD]
                         difference threshold for label propagation algorithm.
                         [default: 0.00001]
@@ -61,8 +61,8 @@ optional arguments:
                         from an existing tool
   --output OUTPUT       path to the output folder
   --max_iteration [MAX_ITERATION]
-                        maximum label propagation algorithm iteration number.
-                        [default: 100]
+                        maximum number of iterations for label propagation
+                        algorithm. [default: 100]
   --diff_threshold [DIFF_THRESHOLD]
                         difference threshold for label propagation algorithm.
                         [default: 0.00001]
