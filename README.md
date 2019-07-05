@@ -31,34 +31,52 @@ Once you have obtained the assembly output, you can run GraphBin.
 You can see the usage options of GraphBin by typing ```python3 graphbin_SPAdes.py -h``` or ```python3 graphbin_SGA.py -h``` on the command line.
 
 ```
-usage: graphbin_SPAdes.py [-h] --graph GRAPH --paths PATHS --binned BINNED --output OUTPUT
+usage: graphbin_SPAdes.py [-h] --graph GRAPH --paths PATHS --binned BINNED
+                          --output OUTPUT [--max_iteration [MAX_ITERATION]]
+                          [--diff_threshold [DIFF_THRESHOLD]]
 
 optional arguments:
-  -h, --help         show this help message and exit
-  --graph GRAPH      path to the assembly graph file
-  --paths PATHS      path to the contigs.paths file
-  --binned BINNED    path to the .csv file with the initial binning output
-                     from an existing tool
-  --output OUTPUT    path to the output folder
+  -h, --help            show this help message and exit
+  --graph GRAPH         path to the assembly graph file
+  --paths PATHS         path to the contigs.paths file
+  --binned BINNED       path to the .csv file with the initial binning output
+                        from an existing tool
+  --output OUTPUT       path to the output folder
+  --max_iteration [MAX_ITERATION]
+                        maximum number of iterations for label propagation
+                        algorithm. [default: 100]
+  --diff_threshold [DIFF_THRESHOLD]
+                        difference threshold for label propagation algorithm.
+                        [default: 0.00001]
 ```
 ```
 usage: graphbin_SGA.py [-h] --graph GRAPH --binned BINNED --output OUTPUT
+                       [--max_iteration [MAX_ITERATION]]
+                       [--diff_threshold [DIFF_THRESHOLD]]
 
 optional arguments:
-  -h, --help         show this help message and exit
-  --graph GRAPH      path to the assembly graph file
-  --binned BINNED    path to the .csv file with the initial binning output
-                     from an existing tool
-  --output OUTPUT    path to the output folder
+  -h, --help            show this help message and exit
+  --graph GRAPH         path to the assembly graph file
+  --binned BINNED       path to the .csv file with the initial binning output
+                        from an existing tool
+  --output OUTPUT       path to the output folder
+  --max_iteration [MAX_ITERATION]
+                        maximum number of iterations for label propagation
+                        algorithm. [default: 100]
+  --diff_threshold [DIFF_THRESHOLD]
+                        difference threshold for label propagation algorithm.
+                        [default: 0.00001]
 ```
+`max_iteration` and `diff_threshold` parameters are set by default. However, the user can specify them when running GrahpBin.
+
 ## Input Format
 
-`graphbin_SPAdes.py` takes in 3 files as inputs.
+`graphbin_SPAdes.py` takes in 3 files as inputs (required).
 * Assembly graph file (in `.gfa` format)
 * Paths of contigs (in `.paths` format)
 * Binning output from an existing tool (in `.csv` format)
 
-`graphbin_SGA.py` takes in 2 files as inputs.
+`graphbin_SGA.py` takes in 2 files as inputs (required).
 * Assembly graph file (in `.asqg` format)
 * Binning output from an existing tool (in `.csv` format)
 
