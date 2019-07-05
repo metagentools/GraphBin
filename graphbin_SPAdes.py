@@ -51,8 +51,8 @@ ap.add_argument("--graph", required=True, help="path to the assembly graph file"
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
-ap.add_argument("--max_iteration", required=False, help="maximum label propagation algorithm iteration number. Default 100")
-ap.add_argument("--diff_threshold", required=False, help="difference threshold for label propagation algorithm. Default 0.00001")
+ap.add_argument("--max_iteration", required=False, nargs='?', type=int, help="maximum number of iterations for label propagation algorithm. [default: 100]")
+ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help="difference threshold for label propagation algorithm. [default: 0.00001]")
 
 args = vars(ap.parse_args())
 
