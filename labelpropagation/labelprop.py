@@ -221,7 +221,7 @@ class LabelProp():
         print("Numebr of labeled vertices:    ", self.labelled_size)
         print("eps:                           ", eps)
         print("max_iteration:                  ", max_iter)
-        print("\niter = ", i+1, ", diff = ", diff)
+        print("iter = ", i+1, ", diff = ", diff)
 
     def show_vertex_adj(self):
         for k, v in self.vertex_adj_map.items():
