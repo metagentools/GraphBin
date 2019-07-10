@@ -67,7 +67,7 @@ optional arguments:
                         difference threshold for label propagation algorithm.
                         [default: 0.00001]
 ```
-`max_iteration` and `diff_threshold` parameters are set by default. However, the user can specify them when running GrahpBin.
+`max_iteration` and `diff_threshold` parameters are set by default. However, the user can specify them when running GraphBin.
 
 ## Input Format
 
