@@ -70,10 +70,6 @@ print("This version of GraphBin makes use of the assembly graph produced by SPAd
 
 print("GraphBin started\n-----------------")
 
-print("Assembly graph file:", assembly_graph_file)
-print("Contig paths file:", contig_paths)
-print("Existing binning output file:", contig_bins_file)
-print("Final binning output file:", output_path)
 
 # Validate max_iteration and diff_threshold
 #---------------------------------------------------
@@ -97,9 +93,6 @@ except:
     print("Exiting GraphBin...\n")
     sys.exit(2)
 
-print("Maximum number of iterations:", max_iteration)
-print("Difference threshold:", diff_threshold)
-
 
 # Check if output folder exists
 #---------------------------------------------------
@@ -111,6 +104,14 @@ if output_path[-1:] != "/":
 # Create output folder if it does not exist
 if not os.path.isdir(output_path):
     subprocess.run("mkdir -p "+output_path, shell=True)
+
+
+print("Assembly graph file:", assembly_graph_file)
+print("Contig paths file:", contig_paths)
+print("Existing binning output file:", contig_bins_file)
+print("Final binning output file:", output_path)
+print("Maximum number of iterations:", max_iteration)
+print("Difference threshold:", diff_threshold)
 
 
 # Get the number of bins from the initial binning result
@@ -134,6 +135,8 @@ except:
     print("Exiting GraphBin...\n")
     sys.exit(2)
 
+
+print("\nConstructing the assembly graph...")
 
 # Get contig paths from contigs.paths
 #-------------------------------------
@@ -234,6 +237,8 @@ except:
 # Get initial binning result
 #----------------------------
 
+print("\nObtaining the initial binning result...")
+
 bins = [[] for x in range(n_bins)]
 
 try:
@@ -245,11 +250,6 @@ try:
             # print(contig_num,bin_num)
             bins[bin_num].append(contig_num)
 
-    print("\nInitial Binning result\n-----------------------")
-
-    for i in range(n_bins):
-        bins[i].sort()
-        print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
     print("Exiting GraphBin...\n")
@@ -289,6 +289,8 @@ def getClosestBinnedNeighbours(graph, node, binned_contigs):
                 queu_l.append(temp2)
     return labelled
 
+
+print("\nDetermining ambiguous vertices...")
 
 remove_labels = []
 
@@ -361,7 +363,8 @@ for b in range(n_bins):
                     remove_labels.append(i)
 
 remove_labels.sort()
-print("\nRemove labels of contigs:", remove_labels)
+
+print("Removing labels of ambiguous vertices...")
 
 # Remove labels of ambiguous vertices
 for i in remove_labels:
@@ -369,14 +372,13 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-print("\nRefined Binning result\n-----------------------")
-
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+print("\nObtaining Refined Binning result...")
         
 
 # Get vertices which are not isolated and not in components without any labels
 #-----------------------------------------------------------------------------
+
+print("\nDeteremining vertices which are not isolated and not in components without any labels...")
 
 non_isolated = []
 
@@ -418,21 +420,7 @@ for i in range(node_count):
                 if j not in non_isolated:
                     non_isolated.append(j)
 
-print("\nNumber of isolated contigs:", len(non_isolated))
-
-
-# Get vertices which are isolated
-#---------------------------------
-
-isolated=[]
-
-for i in range(node_count):
-    
-    neighbours = assembly_graph.neighbors(i, mode=ALL)
-    
-    if len(neighbours)==0:
-        isolated.append(i)
-
+print("Number of non-isolated contigs:", len(non_isolated))
 
 
 # Run label propagation
@@ -444,7 +432,7 @@ for contig in range(node_count):
     
     # Consider vertices that are not isolated
 
-    if contig in non_isolated and contig not in isolated:
+    if contig in non_isolated:
         line = []
         line.append(contig)
 
@@ -476,26 +464,26 @@ lp = LabelProp()
 
 lp.load_data_from_mem(data)
 
-print("\nStarting label propagation\n---------------------------")
+print("\nStarting label propagation with eps="+str(diff_threshold)+" and max_iteration="+str(max_iteration))
 
 ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False) 
 ans.sort()
+
+print("Obtaining Label Propagation result...")
 
 for l in ans:
     for i in range(n_bins):
         if l[1]==i+1 and l[0] not in bins[i]:
             bins[i].append(l[0])
 
-print("\nLabel Propagation result\n-------------------------")
-
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
 
 elapsed_time = time.time() - start_time
 
 
 # Remove labels of ambiguous vertices
 #-------------------------------------
+
+print("\nDetermining ambiguous vertices...")
 
 remove_labels = []
 
@@ -521,7 +509,8 @@ for b in range(n_bins):
             remove_labels.append(i)
 
 remove_labels.sort()
-print("\nRemove labels of contigs:", remove_labels)
+
+print("Removing labels of ambiguous vertices...")
 
 # Remove labels of ambiguous vertices
 for i in remove_labels:
@@ -529,14 +518,7 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-
-# Print the final result
-#------------------------
-
-print("\nFinal Refined Binning result\n-----------------------------")
-
-for i in range(n_bins):
-    print("Bin", i+1, "-", len(bins[i]), ":\n", bins[i])
+print("\nObtaining the Final Refined Binning result...")
 
 # Print elapsed time for the process
 print("\nElapsed time: ", elapsed_time, " seconds")
@@ -544,6 +526,8 @@ print("\nElapsed time: ", elapsed_time, " seconds")
 
 # Write result to output file
 #-----------------------------
+
+print("\nWriting the Final Binning result to file...")
 
 output_bins = []
 
