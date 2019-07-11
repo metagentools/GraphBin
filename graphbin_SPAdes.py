@@ -52,7 +52,7 @@ ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
 ap.add_argument("--max_iteration", required=False, nargs='?', type=int, help="maximum number of iterations for label propagation algorithm. [default: 100]")
-ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help="difference threshold for label propagation algorithm. [default: 0.00001]")
+ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help="difference threshold for label propagation algorithm. [default: 0.1]")
 
 args = vars(ap.parse_args())
 
@@ -63,7 +63,7 @@ contig_bins_file = args["binned"]
 output_path = args["output"]
 
 max_iteration = 100
-diff_threshold = 0.00001
+diff_threshold = 0.1
 
 print("\nWelcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs.")
 print("This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.\n")
@@ -249,6 +249,9 @@ try:
             contig_num = int(row[0])
             # print(contig_num,bin_num)
             bins[bin_num].append(contig_num)
+
+    for i in range(n_bins):
+        bins[i].sort()
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
@@ -469,7 +472,7 @@ print("\nStarting label propagation with eps="+str(diff_threshold)+" and max_ite
 ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False) 
 ans.sort()
 
-print("Obtaining Label Propagation result...")
+print("\nObtaining Label Propagation result...")
 
 for l in ans:
     for i in range(n_bins):
@@ -519,6 +522,9 @@ for i in remove_labels:
             bins[n].remove(i)
 
 print("\nObtaining the Final Refined Binning result...")
+
+for i in range(n_bins):
+    bins[i].sort()
 
 # Print elapsed time for the process
 print("\nElapsed time: ", elapsed_time, " seconds")
