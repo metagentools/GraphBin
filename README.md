@@ -47,7 +47,7 @@ optional arguments:
                         algorithm. [default: 100]
   --diff_threshold [DIFF_THRESHOLD]
                         difference threshold for label propagation algorithm.
-                        [default: 0.00001]
+                        [default: 0.1]
 ```
 ```
 usage: graphbin_SGA.py [-h] --graph GRAPH --binned BINNED --output OUTPUT
@@ -65,9 +65,9 @@ optional arguments:
                         algorithm. [default: 100]
   --diff_threshold [DIFF_THRESHOLD]
                         difference threshold for label propagation algorithm.
-                        [default: 0.00001]
+                        [default: 0.1]
 ```
-`max_iteration` and `diff_threshold` parameters are set by default. However, the user can specify them when running GraphBin.
+`max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
 
 ## Input Format
 
