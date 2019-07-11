@@ -189,6 +189,7 @@ class LabelProp():
     def run(self, eps, max_iter, show_log=False, clean_result=False):
         diff = 0.
         for i in range(max_iter):
+            print("Iteration "+str(i+1))
             diff = self.iterate()
             if diff < eps:
                 break
@@ -215,7 +216,7 @@ class LabelProp():
 ################################################################################
 
     def show_detail(self, diff, eps, i, max_iter):
-        print("Number of vertices:            ", self.vertex_size)
+        print("\nNumber of vertices:            ", self.vertex_size)
         print("Number of class labels:        ", self.label_size)
         print("Number of unlabeled vertices:  ", (self.vertex_size - self.labelled_size))
         print("Numebr of labeled vertices:    ", self.labelled_size)
