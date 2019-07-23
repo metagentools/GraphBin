@@ -228,7 +228,7 @@ except:
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
-def getClosestBinnedNeighbours(graph, node, binned_contigs):
+def getLabelledVertices(graph, node, binned_contigs):
     queu_l = [graph.neighbors(node, mode='ALL')]
     visited_l = [node]
     labelled = []
@@ -273,10 +273,10 @@ for b in range(n_bins):
 
         dist = {}
 
-        # Get set of closest binned neighbours with distance = 1
+        # Get set of closest labelled vertices with distance = 1
         closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
 
-        # Determine whether all the closest neighboring vertices have the same label as its own
+        # Determine whether all the closest labelled vertices have the same label as its own
         neighbours_have_same_label = True
         
         neighbours_binned = False
@@ -313,12 +313,12 @@ for b in range(n_bins):
 
             my_bin = b
 
-            # Get set of closest binned neighbours
-            closest_neighbours = getClosestBinnedNeighbours(assembly_graph, i, binned_contigs)
+            # Get set of closest labelled vertices
+            closest_neighbours = getLabelledVertices(assembly_graph, i, binned_contigs)
 
             if len(closest_neighbours) > 0:
 
-                # Determine whether all the closest vertices have the same label as its own
+                # Determine whether all the closest labelled vertices have the same label as its own
                 neighbours_have_same_label = True
 
                 for neighbour in closest_neighbours:
@@ -464,7 +464,7 @@ for b in range(n_bins):
 
         closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
 
-        # Determine whether all the closest binned neighboring vertices have the same label as its own
+        # Determine whether all the closest labelled vertices have the same label as its own
         neighbours_have_same_label = True
         
         for neighbour in closest_neighbours:
