@@ -262,7 +262,7 @@ except:
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
-def getLabelledVertices(graph, node, binned_contigs):
+def getClosestLabelledVertices(graph, node, binned_contigs):
     queu_l = [graph.neighbors(node, mode='ALL')]
     visited_l = [node]
     labelled = []
@@ -348,7 +348,7 @@ for b in range(n_bins):
             my_bin = b
 
             # Get set of closest labelled vertices
-            closest_neighbours = getLabelledVertices(assembly_graph, i, binned_contigs)
+            closest_neighbours = getClosestLabelledVertices(assembly_graph, i, binned_contigs)
 
             if len(closest_neighbours) > 0:
 
