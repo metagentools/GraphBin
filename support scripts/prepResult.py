@@ -8,21 +8,21 @@ numbered starting from 1.
 
 """
 
-import sys, getopt
+import sys
 import os
 import csv
 import argparse
 import re
+
 from Bio import SeqIO
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
 __credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
 __license__ = "GPL"
-__version__ = "1.0"
+__type__ = "Support Script"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
-__status__ = "Prototype"
 
 
 # Sample command
