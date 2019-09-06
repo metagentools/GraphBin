@@ -3,8 +3,9 @@
 **GraphBin** is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
 ## Dependencies
-GraphBin is coded in Python 3.6. To run GraphBin, you will need to install the following python modules.
+GraphBin is coded in Python 3.6. To run GraphBin and support scripts, you will need to install the following python modules.
 * [python-igraph](https://igraph.org/python/)
+* [Biopython](https://biopython.org/)
 
 The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation) module supporting Python 3 is provided in the source code.
 
@@ -99,6 +100,14 @@ python3 graphbin_SPAdes.py --graph /path/to/graph_file.gfa --paths /path/to/path
 ```
 ```
 python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+
+## Support Scripts
+
+`prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig ID and bin ID. Contigs are numbered starting from 0 and bins are numbered starting from 1. You can run `prepResult.py` as follows.
+
+```
+python prepResult.py --binned /path/to/folder_with_binning_result --assembler SPAdes/SGA --output /path/to/output_folder
 ```
 
 ## Test Data
