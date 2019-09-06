@@ -107,7 +107,7 @@ python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binni
 `prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig ID and bin ID. Contigs are numbered starting from 0 and bins are numbered starting from 1. You can run `prepResult.py` as follows.
 
 ```
-python prepResult.py --binned /path/to/folder_with_binning_result --assembler SPAdes/SGA --output /path/to/output_folder
+python prepResult.py --binned /path/to/folder_with_binning_result --assembler assembler_type_(SPAdes/SGA) --output /path/to/output_folder
 ```
 
 ## Test Data
