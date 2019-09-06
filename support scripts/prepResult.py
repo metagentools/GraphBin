@@ -176,7 +176,7 @@ with open(output_path + 'bin_ids.csv', mode='w') as bin_ids_file:
         bin_id_writer.writerow(row)
 
 print("\nFormatted initial binning results can be found at", contig_bins_file.name)
-print("\nBin ids and corresponding names of fasta files can be found at", bin_ids_file.name)
+print("\nBin IDs and corresponding names of fasta files can be found at", bin_ids_file.name)
 
 
 # Exit program
