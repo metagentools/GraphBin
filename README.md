@@ -109,6 +109,7 @@ python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binni
 ```
 python3 prepResult.py --binned /path/to/folder_with_binning_result --assembler assembler_type_(SPAdes/SGA) --output /path/to/output_folder
 ```
+You can see the usage options of `prepResult.py` by typing `python3 prepResult.py -h` on the command line.
 
 ## Test Data
 
