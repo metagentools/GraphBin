@@ -168,3 +168,6 @@ You can try running GraphBin using these test data files.
 [8] Zhu, X., Ghahramani, Z.: Learning from Labeled and Unlabeled Data with Label Propagation. Technical Report CMU-CALD-02, Carnegie Mellon University, (2002)
 
 [9] python-labelpropagation: Python implementation of label propagation, [https://github.com/ZwEin27/python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation).
+
+## Publication
+The manuscript for GraphBin is currently under review at the _Bioinformatics_ (Oxford Academic) journal.
