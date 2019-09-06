@@ -111,7 +111,7 @@ python3 prepResult.py --binned /path/to/folder_with_binning_result --assembler a
 ```
 You can see the usage options of `prepResult.py` by typing `python3 prepResult.py -h` on the command line.
 
-Formatted binning result will be stored in a file named `initial_contig_bins.csv` in the output folder provided. Bin IDs and corresponding fasta file of the bin will be recorded in a file named `bin_ids.csv` in the output folder provided.
+Formatted binning result will be stored in a file named `initial_contig_bins.csv` in the output folder provided. Bin IDs and corresponding fasta files for each bin will be recorded in a file named `bin_ids.csv` in the output folder provided.
 
 ## Test Data
 
