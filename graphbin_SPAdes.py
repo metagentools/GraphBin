@@ -11,7 +11,7 @@ discarded due to short length.
 graphbin_SPAdes.py makes use of the assembly graphs produced by SPAdes.
 """
 
-import sys, getopt
+import sys
 import os
 import subprocess
 import csv

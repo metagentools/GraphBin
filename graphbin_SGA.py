@@ -11,7 +11,7 @@ discarded due to short length.
 graphbin_SGA.py makes use of the assembly graphs produced by SGA (String Graph Assembler).
 """
 
-import sys, getopt
+import sys
 import os
 import subprocess
 import csv
