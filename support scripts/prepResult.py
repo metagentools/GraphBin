@@ -10,10 +10,7 @@ numbered starting from 1.
 
 import sys, getopt
 import os
-import subprocess
 import csv
-import operator
-import time
 import argparse
 import re
 from Bio import SeqIO
@@ -34,8 +31,6 @@ __status__ = "Prototype"
 #                          --assembler name of the assembler used (SPAdes or SGA)
 #                          --output /path/to/output_folder
 # -------------------------------------------------------------------
-
-start_time = time.time()
 
 
 # Setup argument parser
