@@ -17,10 +17,10 @@ You can see the usage options by typing `python3 visualiseResult_SPAdes.py -h` o
 
 ### Original MaxBin Labelling of the ESC+SPAdes dataset
 <p align="center">
-  <img src="images/3G_initial_binning_result.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
+  <img src="../images/3G_initial_binning_result.png" width="600" title="MaxBin Labelling" alt="MaxBin Labelling">
 </p>
 
 ### Final Labelling of the of the ESC+SPAdes dataset produced from GraphBin
 <p align="center">
-  <img src="images/3G_final_GraphBin_binning_result.png" width="400" title="Final Labelling" alt="Final Labelling">
+  <img src="../images/3G_final_GraphBin_binning_result.png" width="600" title="Final Labelling" alt="Final Labelling">
 </p>
