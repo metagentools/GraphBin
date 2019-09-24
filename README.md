@@ -104,7 +104,7 @@ python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binni
 
 ## Support Scripts
 
-GraphBin provides support scripts to format an initial binning result and visualise binning results in the assembly graph. Details about support scripts and how to execute them are provided in SupportREADME.md [https://github.com/Vini2/GraphBin/blob/master/support%20scripts/SupportREADME.md] file.
+GraphBin provides support scripts to format an initial binning result and visualise binning results in the assembly graph. Details about support scripts and how to execute them are provided in [SupportREADME.md] (https://github.com/Vini2/GraphBin/blob/master/support%20scripts/SupportREADME.md) file.
 
 ## Test Data
 
