@@ -14,3 +14,13 @@ Formatted binning result will be stored in a file named `initial_contig_bins.csv
 `visualiseResult_SPAdes.py` and `visualiseResult_SGA.py` allows you to visualize the binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. You can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin and compare.
 
 You can see the usage options by typing `python3 visualiseResult_SPAdes.py -h` or `python3 visualiseResult_SGA.py -h` on the command line.
+
+### Original MaxBin Labelling of the ESC+SPAdes dataset
+<p align="center">
+  <img src="images/3G_initial_binning_result.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
+</p>
+
+### Final Labelling of the of the ESC+SPAdes dataset produced from GraphBin
+<p align="center">
+  <img src="images/3G_final_GraphBin_binning_result.png" width="400" title="Final Labelling" alt="Final Labelling">
+</p>
