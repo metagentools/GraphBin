@@ -1,4 +1,6 @@
-# prepResult.py
+# Support scripts for GraphBin
+
+## prepResult.py
 
 `prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig ID and bin ID. Contigs are numbered starting from 0 and bins are numbered starting from 1. You can run `prepResult.py` as follows.
 
@@ -9,7 +11,7 @@ You can see the usage options of `prepResult.py` by typing `python3 prepResult.p
 
 Formatted binning result will be stored in a file named `initial_contig_bins.csv` in the output folder provided. Bin IDs and corresponding fasta files for each bin will be recorded in a file named `bin_ids.csv` in the output folder provided.
 
-# visualiseResult_SPAdes.py & visualiseResult_SGA.py
+## visualiseResult_SPAdes.py & visualiseResult_SGA.py
 
 `visualiseResult_SPAdes.py` and `visualiseResult_SGA.py` allows you to visualize the binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. You can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin and compare.
 
