@@ -216,12 +216,13 @@ class LabelProp():
 ################################################################################
 
     def show_detail(self, diff, eps, i, max_iter):
-        print("\nNumber of vertices:            ", self.vertex_size)
-        print("Number of class labels:        ", self.label_size)
-        print("Number of unlabeled vertices:  ", (self.vertex_size - self.labelled_size))
-        print("Numebr of labeled vertices:    ", self.labelled_size)
-        print("eps:                           ", eps)
-        print("max_iteration:                  ", max_iter)
+        print("\nTotal number of vertices:\t\t", self.vertex_size)
+        print("Number of class labels:\t\t\t", self.label_size)
+        print("Previous number of unlabeled vertices:\t", (self.vertex_size - self.labelled_size))
+        print("Previous numebr of labeled vertices:\t", self.labelled_size)
+        print("Value of eps parameter:\t\t\t", eps)
+        print("Value of max_iteration parameter:\t", max_iter)
+        print("\nFinal values:")
         print("iter = ", i+1, ", diff = ", diff)
 
     def show_vertex_adj(self):
