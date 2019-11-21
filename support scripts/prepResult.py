@@ -41,20 +41,24 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--binned", required=True, help="path to the folder containing the initial binning result from an existing tool")
 ap.add_argument("--assembler", required=True, help="name of the assembler used (SPAdes or SGA)")
 ap.add_argument("--output", required=True, help="path to the output folder")
+ap.add_argument("--prefix", required=False, nargs='?', help="prefix for the output file")
 
 args = vars(ap.parse_args())
 
 contig_bins_folder = args["binned"]
 assembler = args["assembler"]
 output_path = args["output"]
+prefix = ""
 
 
 # Check assembler type
+#---------------------------------------------------
 
 if not (assembler.lower() == "spades" or assembler.lower() == "sga"):
     print("\nPlease make sure to provide the correct assembler type (SPAdes or SGA).")
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(2)
+
 
 # Check if folder to initial binning result exists
 #---------------------------------------------------
@@ -104,6 +108,24 @@ if output_path[-1:] != "/":
 # Create output folder if it does not exist
 if not os.path.isdir(output_path):
     subprocess.run("mkdir -p "+output_path, shell=True)
+
+
+# Validate prefix
+#---------------------------------------------------
+try:
+
+    if args["prefix"] is not None:
+        if args["prefix"].endswith("_"):
+            prefix = args["prefix"]
+        else:
+            prefix = args["prefix"]+"_"
+    else:
+        prefix = ""
+
+except:
+    print("\nPlease enter a valid string for prefix")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
 
 
 # Format binning results.
@@ -165,13 +187,13 @@ for bin_file in files:
 
 print("\nWriting initial binning results to output file")
 
-with open(output_path + 'initial_contig_bins.csv', mode='w') as contig_bins_file:
+with open(output_path + prefix + 'initial_contig_bins.csv', mode='w') as contig_bins_file:
     contig_writer = csv.writer(contig_bins_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     
     for row in contig_bins:
         contig_writer.writerow(row)
 
-with open(output_path + 'bin_ids.csv', mode='w') as bin_ids_file:
+with open(output_path + prefix + 'bin_ids.csv', mode='w') as bin_ids_file:
     bin_id_writer = csv.writer(bin_ids_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     
     for row in bin_ids:
