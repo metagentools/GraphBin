@@ -565,6 +565,12 @@ for i in range(node_count):
             line.append(k+1)
             output_bins.append(line)
 
+for i in remove_labels:
+    line = []
+    line.append("NODE_"+str(contigs_map[i]))
+    line.append("unbinned")
+    output_bins.append(line)
+
 output_file = output_path + 'graphbin_output.csv'
 
 with open(output_file, mode='w') as output_file:
