@@ -20,7 +20,15 @@ You can download the latest release of GraphBin from [Releases](https://github.c
 ```
 git clone https://github.com/Vini2/GraphBin.git
 ```
+
+If you have downloaded a release, you will have to extract the files using the following command.
+
+```
+unzip [file_name].zip
+```
+
 Now go in to the source folder using the command
+
 ```
 cd GraphBin/src/
 ```
