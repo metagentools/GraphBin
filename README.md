@@ -2,8 +2,8 @@
 
 ![GitHub](https://img.shields.io/github/license/Vini2/GraphBin) 
 ![GitHub top language](https://img.shields.io/github/languages/top/Vini2/GraphBin)
-![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/Vini2/GraphBin)
 ![GitHub search hit counter](https://img.shields.io/github/search/Vini2/GraphBin/GraphBin)
+![GitHub All Releases](https://img.shields.io/github/downloads/Vini2/GraphBin/total)
 
 **GraphBin** is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
@@ -17,7 +17,7 @@ The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation
 You can go to these links and follow the instructions to download these modules.
 
 ## Downloading GraphBin
-To download GraphBin, you have to clone the GraphBin repository to your machine.
+You can download the latest release of GraphBin from [Releases](https://github.com/Vini2/GraphBin/releases) or clone the GraphBin repository to your machine.
 
 ```
 git clone https://github.com/Vini2/GraphBin.git
