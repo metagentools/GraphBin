@@ -17,6 +17,11 @@ To download GraphBin, you have to clone the GraphBin repository to your machine.
 ```
 git clone https://github.com/Vini2/GraphBin.git
 ```
+Now go in to the source folder using the command
+```
+cd GraphBin/src/
+```
+
 ## Assembly
 The assembly of contigs can be done using 2 assembly software.
 
