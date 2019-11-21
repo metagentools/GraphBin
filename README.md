@@ -88,7 +88,7 @@ optional arguments:
 * Assembly graph file (in `.asqg` format)
 * Binning output from an existing tool (in `.csv` format)
 
-**Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. The numbering of bins starts from 1.
+**Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and the numbering of bins starts from 1.
 
 Example SPAdes binned input
 ```
