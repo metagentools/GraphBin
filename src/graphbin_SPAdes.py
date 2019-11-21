@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """graphbin_SPAdes.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
 

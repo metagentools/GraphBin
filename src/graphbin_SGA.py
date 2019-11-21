@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """graphbin_SGA.py: Improved binning of metagenomic contigs using SGA assembly graphs.
 
