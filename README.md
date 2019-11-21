@@ -6,9 +6,9 @@
 **GraphBin** is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
 ## Dependencies
-GraphBin is coded in Python 3.6. To run GraphBin and support scripts, you will need to install the following python modules.
-* [python-igraph](https://igraph.org/python/)
-* [Biopython](https://biopython.org/)
+The GraphBin codebase is implemented in Python 3.6.5. To run GraphBin and support scripts, you will need to install the following python modules. The versions used for development are mentioned within brackets.
+* [python-igraph](https://igraph.org/python/) (0.7.1)
+* [Biopython](https://biopython.org/) (1.72)
 
 The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation) module supporting Python 3 is provided in the source code.
 
