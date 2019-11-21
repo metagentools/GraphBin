@@ -43,6 +43,7 @@ optional arguments:
   --binned BINNED       path to the .csv file with the initial binning output
                         from an existing tool
   --output OUTPUT       path to the output folder
+  --prefix [PREFIX]     prefix for the output file
   --max_iteration [MAX_ITERATION]
                         maximum number of iterations for label propagation
                         algorithm. [default: 100]
@@ -61,6 +62,7 @@ optional arguments:
   --binned BINNED       path to the .csv file with the initial binning output
                         from an existing tool
   --output OUTPUT       path to the output folder
+  --prefix [PREFIX]     prefix for the output file
   --max_iteration [MAX_ITERATION]
                         maximum number of iterations for label propagation
                         algorithm. [default: 100]
