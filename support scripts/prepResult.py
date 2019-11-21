@@ -129,6 +129,8 @@ for bin_file in files:
 
             contig_num = 0
 
+            line = []
+
             try:
 
                 if assembler.lower() == "spades":
@@ -136,7 +138,8 @@ for bin_file in files:
                     start_n = 'NODE_'
                     end_n = '_length'
                         
-                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))-1
+                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
+                    line.append('NODE_'+str(contig_num))
 
                 elif assembler.lower() == "sga":
 
@@ -144,14 +147,13 @@ for bin_file in files:
                     end_n = ''
                         
                     contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
+                    line.append('contig-'+str(contig_num))
 
             except:
                 print("\nContig naming does not match with the assembler type provided. Please make sure to provide the correct assembler type.")
                 print("\nExiting prepResult.py...\nBye...!\n")
                 sys.exit(2)
 
-            line = []
-            line.append(str(contig_num))
             line.append(str(i))
             contig_bins.append(line)
 
