@@ -90,7 +90,7 @@ optional arguments:
 
 **Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. The numbering of bins starts from 1.
 
-SPAdes binned input
+Example SPAdes binned input
 ```
 NODE_1,1
 NODE_2,1
@@ -99,7 +99,7 @@ NODE_4,2
 NODE_5,2
 ...
 ```
-SGA binned input
+Example SGA binned input
 ```
 contig-0,1
 contig-1,2
@@ -108,7 +108,7 @@ contig-3,1
 contig-4,2
 ...
 ```
-GraphBin provides a support script to generate binning result files. You can refer to [SupportREADME.md](https://github.com/Vini2/GraphBin/blob/master/support%20scripts/SupportREADME.md) file for more details.
+GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [SupportREADME.md](https://github.com/Vini2/GraphBin/blob/master/support%20scripts/SupportREADME.md) file for more details.
 
 ## Example Usage
 
