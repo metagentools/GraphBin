@@ -53,6 +53,7 @@ ap.add_argument("--graph", required=True, help="path to the assembly graph file"
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
+ap.add_argument("--prefix", required=False, nargs='?', help="prefix for the output file")
 ap.add_argument("--max_iteration", required=False, nargs='?', type=int, help="maximum number of iterations for label propagation algorithm. [default: 100]")
 ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help="difference threshold for label propagation algorithm. [default: 0.1]")
 
@@ -64,6 +65,7 @@ n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
+prefix = args["prefix"]
 
 max_iteration = 100
 diff_threshold = 0.1
@@ -93,6 +95,24 @@ try:
 
 except:
     print("\nPlease enter a valid number for diff_threshold")
+    print("Exiting GraphBin...\n")
+    sys.exit(2)
+
+
+# Validate prefix
+#---------------------------------------------------
+try:
+
+    if args["prefix"] is not None:
+        if args["prefix"].endswith("_"):
+            prefix = args["prefix"]
+        else:
+            prefix = args["prefix"]+"_"
+    else:
+        prefix = ""
+
+except:
+    print("\nPlease enter a valid string for prefix")
     print("Exiting GraphBin...\n")
     sys.exit(2)
 
@@ -571,7 +591,7 @@ for i in remove_labels:
     line.append("unbinned")
     output_bins.append(line)
 
-output_file = output_path + 'graphbin_output.csv'
+output_file = output_path + prefix + 'graphbin_output.csv'
 
 with open(output_file, mode='w') as output_file:
     output_writer = csv.writer(output_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
