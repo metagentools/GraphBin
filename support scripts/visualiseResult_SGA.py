@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """visualiseResult_SGA.py: Visualise the binning result from on the SGA assembly graph.
 

@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """visualiseResult_SPAdes.py: Visualise the binning result from on the SPAdes assembly graph.
 

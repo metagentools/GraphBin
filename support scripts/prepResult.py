@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/env python
 
 """prepResult.py: Format the initial binning result from an existing binning tool.
 
