@@ -62,7 +62,7 @@ n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
-prefix = args["prefix"]
+prefix = ""
 
 max_iteration = 100
 diff_threshold = 0.1
