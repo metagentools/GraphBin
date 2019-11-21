@@ -18,9 +18,11 @@ import csv
 import operator
 import time
 import argparse
+import re
 
 from igraph import *
 from labelpropagation.labelprop import LabelProp
+from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
@@ -141,6 +143,8 @@ print("\nConstructing the assembly graph...")
 
 links = []
 
+my_map = BidirectionalMap()
+
 try:
     # Get contig connections from .asqg file
     with open(assembly_graph_file) as file:
@@ -150,6 +154,10 @@ try:
 
             # Count the number of contigs
             if "VT" in line:
+                start = 'contig-'
+                end = ''
+                contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
+                my_map[n_contigs] = contig_num
                 n_contigs += 1
             
             # Identify lines with link information
@@ -165,6 +173,9 @@ except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
     print("Exiting GraphBin...\n")
     sys.exit(2)
+
+contigs_map = my_map
+contigs_map_rev = my_map.inverse
 
 node_count = n_contigs
 
@@ -188,7 +199,7 @@ try:
     for link in links:
         # Remove self loops
         if link[0] != link[1]:
-            assembly_graph.add_edge(link[0], link[1])
+            assembly_graph.add_edge(contigs_map_rev[link[0]], contigs_map_rev[link[1]])
 
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
@@ -209,12 +220,12 @@ try:
     with open(contig_bins_file) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
+            start = 'contig-'
+            end = ''
+            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+            
             bin_num = int(row[1])-1
-            contig_num = int(row[0])
-            # print(contig_num,bin_num)
             bins[bin_num].append(contig_num)
-
-    print("\nInitial Binning result\n-----------------------")
 
     for i in range(n_bins):
         bins[i].sort()
@@ -507,7 +518,7 @@ for i in range(node_count):
     for k in range(n_bins):
         if i in bins[k]:
             line = []
-            line.append("contig-"+str(i+1))
+            line.append("contig-"+str(contigs_map[i]))
             line.append(k+1)
             output_bins.append(line)
 

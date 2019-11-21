@@ -18,9 +18,11 @@ import csv
 import operator
 import time
 import argparse
+import re
 
 from igraph import *
 from labelpropagation.labelprop import LabelProp
+from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
@@ -58,6 +60,7 @@ args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
 contig_paths = args["paths"]
+n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
@@ -143,6 +146,9 @@ print("\nConstructing the assembly graph...")
 
 paths = []
 links = []
+current_contig_num = ""
+
+my_map = BidirectionalMap()
 
 try:
     with open(contig_paths) as file:
@@ -150,6 +156,15 @@ try:
         path = file.readline()
         
         while name != "" and path != "":
+
+            start = 'NODE_'
+            end = '_length'
+            contig_num = int(re.search('%s(.*)%s' % (start, end), name.rstrip()).group(1))
+
+            if current_contig_num != contig_num:
+                my_map[n_contigs] = contig_num
+                current_contig_num = contig_num
+                n_contigs += 1
                 
             while ";" in path:
                 path = path[:-2]+","+file.readline()
@@ -163,7 +178,10 @@ except:
     print("Exiting GraphBin...\n")
     sys.exit(2)
 
-node_count = int(len(paths)/2)
+contigs_map = my_map
+contigs_map_rev = my_map.inverse
+
+node_count = n_contigs
 
 print("\nTotal number of contigs available:", node_count)
 
@@ -245,9 +263,11 @@ try:
     with open(contig_bins_file) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
+            start = 'NODE_'
+            end = ''
+            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+            
             bin_num = int(row[1])-1
-            contig_num = int(row[0])
-            # print(contig_num,bin_num)
             bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
@@ -541,7 +561,7 @@ for i in range(node_count):
     for k in range(n_bins):
         if i in bins[k]:
             line = []
-            line.append("NODE_"+str(i+1))
+            line.append("NODE_"+str(contigs_map[i]))
             line.append(k+1)
             output_bins.append(line)
 
