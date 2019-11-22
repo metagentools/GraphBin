@@ -477,9 +477,6 @@ for l in ans:
             bins[i].append(l[0])
 
 
-elapsed_time = time.time() - start_time
-
-
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
@@ -517,6 +514,8 @@ for i in remove_labels:
     for n in range(n_bins):
         if i in bins[n]:
             bins[n].remove(i)
+
+elapsed_time = time.time() - start_time
 
 print("\nObtaining the Final Refined Binning result...")
 
