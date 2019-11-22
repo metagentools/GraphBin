@@ -7,8 +7,8 @@
 
 ## Dependencies
 The GraphBin codebase is implemented in Python 3.6.5. To run GraphBin and support scripts, you will need to install the following python modules. The versions used for development are mentioned within brackets.
-* [python-igraph](https://igraph.org/python/) (0.7.1)
-* [Biopython](https://biopython.org/) (1.72)
+* [python-igraph](https://igraph.org/python/) (0.7.1) - [Anaconda distribution](https://anaconda.org/conda-forge/python-igraph)
+* [Biopython](https://biopython.org/) (1.72) - [Anaconda distribution](https://anaconda.org/conda-forge/biopython)
 
 The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation) module supporting Python 3 is provided in the source code.
 
