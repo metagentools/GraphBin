@@ -19,6 +19,7 @@ import random
 
 from igraph import *
 from base64 import b16encode
+from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
@@ -67,7 +68,7 @@ final_binning_result = args["final"]
 assembly_graph_file = args["graph"]
 contig_paths = args["paths"]
 output_path = args["output"]
-prefix = "my"
+prefix = ""
 dpi = 300
 width = 1000
 height = 1000
@@ -76,11 +77,27 @@ image_type = "png"
 print("\nWelcome to binning result visualiser of GraphBin!")
 print("This version of the visualiser makes use of the assembly graph produced by SPAdes which is based on the OLC (more recent string graph) approach.\n")
 
-# Obtain prefix and type if provided
-#---------------------------------------------------
-if args["prefix"] is not None:
-    prefix = args["prefix"]
 
+# Validate prefix
+#---------------------------------------------------
+try:
+
+    if args["prefix"] is not None:
+        if args["prefix"].endswith("_"):
+            prefix = args["prefix"]
+        else:
+            prefix = args["prefix"]+"_"
+    else:
+        prefix = ""
+
+except:
+    print("\nPlease enter a valid string for prefix")
+    print("Exiting visualiseResult.py...\nBye...!\n")
+    sys.exit(2)
+
+
+# Obtain type if provided
+#---------------------------------------------------
 if args["type"] is not None:
     if args["type"].startswith("."):
         image_type = args["type"][1:]
@@ -171,6 +188,10 @@ print("\nConstructing the assembly graph...")
 
 paths = []
 links = []
+current_contig_num = ""
+n_contigs = 0
+
+my_map = BidirectionalMap()
 
 try:
     with open(contig_paths) as file:
@@ -178,6 +199,15 @@ try:
         path = file.readline()
         
         while name != "" and path != "":
+
+            start = 'NODE_'
+            end = '_length'
+            contig_num = int(re.search('%s(.*)%s' % (start, end), name.rstrip()).group(1))
+
+            if current_contig_num != contig_num:
+                my_map[n_contigs] = contig_num
+                current_contig_num = contig_num
+                n_contigs += 1
                 
             while ";" in path:
                 path = path[:-2]+","+file.readline()
@@ -188,10 +218,13 @@ try:
             path = file.readline()
 except:
     print("\nPlease make sure that the correct path to the contig paths file is provided")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\n")
     sys.exit(2)
 
-node_count = int(len(paths)/2)
+contigs_map = my_map
+contigs_map_rev = my_map.inverse
+
+node_count = n_contigs
 
 print("\nTotal number of contigs available:", node_count)
 
@@ -220,7 +253,7 @@ try:
 
     for i in range(len(assembly_graph.vs)):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(i)
+        assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
     # Iterate paths
     for i in range(len(paths)):
@@ -258,7 +291,7 @@ try:
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\n")
     sys.exit(2)
 
 
@@ -273,16 +306,19 @@ try:
     with open(initial_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
+            start = 'NODE_'
+            end = ''
+            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+            
             bin_num = int(row[1])-1
-            contig_num = int(row[0])
             bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
         bins[i].sort()
 
 except:
-    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
+    print("Exiting GraphBin...\n")
     sys.exit(2)
 
 
@@ -317,7 +353,7 @@ my_colours = colours(n_bins)
 
 print("\nDrawing and saving the assembly graph with the initial binning result...")
 
-initial_out_fig_name = output_path+prefix+"_initial_binning_result."+image_type
+initial_out_fig_name = output_path+prefix+"initial_binning_result."+image_type
 
 node_colours = []
 
@@ -371,9 +407,10 @@ try:
     with open(final_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            bin_num = int(row[1])-1
-            contig_num = int(row[0][5:])-1
-            bins[bin_num].append(contig_num)
+            if row[1] != 'unbinned':
+                bin_num = int(row[1])-1
+                contig_num = int(row[0][5:])-1
+                bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
         bins[i].sort()
@@ -389,7 +426,7 @@ except:
 
 print("\nDrawing and saving the assembly graph with the final GraphBin binning result...")
 
-final_out_fig_name = output_path+prefix+"_final_GraphBin_binning_result."+image_type
+final_out_fig_name = output_path+prefix+"final_GraphBin_binning_result."+image_type
 
 node_colours = []
 

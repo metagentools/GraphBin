@@ -152,10 +152,10 @@ try:
     bins_list.sort()
 
     n_bins = len(bins_list)
-    print("Number of bins available in binning result:", n_bins)
+    print("Number of bins available in initial binning result:", n_bins)
 except:
-    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting GraphBin...\n")
+    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
+    print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
 
@@ -195,7 +195,7 @@ try:
             path = file.readline()
 except:
     print("\nPlease make sure that the correct path to the contig paths file is provided")
-    print("Exiting GraphBin...\n")
+    print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
 contigs_map = my_map
@@ -268,7 +268,7 @@ try:
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting GraphBin...\n")
+    print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
 
@@ -295,7 +295,7 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting GraphBin...\n")
+    print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
 

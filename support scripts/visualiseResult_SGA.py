@@ -19,6 +19,7 @@ import random
 
 from igraph import *
 from base64 import b16encode
+from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
@@ -64,7 +65,7 @@ initial_binning_result = args["initial"]
 final_binning_result = args["final"]
 assembly_graph_file = args["graph"]
 output_path = args["output"]
-prefix = "my"
+prefix = ""
 dpi = 300
 width = 1000
 height = 1000
@@ -73,11 +74,27 @@ image_type = "png"
 print("\nWelcome to binning result visualiser of GraphBin!")
 print("This version of the visualiser makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.\n")
 
-# Obtain prefix and type if provided
-#---------------------------------------------------
-if args["prefix"] is not None:
-    prefix = args["prefix"]
 
+# Validate prefix
+#---------------------------------------------------
+try:
+
+    if args["prefix"] is not None:
+        if args["prefix"].endswith("_"):
+            prefix = args["prefix"]
+        else:
+            prefix = args["prefix"]+"_"
+    else:
+        prefix = ""
+
+except:
+    print("\nPlease enter a valid string for prefix")
+    print("Exiting visualiseResult.py...\nBye...!\n")
+    sys.exit(2)
+
+
+# Obtain type if provided
+#---------------------------------------------------
 if args["type"] is not None:
     if args["type"].startswith("."):
         image_type = args["type"][1:]
@@ -168,6 +185,7 @@ print("\nConstructing the assembly graph...")
 
 links = []
 n_contigs = 0
+my_map = BidirectionalMap()
 
 try:
     # Get contig connections from .asqg file
@@ -178,6 +196,10 @@ try:
 
             # Count the number of contigs
             if "VT" in line:
+                start = 'contig-'
+                end = ''
+                contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
+                my_map[n_contigs] = contig_num
                 n_contigs += 1
             
             # Identify lines with link information
@@ -193,6 +215,9 @@ except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
     print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
+
+contigs_map = my_map
+contigs_map_rev = my_map.inverse
 
 node_count = n_contigs
 
@@ -210,13 +235,13 @@ try:
 
     for i in range(len(assembly_graph.vs)):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(i)
+        assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
     # Iterate links
     for link in links:
         # Remove self loops
         if link[0] != link[1]:
-            assembly_graph.add_edge(link[0], link[1])
+            assembly_graph.add_edge(contigs_map_rev[link[0]], contigs_map_rev[link[1]])
 
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
@@ -237,8 +262,11 @@ try:
     with open(initial_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
+            start = 'contig-'
+            end = ''
+            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+            
             bin_num = int(row[1])-1
-            contig_num = int(row[0])
             bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
@@ -281,7 +309,7 @@ my_colours = colours(n_bins)
 
 print("\nDrawing and saving the assembly graph with the initial binning result...")
 
-initial_out_fig_name = output_path+prefix+"_initial_binning_result."+image_type
+initial_out_fig_name = output_path+prefix+"initial_binning_result."+image_type
 
 node_colours = []
 
@@ -335,9 +363,10 @@ try:
     with open(final_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            bin_num = int(row[1])-1
-            contig_num = int(row[0][7:])
-            bins[bin_num].append(contig_num)
+            if row[1] != 'unbinned':
+                bin_num = int(row[1])-1
+                contig_num = int(row[0][7:])
+                bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
         bins[i].sort()
@@ -353,7 +382,7 @@ except:
 
 print("\nDrawing and saving the assembly graph with the final GraphBin binning result...")
 
-final_out_fig_name = output_path+prefix+"_final_GraphBin_binning_result."+image_type
+final_out_fig_name = output_path+prefix+"final_GraphBin_binning_result."+image_type
 
 node_colours = []
 
