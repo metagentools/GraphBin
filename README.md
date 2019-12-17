@@ -36,8 +36,8 @@ cd GraphBin/src/
 ## Assembly
 The assembly of contigs can be done using 3 assembly software.
 
-### SPAdes
-[**SPAdes**](http://cab.spbu.ru/software/spades/) is an assembler based on the de Bruijn graph approach. Use SPAdes software to assemble reads into contigs. Use the metagenomics mode for assembly.
+### metaSPAdes
+[**SPAdes**](http://cab.spbu.ru/software/spades/) is an assembler based on the de Bruijn graph approach. [**metaSPAdes**](https://genome.cshlp.org/content/27/5/824) is the dedicated metagenomic assembler of SPAdes. Use metaSPAdes (SPAdes in metagenomics mode) software to assemble reads into contigs.
 
 ### SGA
 [**SGA**](https://github.com/jts/sga) (String Graph Assembler) is an assembler based on the overlap-layout-consensus (more recently string graph) approach. Use SGA software to assemble reads into contigs.
@@ -135,6 +135,7 @@ The data used to test GraphBin can be found in the `test data` folder. The test 
 * Paths file for the assembly graph (for the datasets assembled using SPAdes)
 * Initial binning result from MaxBin 2.0
 * Initial binning result from MetaWatt
+* Initial binning result from MetaBAT 2
 * Ground truth labelling of contigs from TAXAassign
 
 You can try running GraphBin using these test data files.
