@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-"""graphbin_MEGAHIT.py: Improved binning of metagenomic contigs using SGA assembly graphs.
+"""graphbin_MEGAHIT.py: Improved binning of metagenomic contigs using MEGAHIT assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
