@@ -36,9 +36,9 @@ __status__ = "Prototype"
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_SGA.py     --graph /path/to/graph_file.asqg
-#                            --binned /path/to/binning_result.csv
-#                            --output /path/to/output_folder
+# python graphbin_MEGAHIT.py    --graph /path/to/graph_file.asqg
+#                               --binned /path/to/binning_result.csv
+#                               --output /path/to/output_folder
 # -------------------------------------------------------------------
 
 start_time = time.time()
