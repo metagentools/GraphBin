@@ -199,6 +199,8 @@ contigs_map_rev = my_map.inverse
 
 node_count = n_contigs
 
+print("\nTotal number of contigs available:", node_count)
+
 
 ## Construct the assembly graph
 #-------------------------------
@@ -208,9 +210,13 @@ try:
     # Create the graph
     assembly_graph = Graph()
 
+    # Create list of edges
+    edge_list = []
+
     # Add vertices
     assembly_graph.add_vertices(node_count)
 
+    # Name vertices
     for i in range(len(assembly_graph.vs)):
         assembly_graph.vs[i]["id"]= i
         assembly_graph.vs[i]["label"]= str(i)
@@ -219,8 +225,11 @@ try:
     for link in links:
         # Remove self loops
         if link[0] != link[1]:
-            assembly_graph.add_edge(contigs_map_rev[link[0]], contigs_map_rev[link[1]])
+            # Add edge to list of edges
+            edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
 
+    # Add edges to the graph
+    assembly_graph.add_edges(edge_list)
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 except:
@@ -228,6 +237,7 @@ except:
     print("Exiting GraphBin...\n")
     sys.exit(2)
 
+print("Total number of edges in the assembly graph:", len(edge_list))
 
 # Get initial binning result
 #----------------------------

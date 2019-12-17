@@ -21,6 +21,7 @@ import argparse
 import re
 
 from igraph import *
+from collections import defaultdict
 from labelpropagation.labelprop import LabelProp
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
@@ -85,7 +86,7 @@ try:
 
 except:
     print("\nPlease enter a valid number for max_iterations")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 try:
@@ -95,7 +96,7 @@ try:
 
 except:
     print("\nPlease enter a valid number for diff_threshold")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -113,7 +114,7 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -155,7 +156,7 @@ try:
     print("Number of bins available in initial binning result:", n_bins)
 except:
     print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -164,11 +165,13 @@ print("\nConstructing the assembly graph...")
 # Get contig paths from contigs.paths
 #-------------------------------------
 
-paths = []
-links = []
-current_contig_num = ""
+paths = {}
+segment_contigs = {}
+node_count = 0
 
 my_map = BidirectionalMap()
+
+current_contig_num = ""
 
 try:
     with open(contig_paths) as file:
@@ -176,35 +179,50 @@ try:
         path = file.readline()
         
         while name != "" and path != "":
-
-            start = 'NODE_'
-            end = '_length'
-            contig_num = int(re.search('%s(.*)%s' % (start, end), name.rstrip()).group(1))
-
-            if current_contig_num != contig_num:
-                my_map[n_contigs] = contig_num
-                current_contig_num = contig_num
-                n_contigs += 1
                 
             while ";" in path:
                 path = path[:-2]+","+file.readline()
-                
-            paths.append(path.split("\n")[0])
+            
+            start = 'NODE_'
+            end = '_length_'
+            contig_num = str(int(re.search('%s(.*)%s' % (start, end), name).group(1)))
+            
+            segments = path.rstrip().split(",")
+
+            if current_contig_num != contig_num:
+                my_map[n_contigs] = int(contig_num)
+                current_contig_num = contig_num
+                n_contigs += 1
+            
+            if contig_num not in paths:
+                paths[contig_num] = [segments[0], segments[-1]]
+            
+            for segment in segments:
+                if segment not in segment_contigs:
+                    segment_contigs[segment] = set([contig_num])
+                else:
+                    segment_contigs[segment].add(contig_num)
             
             name = file.readline()
             path = file.readline()
+
 except:
     print("\nPlease make sure that the correct path to the contig paths file is provided")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 contigs_map = my_map
+print(contigs_map)
 contigs_map_rev = my_map.inverse
+print()
+print(contigs_map_rev)
 
 node_count = n_contigs
 
 print("\nTotal number of contigs available:", node_count)
 
+links = []
+links_map = defaultdict(set)
 
 ## Construct the assembly graph
 #-------------------------------
@@ -219,58 +237,77 @@ try:
             # Identify lines with link information
             if "L" in line:
                 strings = line.split("\t")
+                f1, f2 = strings[1]+strings[2], strings[3]+strings[4]
+                links_map[f1].add(f2)
+                links_map[f2].add(f1)
                 links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
             line = file.readline()
+            
 
-    # Create the graph
+    # Create graph
     assembly_graph = Graph()
 
     # Add vertices
     assembly_graph.add_vertices(node_count)
 
-    for i in range(len(assembly_graph.vs)):
+    # Create list of edges
+    edge_list = []
+
+    # Name vertices
+    for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
         assembly_graph.vs[i]["label"]= str(i)
 
-    # Iterate paths
+    print()
+    print(paths)
+
     for i in range(len(paths)):
-        segments = paths[i].split(",")
+        segments = paths[str(contigs_map[i])]
+        
         start = segments[0]
-        end = segments[len(segments)-1]
+        start_rev = ""
+
+        if start.endswith("+"):
+            start_rev = start[:-1]+"-"
+        else:
+            start_rev = start[:-1]+"+"
+            
+        end = segments[1]
+        end_rev = ""
+
+        if end.endswith("+"):
+            end_rev = end[:-1]+"-"
+        else:
+            end_rev = end[:-1]+"+"
         
         new_links = []
-        connections = []
         
-        # Iterate links
-        for link in links:
-            link_list = link.split()
-            
-            if start in link_list[0]:
-                new_links.append(link_list[1])
-            elif start in link_list[1]:
-                new_links.append(link_list[0])
-            if end in link_list[0]:
-                new_links.append(link_list[1])
-            elif end in link_list[1]:
-                new_links.append(link_list[0])
+        if start in links_map:
+            new_links.extend(list(links_map[start]))
+        if start_rev in links_map:
+            new_links.extend(list(links_map[start_rev]))
+        if end in links_map:
+            new_links.extend(list(links_map[end]))
+        if end_rev in links_map:
+            new_links.extend(list(links_map[end_rev]))
         
-        # Determine connections
         for new_link in new_links:
-            for j in range(len(paths)):
-                if new_link in paths[j] and int(j/2) not in connections and int(j/2)!=int(i/2):
-                    ind = int(j/2)
-                    connections.append(ind)
-        
-        # Add connections in graph
-        for connection in connections:
-            assembly_graph.add_edge(int(i/2),connection)
+            if new_link in segment_contigs:
+                for contig in segment_contigs[new_link]:
+                    if i!=int(contig):
+                        # Add edge to list of edges
+                        edge_list.append((i,contigs_map_rev[int(contig)]))
 
+    # Add edges to the graph
+    assembly_graph.add_edges(edge_list)
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
+
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
+print("Total number of edges in the assembly graph:", len(edge_list))
 
 # Get initial binning result
 #----------------------------
@@ -295,7 +332,7 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
