@@ -54,8 +54,8 @@ prefix = ""
 # Check assembler type
 #---------------------------------------------------
 
-if not (assembler.lower() == "spades" or assembler.lower() == "sga"):
-    print("\nPlease make sure to provide the correct assembler type (SPAdes or SGA).")
+if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit"):
+    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT).")
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(2)
 
@@ -155,7 +155,7 @@ for bin_file in files:
 
             try:
 
-                if assembler.lower() == "spades":
+                if assembler.lower() == "spades" or assembler.lower() == "megahit":
 
                     start_n = 'NODE_'
                     end_n = '_length'
