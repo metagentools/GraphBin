@@ -91,7 +91,7 @@ optional arguments:
 
 **Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and the numbering of bins starts from 1.
 
-Example SPAdes and MEGAHIT binned input
+Example metaSPAdes and MEGAHIT binned input
 ```
 NODE_1,1
 NODE_2,1
@@ -132,7 +132,7 @@ GraphBin provides support scripts to format an initial binning result and visual
 The data used to test GraphBin can be found in the `test data` folder. The test data for each of the datasets include the following files.
 * Contigs file
 * Assembly graph file
-* Paths file for the assembly graph (for the datasets assembled using SPAdes)
+* Paths file for the assembly graph (for the datasets assembled using metaSPAdes)
 * Initial binning result from MaxBin 2.0
 * Initial binning result from MetaWatt
 * Initial binning result from MetaBAT 2
@@ -140,7 +140,7 @@ The data used to test GraphBin can be found in the `test data` folder. The test 
 
 You can try running GraphBin using these test data files.
 
-## Visualization of the Assembly Graph of ESC+SPAdes Test Dataset
+## Visualization of the Assembly Graph of ESC+metaSPAdes Test Dataset
 
 ### Initial Assembly Graph
 <p align="center">
