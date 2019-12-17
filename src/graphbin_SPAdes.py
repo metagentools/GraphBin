@@ -62,7 +62,6 @@ args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
 contig_paths = args["paths"]
-n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
@@ -190,9 +189,9 @@ try:
             segments = path.rstrip().split(",")
 
             if current_contig_num != contig_num:
-                my_map[n_contigs] = int(contig_num)
+                my_map[node_count] = int(contig_num)
                 current_contig_num = contig_num
-                n_contigs += 1
+                node_count += 1
             
             if contig_num not in paths:
                 paths[contig_num] = [segments[0], segments[-1]]
@@ -212,17 +211,13 @@ except:
     sys.exit(2)
 
 contigs_map = my_map
-print(contigs_map)
 contigs_map_rev = my_map.inverse
-print()
-print(contigs_map_rev)
-
-node_count = n_contigs
 
 print("\nTotal number of contigs available:", node_count)
 
 links = []
 links_map = defaultdict(set)
+
 
 ## Construct the assembly graph
 #-------------------------------

@@ -58,7 +58,6 @@ ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help=
 args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
-n_contigs = 0
 n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
@@ -83,7 +82,7 @@ try:
 
 except:
     print("\nPlease enter a valid number for max_iterations")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 try:
@@ -93,7 +92,7 @@ try:
 
 except:
     print("\nPlease enter a valid number for diff_threshold")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -111,7 +110,7 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -152,7 +151,7 @@ try:
     print("Number of bins available in binning result:", n_bins)
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
@@ -164,6 +163,8 @@ print("\nConstructing the assembly graph...")
 links = []
 
 my_map = BidirectionalMap()
+
+node_count = 0
 
 try:
     # Get contig connections from .asqg file
@@ -177,8 +178,8 @@ try:
                 start = 'contig-'
                 end = ''
                 contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
-                my_map[n_contigs] = contig_num
-                n_contigs += 1
+                my_map[node_count] = contig_num
+                node_count += 1
             
             # Identify lines with link information
             elif "ED" in line:
@@ -191,13 +192,11 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 contigs_map = my_map
 contigs_map_rev = my_map.inverse
-
-node_count = n_contigs
 
 print("\nTotal number of contigs available:", node_count)
 
@@ -234,7 +233,7 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 print("Total number of edges in the assembly graph:", len(edge_list))
@@ -262,7 +261,7 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting GraphBin...\n")
+    print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
 
