@@ -1,4 +1,4 @@
-# GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs
+# GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
 ![GitHub](https://img.shields.io/github/license/Vini2/GraphBin) 
 ![GitHub top language](https://img.shields.io/github/languages/top/Vini2/GraphBin)
