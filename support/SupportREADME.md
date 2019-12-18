@@ -30,3 +30,7 @@ You can see the usage options by typing `python3 visualiseResult_SPAdes.py -h` o
 ## fastg2gfa
 
 The MEGAHIT toolkit will result in a FASTG file which you can convert to GFA using [fastg2gfa](https://github.com/lh3/gfa1/blob/master/misc/fastg2gfa.c).
+
+```
+fastg2gfa final.fastg > final.gfa
+```
