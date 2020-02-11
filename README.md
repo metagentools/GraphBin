@@ -136,6 +136,8 @@ The data used to test GraphBin can be found in the `test data` folder. The test 
 * Initial binning result from MaxBin 2.0
 * Initial binning result from MetaWatt
 * Initial binning result from MetaBAT 2
+* Initial binning result from SolidBin
+* Initial binning result from BusyBee Web (Not available for metaSPAdes assemblies)
 * Ground truth labelling of contigs from TAXAassign
 
 You can try running GraphBin using these test data files.
