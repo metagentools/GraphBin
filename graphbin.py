@@ -133,7 +133,7 @@ except:
 # Run GrraphBin
 
 if assembler.lower() == "spades":
-    cmdFilter = """python "{0}src/graphbin_SPAdes.py" --graph "{1}" --paths "{2}" --binned "{3}" --output "{4}" --prefix "{5}" --max_iteration "{6}" --diff_threshold "{7}" """.format(
+    cmdGraphBin = """python "{0}src/graphbin_SPAdes.py" --graph "{1}" --paths "{2}" --binned "{3}" --output "{4}" --prefix "{5}" --max_iteration "{6}" --diff_threshold "{7}" """.format(
         os.path.dirname(__file__), 
         assembly_graph_file, 
         contig_paths, 
@@ -144,7 +144,7 @@ if assembler.lower() == "spades":
         diff_threshold)
 
 elif assembler.lower() == "sga":
-    cmdFilter = """python "{0}src/graphbin_SGA.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
+    cmdGraphBin = """python "{0}src/graphbin_SGA.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
         os.path.dirname(__file__), 
         assembly_graph_file,
         contig_bins_file, 
@@ -154,7 +154,7 @@ elif assembler.lower() == "sga":
         diff_threshold)
 
 elif assembler.lower() == "megahit":
-    cmdFilter = """python "{0}src/graphbin_MEGAHIT.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
+    cmdGraphBin = """python "{0}src/graphbin_MEGAHIT.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
         os.path.dirname(__file__), 
         assembly_graph_file,
         contig_bins_file, 
@@ -163,4 +163,4 @@ elif assembler.lower() == "megahit":
         max_iteration,
         diff_threshold)
 
-o = os.system(cmdFilter)
+os.system(cmdGraphBin)
