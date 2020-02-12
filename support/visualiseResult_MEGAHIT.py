@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_SGA.py: Visualise the binning result from on the SGA assembly graph.
+"""visualiseResult_MEGAHIT.py: Visualise the binning result from on the MEGAHIT assembly graph.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial
@@ -32,9 +32,9 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 # Sample command
 # -------------------------------------------------------------------
-# python visualiseResult_SGA.py     --initial /path/to/file_with_initial_binning_result
+# python visualiseResult_MEGAHIT.py --initial /path/to/file_with_initial_binning_result
 #                                   --final /path/to/file_with_final_GraphBin_binning_result
-#                                   --graph /path/to/graph_file.asqg
+#                                   --graph /path/to/graph_file.gfa
 #                                   --output /path/to/output_folder
 #                                   --prefix prefix for output image files
 #                                   --type type_of_the_image
@@ -72,7 +72,7 @@ height = args["height"]
 image_type = args["type"]
 
 print("\nWelcome to binning result visualiser of GraphBin!")
-print("This version of the visualiser makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.\n")
+print("This version of the visualiser makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach.\n")
 
 
 # Validate prefix
@@ -145,73 +145,90 @@ except:
 
 print("\nConstructing the assembly graph...")
 
-# Get the links from the .asqg file
-#-----------------------------------
-
-links = []
-n_contigs = 0
-my_map = BidirectionalMap()
-
-try:
-    # Get contig connections from .asqg file
-    with open(assembly_graph_file) as file:
-        line = file.readline()
-        
-        while line != "":
-
-            # Count the number of contigs
-            if "VT" in line:
-                start = 'contig-'
-                end = ''
-                contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
-                my_map[n_contigs] = contig_num
-                n_contigs += 1
-            
-            # Identify lines with link information
-            elif "ED" in line:
-                link = []
-                strings = line.split("\t")[1].split()
-                link.append(int(strings[0][7:]))
-                link.append(int(strings[1][7:]))
-                links.append(link)
-            line = file.readline()
-
-except:
-    print("\nPlease make sure that the correct path to the assembly graph file is provided")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
-
-contigs_map = my_map
-contigs_map_rev = my_map.inverse
-
-node_count = n_contigs
-
-
 ## Construct the assembly graph
 #-------------------------------
 
+node_count = 0
+
+links = []
+
+my_map = BidirectionalMap()
+
 try:
 
-    # Create the graph
+    # Get links from .gfa file
+    with open(assembly_graph_file) as file:
+
+        line = file.readline()
+
+        while line != "":
+
+            # Identify lines with link information
+            if line.startswith("L"):
+                link = []
+
+                strings = line.split("\t")
+
+                start_1 = 'NODE_'
+                end_1 = '_length'
+
+                link1 = int(re.search('%s(.*)%s' % (start_1, end_1), strings[1]).group(1))
+
+                start_2 = 'NODE_'
+                end_2 = '_length'
+
+                link2 = int(re.search('%s(.*)%s' % (start_2, end_2), strings[3]).group(1))
+
+                link.append(link1)
+                link.append(link2)
+                links.append(link)
+
+            elif line.startswith("S"):
+                strings = line.split()
+
+                start = 'NODE_'
+                end = '_length'
+
+                contig_num = int(re.search('%s(.*)%s' % (start, end), strings[1]).group(1))
+
+                my_map[node_count] = int(contig_num)
+
+                node_count += 1
+            
+            line = file.readline()
+
+
+    print("\nTotal number of contigs available:", node_count)
+
+    contigs_map = my_map
+    contigs_map_rev = my_map.inverse
+
+    # Create graph
     assembly_graph = Graph()
 
     # Add vertices
     assembly_graph.add_vertices(node_count)
 
-    for i in range(len(assembly_graph.vs)):
-        assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(contigs_map[i])
+    # Create list of edges
+    edge_list = []
 
+    for i in range(node_count):
+        assembly_graph.vs[i]["id"]= i
+        assembly_graph.vs[i]["label"]= str(i)
+        
     # Iterate links
     for link in links:
         # Remove self loops
         if link[0] != link[1]:
-            assembly_graph.add_edge(contigs_map_rev[link[0]], contigs_map_rev[link[1]])
+            # Add edge to list of edges
+            edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
 
+    # Add edges to the graph 
+    assembly_graph.add_edges(edge_list)
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 except:
-    print("\nPlease make sure that the correct path to the assembly graph file is provided")
+    print("\nPlease make sure that the correct path to the assembly graph file is provided.")
     print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
@@ -227,7 +244,7 @@ try:
     with open(initial_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            start = 'contig-'
+            start = 'NODE_'
             end = ''
             contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
             
@@ -238,7 +255,7 @@ try:
         bins[i].sort()
 
 except:
-    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
+    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
     print("Exiting visualiseResult.py...\nBye...!\n")
     sys.exit(2)
 
@@ -328,10 +345,12 @@ try:
     with open(final_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            if row[1] != 'unbinned':
-                bin_num = int(row[1])-1
-                contig_num = int(row[0][7:])
-                bins[bin_num].append(contig_num)
+            start = 'NODE_'
+            end = ''
+            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+            
+            bin_num = int(row[1])-1
+            bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
         bins[i].sort()

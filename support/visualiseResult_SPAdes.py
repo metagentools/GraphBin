@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 """visualiseResult_SPAdes.py: Visualise the binning result from on the SPAdes assembly graph.
 
@@ -22,8 +22,8 @@ from base64 import b16encode
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
-__copyright__ = "Copyright 2019, GraphBin Project"
-__credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
+__copyright__ = "Copyright 2020, GraphBin Project"
+__credits__ = "Benjamin Kaehler and Gavin Huttley"
 __license__ = "GPL"
 __type__ = "Support Script"
 __maintainer__ = "Vijini Mallawaarachchi"
@@ -32,16 +32,16 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 # Sample command
 # -------------------------------------------------------------------
-# python visualiseResult.py     --initial /path/to/file_with_initial_binning_result
-#                               --final /path/to/file_with_final_GraphBin_binning_result
-#                               --graph /path/to/graph_file.asqg
-#                               --paths /path/to/paths_file.paths
-#                               --output /path/to/output_folder
-#                               --prefix prefix for output image files
-#                               --type type_of_the_image
-#                               --width width_of_image
-#                               --height height_of_image
-#                               --dpi dpi_value
+# python visualiseResult_SPAdes.py  --initial /path/to/file_with_initial_binning_result
+#                                   --final /path/to/file_with_final_GraphBin_binning_result
+#                                   --graph /path/to/graph_file.gfa
+#                                   --paths /path/to/paths_file.paths
+#                                   --output /path/to/output_folder
+#                                   --prefix prefix for output image files
+#                                   --type type_of_the_image
+#                                   --width width_of_image
+#                                   --height height_of_image
+#                                   --dpi dpi_value
 # -------------------------------------------------------------------
 
 
@@ -50,16 +50,16 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--initial", required=True, help="path to the file containing the initial binning result from an existing tool")
-ap.add_argument("--final", required=True, help="path to the file containing the final GraphBin binning result")
-ap.add_argument("--graph", required=True, help="path to the assembly graph file")
-ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
-ap.add_argument("--output", required=True, help="path to the output folder")
-ap.add_argument("--prefix", required=False, nargs='?', help="prefix for the output image files")
-ap.add_argument("--type", required=False, nargs='?', help="type of the image (jpg, png, eps, svg)")
-ap.add_argument("--width", required=False, nargs='?', help="width of the image in pixels")
-ap.add_argument("--height", required=False, nargs='?', help="height of the image in pixels")
-ap.add_argument("--dpi", required=False, nargs='?', help="dpi value")
+ap.add_argument("--initial", required=True, type=str, help="path to the file containing the initial binning result from an existing tool")
+ap.add_argument("--final", required=True, type=str, help="path to the file containing the final GraphBin binning result")
+ap.add_argument("--graph", required=True, type=str, help="path to the assembly graph file")
+ap.add_argument("--paths", required=True, type=str, help="path to the contigs.paths file")
+ap.add_argument("--output", required=True, type=str, help="path to the output folder")
+ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output image files")
+ap.add_argument("--type", required=False, type=str, default='png', help="type of the image (jpg, png, eps, svg)")
+ap.add_argument("--width", required=False, type=int, default=1000, help="width of the image in pixels")
+ap.add_argument("--height", required=False, type=int, default=1000, help="height of the image in pixels")
+ap.add_argument("--dpi", required=False, type=int, default=300, help="dpi value")
 
 args = vars(ap.parse_args())
 
@@ -68,27 +68,26 @@ final_binning_result = args["final"]
 assembly_graph_file = args["graph"]
 contig_paths = args["paths"]
 output_path = args["output"]
-prefix = ""
-dpi = 300
-width = 1000
-height = 1000
-image_type = "png"
+prefix = args["prefix"]
+dpi = args["dpi"]
+width = args["width"]
+height = args["height"]
+image_type = args["type"]
 
 print("\nWelcome to binning result visualiser of GraphBin!")
-print("This version of the visualiser makes use of the assembly graph produced by SPAdes which is based on the OLC (more recent string graph) approach.\n")
+print("This version of the visualiser makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.\n")
 
 
 # Validate prefix
 #---------------------------------------------------
 try:
-
-    if args["prefix"] is not None:
+    if args["prefix"] != '':
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
         else:
             prefix = args["prefix"]+"_"
     else:
-        prefix = ""
+        prefix = ''
 
 except:
     print("\nPlease enter a valid string for prefix")
@@ -96,46 +95,12 @@ except:
     sys.exit(2)
 
 
-# Obtain type if provided
+# Format type if provided
 #---------------------------------------------------
-if args["type"] is not None:
-    if args["type"].startswith("."):
-        image_type = args["type"][1:]
-    else:
-        image_type = args["type"]
-
-
-# Validate height, width and dpi
-#---------------------------------------------------
-try:
-
-    if args["width"] is not None:
-        width = int(args["width"])
-
-except:
-    print("\nPlease enter a valid number for width")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
-
-try:
-
-    if args["height"] is not None:
-        height = int(args["height"])
-
-except:
-    print("\nPlease enter a valid number for height")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
-
-try:
-
-    if args["dpi"] is not None:
-        dpi = int(args["dpi"])
-
-except:
-    print("\nPlease enter a valid dpi value")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+if args["type"].startswith("."):
+    image_type = args["type"][1:]
+else:
+    image_type = args["type"]
 
 
 # Check if output folder exists
