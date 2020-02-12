@@ -1,8 +1,27 @@
 #!/usr/bin/python3
+
+"""graphbin_SPAdes.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
+
+GraphBin is a metagenomic contig binning tool that makes use of the contig 
+connectivity information from the assembly graph to bin contigs. It utilizes 
+the binning result of an existing binning tool and a label propagation algorithm 
+to correct mis-binned contigs and predict the labels of contigs which are 
+discarded due to short length.
+"""
+
 import argparse
 import os
 import sys
 import subprocess
+
+__author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
+__copyright__ = "Copyright 2019, GraphBin Project"
+__credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
+__license__ = "GPL"
+__version__ = "0.2"
+__maintainer__ = "Vijini Mallawaarachchi"
+__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__status__ = "Prototype"
 
 parser = argparse.ArgumentParser(description="""GraphBin Help. GraphBin is a metagenomic contig binning tool 
 that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the 
