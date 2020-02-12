@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 
-"""graphbin.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
-"""
+"""graphbin.py: Improved binning of metagenomic contigs using SPAdes assembly graphs."""
 
 import argparse
 import os
@@ -9,8 +8,8 @@ import sys
 import subprocess
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
-__copyright__ = "Copyright 2019, GraphBin Project"
-__credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
+__copyright__ = "Copyright 2020, GraphBin Project"
+__credits__ = "Benjamin Kaehler and Gavin Huttley"
 __license__ = "GPL"
 __version__ = "1.0"
 __maintainer__ = "Vijini Mallawaarachchi"
@@ -25,23 +24,26 @@ and predict the labels of contigs which are discarded due to short length.""")
 parser.add_argument("--assembler", 
                     required=True, 
                     type=str,
-                    default="spades",
                     help="name of the assembler used (SPAdes, SGA or MEGAHIT)")
 
 parser.add_argument("--graph", 
-                    required=True, 
+                    required=True,
+                    type=str,
                     help="path to the assembly graph file")
 
 parser.add_argument("--paths", 
-                    required=False, 
+                    required=False,
+                    type=str,
                     help="path to the contigs.paths file")
 
 parser.add_argument("--binned", 
-                    required=True, 
+                    required=True,
+                    type=str,
                     help="path to the .csv file with the initial binning output from an existing tool")
 
 parser.add_argument("--output", 
-                    required=True, 
+                    required=True,
+                    type=str,
                     help="path to the output folder")
 
 parser.add_argument("--prefix", 

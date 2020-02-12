@@ -25,16 +25,6 @@ from collections import defaultdict
 from labelpropagation.labelprop import LabelProp
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
-__author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
-__copyright__ = "Copyright 2019, GraphBin Project"
-__credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
-__license__ = "GPL"
-__version__ = "1.0"
-__maintainer__ = "Vijini Mallawaarachchi"
-__email__ = "vijini.mallawaarachchi@anu.edu.au"
-__status__ = "Release Candidate"
-
-
 # Sample command
 # -------------------------------------------------------------------
 # python graphbin_SPAdes.py     --graph /path/to/graph_file.gfa
