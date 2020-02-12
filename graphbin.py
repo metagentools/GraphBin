@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""graphbin_SPAdes.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
+"""graphbin.py: Improved binning of metagenomic contigs using SPAdes assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
