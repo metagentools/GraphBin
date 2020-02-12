@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 
 """prepResult.py: Format the initial binning result from an existing binning tool.
 
@@ -18,7 +18,7 @@ from Bio import SeqIO
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
 __copyright__ = "Copyright 2019, GraphBin Project"
-__credits__ = ["Benjamin Kaehler", "Gavin Huttley"]
+__credits__ = "Benjamin Kaehler and Gavin Huttley"
 __license__ = "GPL"
 __type__ = "Support Script"
 __maintainer__ = "Vijini Mallawaarachchi"
@@ -38,10 +38,10 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--binned", required=True, help="path to the folder containing the initial binning result from an existing tool")
-ap.add_argument("--assembler", required=True, help="name of the assembler used (SPAdes or SGA)")
-ap.add_argument("--output", required=True, help="path to the output folder")
-ap.add_argument("--prefix", required=False, nargs='?', help="prefix for the output file")
+ap.add_argument("--binned", required=True, type=str, help="path to the folder containing the initial binning result from an existing tool")
+ap.add_argument("--assembler", required=True, type=str, help="name of the assembler used (SPAdes or SGA)")
+ap.add_argument("--output", required=True, type=str, help="path to the output folder")
+ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
 
 args = vars(ap.parse_args())
 
@@ -114,7 +114,7 @@ if not os.path.isdir(output_path):
 #---------------------------------------------------
 try:
 
-    if args["prefix"] is not None:
+    if args["prefix"] != '':
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
         else:
