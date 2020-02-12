@@ -49,7 +49,7 @@ parser.add_argument("--output",
 parser.add_argument("--prefix", 
                     required=False,
                     type=str,
-                    default="",
+                    default='',
                     help="prefix for the output file")
 
 parser.add_argument("--max_iteration", 
@@ -120,23 +120,22 @@ if not os.path.isdir(output_path):
     subprocess.run("mkdir -p "+output_path, shell=True)
 
 # Validate prefix
-try:
+if args["prefix"] != '':
     if args["prefix"].endswith("_"):
         prefix = args["prefix"]
     else:
         prefix = args["prefix"]+"_"
+else:
+    prefix = ''
 
-except:
-    print("\nPlease enter a valid string for prefix")
+# Validate max_iteration
+if args["max_iteration"] <= 0:
+    print("\nPlease enter a valid number for max_iteration")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
 
-# Validate max_iteration and diff_threshold
-try:
-    if args["diff_threshold"] is not None:
-        diff_threshold = float(args["diff_threshold"])
-
-except:
+# Validate diff_threshold
+if args["diff_threshold"] < 0:
     print("\nPlease enter a valid number for diff_threshold")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
