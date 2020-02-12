@@ -14,7 +14,7 @@ __license__ = "GPL"
 __version__ = "1.0"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
-__status__ = "Release Candidate"
+__status__ = "Stable Release"
 
 parser = argparse.ArgumentParser(description="""GraphBin Help. GraphBin is a metagenomic contig binning tool 
 that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the 
