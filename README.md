@@ -34,7 +34,7 @@ unzip [file_name].zip
 Now go in to the source folder using the command
 
 ```
-cd GraphBin/src/
+cd GraphBin
 ```
 
 ## Assembly
@@ -53,25 +53,35 @@ The assembly of contigs can be done using 3 assembly software.
 Once you have obtained the assembly output, you can run GraphBin.
 
 ## Using GraphBin
-You can see the usage options of GraphBin by typing ```python3 graphbin_SPAdes.py -h``` or ```python3 graphbin_SGA.py -h``` or ```python3 graphbin_MEGAHIT.py -h``` on the command line. For example,
+You can see the usage options of GraphBin by typing ```python graphbin.py -h``` on the command line. For example,
 
 ```
-usage: graphbin_SPAdes.py [-h] --graph GRAPH --paths PATHS --binned BINNED
-                          --output OUTPUT [--max_iteration [MAX_ITERATION]]
-                          [--diff_threshold [DIFF_THRESHOLD]]
+python graphbin.py -h
+usage: graphbin.py [-h] --assembler ASSEMBLER --graph GRAPH [--paths PATHS]
+                   --binned BINNED --output OUTPUT [--prefix PREFIX]
+                   [--max_iteration MAX_ITERATION]
+                   [--diff_threshold DIFF_THRESHOLD]
+
+GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
+the contig connectivity information from the assembly graph to bin contigs. It
+utilizes the binning result of an existing binning tool and a label
+propagation algorithm to correct mis-binned contigs and predict the labels of
+contigs which are discarded due to short length.
 
 optional arguments:
   -h, --help            show this help message and exit
+  --assembler ASSEMBLER
+                        name of the assembler used (SPAdes, SGA or MEGAHIT)
   --graph GRAPH         path to the assembly graph file
   --paths PATHS         path to the contigs.paths file
   --binned BINNED       path to the .csv file with the initial binning output
                         from an existing tool
   --output OUTPUT       path to the output folder
-  --prefix [PREFIX]     prefix for the output file
-  --max_iteration [MAX_ITERATION]
+  --prefix PREFIX       prefix for the output file
+  --max_iteration MAX_ITERATION
                         maximum number of iterations for label propagation
                         algorithm. [default: 100]
-  --diff_threshold [DIFF_THRESHOLD]
+  --diff_threshold DIFF_THRESHOLD
                         difference threshold for label propagation algorithm.
                         [default: 0.1]
 ```
@@ -80,16 +90,16 @@ optional arguments:
 
 ## Input Format
 
-`graphbin_SPAdes.py` takes in 3 files as inputs (required).
+For the SPAdes version, `graphbin.py` takes in 3 files as inputs (required).
 * Assembly graph file (in `.gfa` format)
 * Paths of contigs (in `.paths` format)
 * Binning output from an existing tool (in `.csv` format)
 
-`graphbin_SGA.py` takes in 2 files as inputs (required).
+For the SGA version, `graphbin.py` takes in 2 files as inputs (required).
 * Assembly graph file (in `.asqg` format)
 * Binning output from an existing tool (in `.csv` format)
 
-`graphbin_MEGAHIT.py` takes in 2 files as inputs (required).
+For the MEGAHIT version, `graphbin.py`  takes in 2 files as inputs (required).
 * Assembly graph file (in `.gfa` format)
 * Binning output from an existing tool (in `.csv` format)
 
@@ -118,13 +128,13 @@ GraphBin provides a support script to generate similar files once the initial bi
 ## Example Usage
 
 ```
-python3 graphbin_SPAdes.py --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
+python graphbin.py --assembler spades --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python3 graphbin_SGA.py --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
+python graphbin.py --assembler sga --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python3 graphbin_MEGAHIT.py --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
+python graphbin.py --assembler megahit --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Support Scripts
