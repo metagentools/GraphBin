@@ -96,7 +96,6 @@ if not os.path.isfile(contig_bins_file):
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
 
-
 # Handle for missing trailing forwardslash in output folder path
 if output_path[-1:] != "/":
     output_path = output_path + "/"
@@ -104,7 +103,6 @@ if output_path[-1:] != "/":
 # Create output folder if it does not exist
 if not os.path.isdir(output_path):
     subprocess.run("mkdir -p "+output_path, shell=True)
-
 
 # Validate prefix
 try:
@@ -118,7 +116,6 @@ except:
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
 
-
 # Validate max_iteration and diff_threshold
 try:
     if args["diff_threshold"] is not None:
@@ -130,8 +127,8 @@ except:
     sys.exit(1)
 
 
-# Run GrraphBin
-
+# Run GraphBin
+#---------------------------------------------------
 if assembler.lower() == "spades":
     cmdGraphBin = """python "{0}src/graphbin_SPAdes.py" --graph "{1}" --paths "{2}" --binned "{3}" --output "{4}" --prefix "{5}" --max_iteration "{6}" --diff_threshold "{7}" """.format(
         os.path.dirname(__file__), 
