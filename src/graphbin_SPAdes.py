@@ -54,80 +54,21 @@ ap.add_argument("--graph", required=True, help="path to the assembly graph file"
 ap.add_argument("--paths", required=True, help="path to the contigs.paths file")
 ap.add_argument("--binned", required=True, help="path to the .csv file with the initial binning output from an existing tool")
 ap.add_argument("--output", required=True, help="path to the output folder")
-ap.add_argument("--prefix", required=False, nargs='?', help="prefix for the output file")
-ap.add_argument("--max_iteration", required=False, nargs='?', type=int, help="maximum number of iterations for label propagation algorithm. [default: 100]")
-ap.add_argument("--diff_threshold", required=False, nargs='?', type=float, help="difference threshold for label propagation algorithm. [default: 0.1]")
+ap.add_argument("--prefix", required=False, help="prefix for the output file")
+ap.add_argument("--max_iteration", required=False, type=int, help="maximum number of iterations for label propagation algorithm. [default: 100]")
+ap.add_argument("--diff_threshold", required=False, type=float, help="difference threshold for label propagation algorithm. [default: 0.1]")
 
 args = vars(ap.parse_args())
 
 assembly_graph_file = args["graph"]
 contig_paths = args["paths"]
-n_bins = 0
 contig_bins_file = args["binned"]
 output_path = args["output"]
-prefix = ""
+prefix = args["prefix"]
+max_iteration = args["max_iteration"]
+diff_threshold = args["diff_threshold"]
 
-max_iteration = 100
-diff_threshold = 0.1
-
-print("\nWelcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs.")
 print("This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.\n")
-
-print("GraphBin started\n-----------------")
-
-
-# Validate max_iteration and diff_threshold
-#---------------------------------------------------
-try:
-
-    if args["max_iteration"] is not None:
-        max_iteration = int(args["max_iteration"])
-
-except:
-    print("\nPlease enter a valid number for max_iterations")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
-
-try:
-
-    if args["diff_threshold"] is not None:
-        diff_threshold = float(args["diff_threshold"])
-
-except:
-    print("\nPlease enter a valid number for diff_threshold")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
-
-
-# Validate prefix
-#---------------------------------------------------
-try:
-
-    if args["prefix"] is not None:
-        if args["prefix"].endswith("_"):
-            prefix = args["prefix"]
-        else:
-            prefix = args["prefix"]+"_"
-    else:
-        prefix = ""
-
-except:
-    print("\nPlease enter a valid string for prefix")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
-
-
-# Check if output folder exists
-#---------------------------------------------------
-
-# Handle for missing trailing forwardslash in output folder path
-if output_path[-1:] != "/":
-    output_path = output_path + "/"
-
-# Create output folder if it does not exist
-if not os.path.isdir(output_path):
-    subprocess.run("mkdir -p "+output_path, shell=True)
-
 
 print("Assembly graph file:", assembly_graph_file)
 print("Contig paths file:", contig_paths)
@@ -136,9 +77,13 @@ print("Final binning output file:", output_path)
 print("Maximum number of iterations:", max_iteration)
 print("Difference threshold:", diff_threshold)
 
+print("\nGraphBin started\n-----------------")
+
 
 # Get the number of bins from the initial binning result
 #---------------------------------------------------
+
+n_bins = 0
 
 try:
     all_bins_list = []
@@ -154,7 +99,7 @@ try:
     n_bins = len(bins_list)
     print("Number of bins available in initial binning result:", n_bins)
 except:
-    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
+    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
@@ -206,7 +151,7 @@ try:
             path = file.readline()
 
 except:
-    print("\nPlease make sure that the correct path to the contig paths file is provided")
+    print("\nPlease make sure that the correct path to the contig paths file is provided.")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
@@ -253,9 +198,6 @@ try:
         assembly_graph.vs[i]["id"]= i
         assembly_graph.vs[i]["label"]= str(i)
 
-    print()
-    print(paths)
-
     for i in range(len(paths)):
         segments = paths[str(contigs_map[i])]
         
@@ -298,7 +240,7 @@ try:
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 except:
-    print("\nPlease make sure that the correct path to the assembly graph file is provided")
+    print("\nPlease make sure that the correct path to the assembly graph file is provided.")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
@@ -326,7 +268,8 @@ try:
         bins[i].sort()
 
 except:
-    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
+    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format.")
+    print("Moreover, please check whether you have provided the correct assembler type as well.")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(2)
 
@@ -616,21 +559,35 @@ for i in range(node_count):
             line.append(k+1)
             output_bins.append(line)
 
-for i in remove_labels:
-    line = []
-    line.append("NODE_"+str(contigs_map[i]))
-    line.append("unbinned")
-    output_bins.append(line)
-
 output_file = output_path + prefix + 'graphbin_output.csv'
 
-with open(output_file, mode='w') as output_file:
-    output_writer = csv.writer(output_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+with open(output_file, mode='w') as out_file:
+    output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     
     for row in output_bins:
         output_writer.writerow(row)
 
-print("\nFinal binning results can be found at", output_file.name)
+print("\nFinal binning results can be found at", output_file)
+
+
+unbinned_contigs = []
+
+for i in range(node_count):
+    if i in remove_labels or i not in non_isolated:
+        line = []
+        line.append("NODE_"+str(contigs_map[i]))
+        unbinned_contigs.append(line)
+
+if len(unbinned_contigs)!=0:
+    unbinned_file = output_path + prefix + 'graphbin_unbinned.csv'
+
+    with open(unbinned_file, mode='w') as out_file:
+        output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        
+        for row in unbinned_contigs:
+            output_writer.writerow(row)
+
+    print("Unbinned contigs can be found at", unbinned_file)
 
 
 # Exit program
