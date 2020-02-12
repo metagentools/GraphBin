@@ -26,7 +26,7 @@ from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_MEGAHIT.py    --graph /path/to/graph_file.asqg
+# python graphbin_MEGAHIT.py    --graph /path/to/graph_file.gfa
 #                               --binned /path/to/binning_result.csv
 #                               --output /path/to/output_folder
 # -------------------------------------------------------------------
