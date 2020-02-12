@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="GraphBin_logo.png" width="450" title="Final Labelling" alt="Final Labelling">
+</p>
+
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
 ![GitHub](https://img.shields.io/github/license/Vini2/GraphBin) 
