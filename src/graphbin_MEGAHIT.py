@@ -70,7 +70,7 @@ diff_threshold = args["diff_threshold"]
 # Setup output path for log file
 #---------------------------------------------------
 
-fileHandler = logging.FileHandler(output_path+"/graphbin.log")
+fileHandler = logging.FileHandler(output_path+"/"+prefix+"graphbin.log")
 fileHandler.setLevel(logging.INFO)
 fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
