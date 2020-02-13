@@ -17,6 +17,8 @@ Formatted binning result will be stored in a file named `initial_contig_bins.csv
 
 You can see the usage options by typing `python visualiseResult_SPAdes.py -h` or `python visualiseResult_SGA.py -h` or `python visualiseResult_MEGAHIT.py -h` on the command line.
 
+If you come across a Python3 error when plotting graphs, please refer to [this thread](https://github.com/igraph/python-igraph/issues/88) to fix it.
+
 ### Original MaxBin Labelling of the ESC+SPAdes dataset
 <p align="center">
   <img src="../images/3G_initial_binning_result.png" width="600" title="MaxBin Labelling" alt="MaxBin Labelling">
