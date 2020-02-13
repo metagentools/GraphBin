@@ -9,16 +9,9 @@
 
 **GraphBin** is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
-## Dependencies
-The GraphBin codebase is implemented in Python 3.6.5. To run GraphBin and support scripts, you will need to install the following python modules. The versions used for development are mentioned within brackets.
-* [python-igraph](https://igraph.org/python/) (0.7.1) - [Anaconda distribution](https://anaconda.org/conda-forge/python-igraph)
-* [Biopython](https://biopython.org/) (1.72) - [Anaconda distribution](https://anaconda.org/conda-forge/biopython)
+## Getting Started
 
-The [python-labelpropagation](https://github.com/ZwEin27/python-labelpropagation) module supporting Python 3 is provided in the source code.
-
-You can go to these links and follow the instructions to download these modules.
-
-## Downloading GraphBin
+### Downloading GraphBin
 You can download the latest release of GraphBin from [Releases](https://github.com/Vini2/GraphBin/releases) or clone the GraphBin repository to your machine.
 
 ```
@@ -36,6 +29,19 @@ Now go in to the source folder using the command
 ```
 cd GraphBin
 ```
+
+### Setting up the environment
+We recommend using [Conda](https://docs.conda.io/en/latest/) to run GraphBin. You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
+
+Once you have installed Conda, make sure you are in the GraphBin directory. Now run the following commands to create a Conda environment and activate it to run GraphBin.
+
+```
+conda env create -f environment.yml
+conda activate graphbin
+```
+
+Now you are ready to run GraphBin.
+
 
 ## Assembly
 The assembly of contigs can be done using 3 assembly software.
