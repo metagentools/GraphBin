@@ -66,7 +66,6 @@ parser.add_argument("--diff_threshold",
 
 args = vars(parser.parse_args())
 
-print("\nWelcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs.")
 
 assembler = args["assembler"]
 assembly_graph_file = args["graph"]

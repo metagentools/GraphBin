@@ -19,6 +19,7 @@ import operator
 import time
 import argparse
 import re
+import logging
 
 from igraph import *
 from collections import defaultdict
@@ -33,10 +34,22 @@ from bidirectionalmap.bidirectionalmap import BidirectionalMap
 #                               --output /path/to/output_folder
 # -------------------------------------------------------------------
 
+
+# Setup logger
+#-----------------------
+
+logger = logging.getLogger('GraphBin 1.0')
+logger.setLevel(logging.INFO)
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+consoleHeader = logging.StreamHandler()
+consoleHeader.setFormatter(formatter)
+logger.addHandler(consoleHeader)
+
 start_time = time.time()
 
+
 # Setup argument parser
-#-----------------------
+#---------------------------------------------------
 
 ap = argparse.ArgumentParser()
 
@@ -58,16 +71,27 @@ prefix = args["prefix"]
 max_iteration = args["max_iteration"]
 diff_threshold = args["diff_threshold"]
 
-print("This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.\n")
 
-print("Assembly graph file:", assembly_graph_file)
-print("Contig paths file:", contig_paths)
-print("Existing binning output file:", contig_bins_file)
-print("Final binning output file:", output_path)
-print("Maximum number of iterations:", max_iteration)
-print("Difference threshold:", diff_threshold)
+# Setup output path for log file
+#---------------------------------------------------
 
-print("\nGraphBin started\n-----------------")
+fileHandler = logging.FileHandler(output_path+"/graphbin.log")
+fileHandler.setLevel(logging.INFO)
+fileHandler.setFormatter(formatter)
+logger.addHandler(fileHandler)
+
+logger.info("Welcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs.")
+logger.info("This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.")
+
+logger.info("Input arguments:")
+logger.info("Assembly graph file: "+assembly_graph_file)
+logger.info("Contig paths file: "+contig_paths)
+logger.info("Existing binning output file: "+contig_bins_file)
+logger.info("Final binning output file: "+output_path)
+logger.info("Maximum number of iterations: "+str(max_iteration))
+logger.info("Difference threshold: "+str(diff_threshold))
+
+logger.info("GraphBin started")
 
 
 # Get the number of bins from the initial binning result
@@ -87,14 +111,14 @@ try:
     bins_list.sort()
 
     n_bins = len(bins_list)
-    print("Number of bins available in initial binning result:", n_bins)
+    logger.info("Number of bins available in the initial binning result: "+str(n_bins))
 except:
-    print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
+    logger.error("Please make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
+    logger.info("Exiting GraphBin... Bye...!")
+    sys.exit(1)
 
 
-print("\nConstructing the assembly graph...")
+logger.info("Constructing the assembly graph")
 
 # Get contig paths from contigs.paths
 #-------------------------------------
@@ -141,14 +165,14 @@ try:
             path = file.readline()
 
 except:
-    print("\nPlease make sure that the correct path to the contig paths file is provided.")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
+    logger.error("Please make sure that the correct path to the contig paths file is provided.")
+    logger.info("Exiting GraphBin... Bye...!")
+    sys.exit(1)
 
 contigs_map = my_map
 contigs_map_rev = my_map.inverse
 
-print("\nTotal number of contigs available:", node_count)
+logger.info("Total number of contigs available: "+str(node_count))
 
 links = []
 links_map = defaultdict(set)
@@ -230,16 +254,17 @@ try:
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
 except:
-    print("\nPlease make sure that the correct path to the assembly graph file is provided.")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
+    logger.error("Please make sure that the correct path to the assembly graph file is provided.")
+    logger.info("Exiting GraphBin... Bye...!")
+    sys.exit(1)
 
-print("Total number of edges in the assembly graph:", len(edge_list))
+logger.info("Total number of edges in the assembly graph: "+str(len(edge_list)))
+
 
 # Get initial binning result
 #----------------------------
 
-print("\nObtaining the initial binning result...")
+logger.info("Obtaining the initial binning result")
 
 bins = [[] for x in range(n_bins)]
 
@@ -258,10 +283,9 @@ try:
         bins[i].sort()
 
 except:
-    print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format.")
-    print("Moreover, please check whether you have provided the correct assembler type as well.")
-    print("Exiting GraphBin...\nBye...!\n")
-    sys.exit(2)
+    logger.error("Please make sure that the correct path to the binning result file is provided and it is having the correct format. Moreover, please check whether you have provided the correct assembler type as well.")
+    logger.info("Exiting GraphBin... Bye...!")
+    sys.exit(1)
 
 
 # Remove labels of ambiguous vertices
@@ -298,7 +322,7 @@ def getClosestLabelledVertices(graph, node, binned_contigs):
     return labelled
 
 
-print("\nDetermining ambiguous vertices...")
+logger.info("Determining ambiguous vertices")
 
 remove_labels = []
 
@@ -372,7 +396,7 @@ for b in range(n_bins):
 
 remove_labels.sort()
 
-print("Removing labels of ambiguous vertices...")
+logger.info("Removing labels of ambiguous vertices")
 
 # Remove labels of ambiguous vertices
 for i in remove_labels:
@@ -380,13 +404,13 @@ for i in remove_labels:
         if i in bins[n]:
             bins[n].remove(i)
 
-print("\nObtaining Refined Binning result...")
+logger.info("Obtaining the refined binning result")
         
 
 # Get vertices which are not isolated and not in components without any labels
 #-----------------------------------------------------------------------------
 
-print("\nDeteremining vertices which are not isolated and not in components without any labels...")
+logger.info("Deteremining vertices which are not isolated and not in components without any labels")
 
 non_isolated = []
 
@@ -428,7 +452,7 @@ for i in range(node_count):
                 if j not in non_isolated:
                     non_isolated.append(j)
 
-print("Number of non-isolated contigs:", len(non_isolated))
+logger.info("Number of non-isolated contigs: "+str(len(non_isolated)))
 
 
 # Run label propagation
@@ -472,12 +496,12 @@ lp = LabelProp()
 
 lp.load_data_from_mem(data)
 
-print("\nStarting label propagation with eps="+str(diff_threshold)+" and max_iteration="+str(max_iteration))
+logger.info("Starting label propagation with eps="+str(diff_threshold)+" and max_iteration="+str(max_iteration))
 
 ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False) 
 ans.sort()
 
-print("\nObtaining Label Propagation result...")
+logger.info("Obtaining Label Propagation result")
 
 for l in ans:
     for i in range(n_bins):
@@ -488,7 +512,7 @@ for l in ans:
 # Remove labels of ambiguous vertices
 #-------------------------------------
 
-print("\nDetermining ambiguous vertices...")
+logger.info("Determining ambiguous vertices")
 
 remove_labels = []
 
@@ -515,7 +539,7 @@ for b in range(n_bins):
 
 remove_labels.sort()
 
-print("Removing labels of ambiguous vertices...")
+logger.info("Removing labels of ambiguous vertices")
 
 # Remove labels of ambiguous vertices
 for i in remove_labels:
@@ -525,19 +549,19 @@ for i in remove_labels:
 
 elapsed_time = time.time() - start_time
 
-print("\nObtaining the Final Refined Binning result...")
+logger.info("Obtaining the Final Refined Binning result")
 
 for i in range(n_bins):
     bins[i].sort()
 
 # Print elapsed time for the process
-print("\nElapsed time: ", elapsed_time, " seconds")
+logger.info("Elapsed time: "+str(elapsed_time)+" seconds")
 
 
 # Write result to output file
 #-----------------------------
 
-print("\nWriting the Final Binning result to file...")
+logger.info("Writing the Final Binning result to file")
 
 output_bins = []
 
@@ -557,7 +581,7 @@ with open(output_file, mode='w') as out_file:
     for row in output_bins:
         output_writer.writerow(row)
 
-print("\nFinal binning results can be found at", output_file)
+logger.info("Final binning results can be found at "+output_file)
 
 
 unbinned_contigs = []
@@ -577,10 +601,13 @@ if len(unbinned_contigs)!=0:
         for row in unbinned_contigs:
             output_writer.writerow(row)
 
-    print("Unbinned contigs can be found at", unbinned_file)
+    logger.info("Unbinned contigs can be found at "+unbinned_file)
 
 
 # Exit program
 #--------------
 
-print("\nThank you for using GraphBin!\n")
+logger.info("Thank you for using GraphBin! Bye...!")
+
+logger.removeHandler(fileHandler)
+logger.removeHandler(consoleHeader)
