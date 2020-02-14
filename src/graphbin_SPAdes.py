@@ -283,7 +283,7 @@ try:
         bins[i].sort()
 
 except:
-    logger.error("Please make sure that the correct path to the binning result file is provided and it is having the correct format. Moreover, please check whether you have provided the correct assembler type as well.")
+    logger.error("Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format.")
     logger.info("Exiting GraphBin... Bye...!")
     sys.exit(1)
 
