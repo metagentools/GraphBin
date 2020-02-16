@@ -42,6 +42,12 @@ conda activate graphbin
 
 Now you are ready to run GraphBin.
 
+If you want to switch back to your normal environment, run the following command.
+
+```
+conda deactivate
+```
+
 
 ## Assembly
 The assembly of contigs can be done using 3 assembly software.
