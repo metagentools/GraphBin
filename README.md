@@ -24,7 +24,7 @@ If you have downloaded a release, you will have to extract the files using the f
 unzip [file_name].zip
 ```
 
-Now go in to the source folder using the command
+Now go in to the GraphBin folder using the command
 
 ```
 cd GraphBin/
@@ -33,7 +33,7 @@ cd GraphBin/
 ### Setting up the environment
 We recommend that you use [Conda](https://docs.conda.io/en/latest/) to run GraphBin. You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
 
-Once you have installed Conda, make sure you are in the GraphBin directory. Now run the following commands to create a Conda environment and activate it to run GraphBin.
+Once you have installed Conda, make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
 
 ```
 conda env create -f environment.yml
