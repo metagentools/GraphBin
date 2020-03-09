@@ -219,4 +219,4 @@ You can try running GraphBin using these test data files.
 [11] Zhu, X., Ghahramani, Z.: Learning from Labeled and Unlabeled Data with Label Propagation. Technical report, School of ComputerScience, Carnegie Mellon University, (2002)
 
 ## Publication
-The manuscript for GraphBin is currently under review at the _Bioinformatics_ (Oxford Academic) journal.
+The manuscript for GraphBin has been accepted for publication by the _Bioinformatics_ (Oxford Academic) journal.
