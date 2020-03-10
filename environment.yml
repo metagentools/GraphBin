@@ -6,3 +6,4 @@ dependencies:
   - python>=3.7.1
   - biopython>=1.72
   - python-igraph>=0.7.1
+  - cairocffi
