@@ -222,5 +222,7 @@ You can try running GraphBin using these test data files.
 
 [13] Zhu, X., Ghahramani, Z.: Learning from Labeled and Unlabeled Data with Label Propagation. Technical report, School of ComputerScience, Carnegie Mellon University, (2002)
 
-## Publication
-The manuscript for GraphBin has been accepted for publication by the _Bioinformatics_ (Oxford Academic) journal. You can find the article at DOI: [10.1093/bioinformatics/btaa180](http://dx.doi.org/10.1093/bioinformatics/btaa180)
+## Citation
+If you use GraphBin in your work, please site GraphBin as,
+
+Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binning of metagenomic contigs using assembly graphs. Bioinformatics. 2020 btaa180. DOI: [10.1093/bioinformatics/btaa180](http://dx.doi.org/10.1093/bioinformatics/btaa180)
