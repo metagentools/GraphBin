@@ -226,3 +226,18 @@ You can try running GraphBin using these test data files.
 If you use GraphBin in your work, please site GraphBin as,
 
 Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binning of metagenomic contigs using assembly graphs. Bioinformatics. 2020 btaa180. DOI: [10.1093/bioinformatics/btaa180](http://dx.doi.org/10.1093/bioinformatics/btaa180)
+
+```
+@article{10.1093/bioinformatics/btaa180,
+    author = {Mallawaarachchi, Vijini and Wickramarachchi, Anuradha and Lin, Yu},
+    title = "{GraphBin: refined binning of metagenomic contigs using assembly graphs}",
+    journal = {Bioinformatics},
+    year = {2020},
+    month = {03},
+    issn = {1367-4803},
+    doi = {10.1093/bioinformatics/btaa180},
+    url = {https://doi.org/10.1093/bioinformatics/btaa180},
+    note = {btaa180},
+    eprint = {https://academic.oup.com/bioinformatics/advance-article-pdf/doi/10.1093/bioinformatics/btaa180/33032064/btaa180.pdf},
+}
+```
