@@ -59,7 +59,7 @@ ap.add_argument("--prefix", required=False, type=str, default='', help="prefix f
 ap.add_argument("--type", required=False, type=str, default='png', help="type of the image (jpg, png, eps, svg)")
 ap.add_argument("--width", required=False, type=int, default=1000, help="width of the image in pixels")
 ap.add_argument("--height", required=False, type=int, default=1000, help="height of the image in pixels")
-ap.add_argument("--vsize", required=False, type=int, default=30, help="size of the vertices")
+ap.add_argument("--vsize", required=False, type=int, default=50, help="size of the vertices")
 ap.add_argument("--lsize", required=False, type=int, default=8, help="size of the vertex labels")
 ap.add_argument("--dpi", required=False, type=int, default=300, help="dpi value")
 
@@ -157,12 +157,13 @@ print("\nConstructing the assembly graph...")
 # Get contig paths from contigs.paths
 #-------------------------------------
 
-paths = []
-links = []
-current_contig_num = ""
-n_contigs = 0
+paths = {}
+segment_contigs = {}
+node_count = 0
 
 my_map = BidirectionalMap()
+
+current_contig_num = ""
 
 try:
     with open(contig_paths) as file:
@@ -170,20 +171,29 @@ try:
         path = file.readline()
         
         while name != "" and path != "":
-
-            start = 'NODE_'
-            end = '_length'
-            contig_num = int(re.search('%s(.*)%s' % (start, end), name.rstrip()).group(1))
-
-            if current_contig_num != contig_num:
-                my_map[n_contigs] = contig_num
-                current_contig_num = contig_num
-                n_contigs += 1
                 
             while ";" in path:
                 path = path[:-2]+","+file.readline()
-                
-            paths.append(path.split("\n")[0])
+            
+            start = 'NODE_'
+            end = '_length_'
+            contig_num = str(int(re.search('%s(.*)%s' % (start, end), name).group(1)))
+            
+            segments = path.rstrip().split(",")
+
+            if current_contig_num != contig_num:
+                my_map[node_count] = int(contig_num)
+                current_contig_num = contig_num
+                node_count += 1
+            
+            if contig_num not in paths:
+                paths[contig_num] = [segments[0], segments[-1]]
+            
+            for segment in segments:
+                if segment not in segment_contigs:
+                    segment_contigs[segment] = set([contig_num])
+                else:
+                    segment_contigs[segment].add(contig_num)
             
             name = file.readline()
             path = file.readline()
@@ -195,13 +205,14 @@ except:
 contigs_map = my_map
 contigs_map_rev = my_map.inverse
 
-node_count = n_contigs
-
 print("\nTotal number of contigs available:", node_count)
 
 
 ## Construct the assembly graph
 #-------------------------------
+
+links = []
+links_map = defaultdict(set)
 
 try:
     # Get links from assembly_graph_with_scaffolds.gfa
@@ -213,52 +224,66 @@ try:
             # Identify lines with link information
             if "L" in line:
                 strings = line.split("\t")
+                f1, f2 = strings[1]+strings[2], strings[3]+strings[4]
+                links_map[f1].add(f2)
+                links_map[f2].add(f1)
                 links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
             line = file.readline()
+            
 
-    # Create the graph
+    # Create graph
     assembly_graph = Graph()
 
     # Add vertices
     assembly_graph.add_vertices(node_count)
 
-    for i in range(len(assembly_graph.vs)):
+    # Create list of edges
+    edge_list = []
+
+    # Name vertices
+    for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
         assembly_graph.vs[i]["label"]= "NODE_"+str(contigs_map[i])
 
-    # Iterate paths
     for i in range(len(paths)):
-        segments = paths[i].split(",")
+        segments = paths[str(contigs_map[i])]
+        
         start = segments[0]
-        end = segments[len(segments)-1]
+        start_rev = ""
+
+        if start.endswith("+"):
+            start_rev = start[:-1]+"-"
+        else:
+            start_rev = start[:-1]+"+"
+            
+        end = segments[1]
+        end_rev = ""
+
+        if end.endswith("+"):
+            end_rev = end[:-1]+"-"
+        else:
+            end_rev = end[:-1]+"+"
         
         new_links = []
-        connections = []
         
-        # Iterate links
-        for link in links:
-            link_list = link.split()
-            
-            if start in link_list[0]:
-                new_links.append(link_list[1])
-            elif start in link_list[1]:
-                new_links.append(link_list[0])
-            if end in link_list[0]:
-                new_links.append(link_list[1])
-            elif end in link_list[1]:
-                new_links.append(link_list[0])
+        if start in links_map:
+            new_links.extend(list(links_map[start]))
+        if start_rev in links_map:
+            new_links.extend(list(links_map[start_rev]))
+        if end in links_map:
+            new_links.extend(list(links_map[end]))
+        if end_rev in links_map:
+            new_links.extend(list(links_map[end_rev]))
         
-        # Determine connections
         for new_link in new_links:
-            for j in range(len(paths)):
-                if new_link in paths[j] and int(j/2) not in connections and int(j/2)!=int(i/2):
-                    ind = int(j/2)
-                    connections.append(ind)
-        
-        # Add connections in graph
-        for connection in connections:
-            assembly_graph.add_edge(int(i/2),connection)
+            if new_link in segment_contigs:
+                for contig in segment_contigs[new_link]:
+                    if i!=contigs_map_rev[int(contig)]:
+                        # Add edge to list of edges
+                        edge_list.append((i,contigs_map_rev[int(contig)]))
 
+    # Add edges to the graph
+    assembly_graph.add_edges(edge_list)
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")

@@ -245,7 +245,7 @@ try:
         for new_link in new_links:
             if new_link in segment_contigs:
                 for contig in segment_contigs[new_link]:
-                    if i!=int(contig):
+                    if i!=contigs_map_rev[int(contig)]:
                         # Add edge to list of edges
                         edge_list.append((i,contigs_map_rev[int(contig)]))
 
