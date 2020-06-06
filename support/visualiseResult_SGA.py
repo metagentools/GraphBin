@@ -57,6 +57,8 @@ ap.add_argument("--prefix", required=False, type=str, default='', help="prefix f
 ap.add_argument("--type", required=False, type=str, default='png', help="type of the image (jpg, png, eps, svg)")
 ap.add_argument("--width", required=False, type=int, default=1000, help="width of the image in pixels")
 ap.add_argument("--height", required=False, type=int, default=1000, help="height of the image in pixels")
+ap.add_argument("--vsize", required=False, type=int, default=30, help="size of the vertices")
+ap.add_argument("--lsize", required=False, type=int, default=8, help="size of the vertex labels")
 ap.add_argument("--dpi", required=False, type=int, default=300, help="dpi value")
 
 args = vars(ap.parse_args())
@@ -69,6 +71,8 @@ prefix = args["prefix"]
 dpi = args["dpi"]
 width = args["width"]
 height = args["height"]
+vsize = args["vsize"]
+lsize = args["lsize"]
 image_type = args["type"]
 
 print("\nWelcome to binning result visualiser of GraphBin!")
@@ -118,6 +122,8 @@ print("Final output path:", output_path)
 print("Image type:", image_type)
 print("Width of image:", width, "pixels")
 print("Height of image:", height, "pixels")
+print("Size of the vertices:", vsize, "pt")
+print("Size of the vertex labels:", lsize, "pt")
 
 
 # Get the number of bins from the initial binning result
@@ -296,15 +302,11 @@ visual_style = {}
 visual_style["bbox"] = (width,height)
 visual_style["margin"] = 17
 
-# Set vertex colours
-# visual_style["vertex_color"] = '#fecc5c'
-
-# # Scale vertices based on degree
-# outdegree = g.outdegree()
-visual_style["vertex_size"] = 25
+# Set vertex size
+visual_style["vertex_size"] = vsize
 
 # Set vertex lable size
-visual_style["vertex_label_size"] = 8
+visual_style["vertex_label_size"] = lsize
 
 # Don't curve the edges
 visual_style["edge_curved"] = False
@@ -369,15 +371,11 @@ visual_style = {}
 visual_style["bbox"] = (width,height)
 visual_style["margin"] = 17
 
-# Set vertex colours
-# visual_style["vertex_color"] = '#fecc5c'
-
-# # Scale vertices based on degree
-# outdegree = g.outdegree()
-visual_style["vertex_size"] = 25
+# Set vertex size
+visual_style["vertex_size"] = vsize
 
 # Set vertex lable size
-visual_style["vertex_label_size"] = 8
+visual_style["vertex_label_size"] = lsize
 
 # Don't curve the edges
 visual_style["edge_curved"] = False

@@ -510,7 +510,7 @@ for i in range(node_count):
     for k in range(n_bins):
         if i in bins[k]:
             line = []
-            line.append("contig-"+str(contigs_map[i]))
+            line.append(str(contigs_map[i]))
             line.append(k+1)
             output_bins.append(line)
 
