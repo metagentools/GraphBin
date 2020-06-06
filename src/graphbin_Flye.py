@@ -36,7 +36,7 @@ from bidirectionalmap.bidirectionalmap import BidirectionalMap
 # Setup logger
 #-----------------------
 
-logger = logging.getLogger('GraphBin 1.0')
+logger = logging.getLogger('GraphBin 1.1')
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 consoleHeader = logging.StreamHandler()
