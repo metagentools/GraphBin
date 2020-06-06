@@ -114,7 +114,7 @@ except:
 
 logger.info("Constructing the assembly graph")
 
-# Get the links from the .asqg file
+# Get the links from the .gfa file
 #-----------------------------------
 
 my_map = BidirectionalMap()
