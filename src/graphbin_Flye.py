@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""graphbin_Canu.py: Refined binning of metagenomic contigs using Canu assembly graphs.
+"""graphbin_Flye.py: Refined binning of metagenomic contigs using Flye assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,7 +8,7 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Canu.py makes use of the assembly graphs produced by Canu long read assembler.
+graphbin_Flye.py makes use of the assembly graphs produced by Flye long read assembler.
 """
 
 import sys
@@ -27,7 +27,7 @@ from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_Canu.py    --graph /path/to/graph_file.asqg
+# python graphbin_Flye.py    --graph /path/to/graph_file.asqg
 #                            --binned /path/to/binning_result.csv
 #                            --output /path/to/output_folder
 # -------------------------------------------------------------------
@@ -77,7 +77,7 @@ fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
 
 logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-logger.info("This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach.")
+logger.info("This version of GraphBin makes use of the assembly graph produced by Flye which is a long reads assembler based on the de Bruijn graph approach.")
 
 logger.info("Assembly graph file: "+assembly_graph_file)
 logger.info("Existing binning output file: "+contig_bins_file)

@@ -175,7 +175,7 @@ try:
     # Name vertices
     for i in range(len(assembly_graph.vs)):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(i)
+        assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
     # Iterate links
     for link in links:

@@ -210,7 +210,7 @@ try:
     # Name vertices
     for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(i)
+        assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
     for i in range(len(paths)):
         segments = paths[str(contigs_map[i])]

@@ -24,7 +24,7 @@ and predict the labels of contigs which are discarded due to short length.""")
 parser.add_argument("--assembler", 
                     required=True, 
                     type=str,
-                    help="name of the assembler used (SPAdes, SGA or MEGAHIT)")
+                    help="name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye and Canu long-read assemblies as well.")
 
 parser.add_argument("--graph", 
                     required=True,
@@ -81,8 +81,8 @@ diff_threshold = args["diff_threshold"]
 #---------------------------------------------------
 
 # Check assembler type
-if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "canu"):
-    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA, MEGAHIT or Canu).")
+if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "flye" or assembler.lower() == "canu"):
+    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT). GraphBin supports Flye and Canu long-read assemblies as well.")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
 
@@ -165,6 +165,16 @@ elif assembler.lower() == "sga":
 
 elif assembler.lower() == "megahit":
     cmdGraphBin = """python "{0}src/graphbin_MEGAHIT.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
+        os.path.dirname(__file__), 
+        assembly_graph_file,
+        contig_bins_file, 
+        output_path,
+        prefix,
+        max_iteration,
+        diff_threshold)
+
+elif assembler.lower() == "flye":
+    cmdGraphBin = """python "{0}src/graphbin_Flye.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
         os.path.dirname(__file__), 
         assembly_graph_file,
         contig_bins_file, 
