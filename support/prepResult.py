@@ -39,7 +39,7 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--binned", required=True, type=str, help="path to the folder containing the initial binning result from an existing tool")
-ap.add_argument("--assembler", required=True, type=str, help="name of the assembler used (SPAdes or SGA)")
+ap.add_argument("--assembler", required=True, type=str, help="name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye and Canu long-read assemblies as well.")
 ap.add_argument("--output", required=True, type=str, help="path to the output folder")
 ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
 
@@ -54,7 +54,7 @@ prefix = ""
 # Check assembler type
 #---------------------------------------------------
 
-if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit"):
+if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "flye" or assembler.lower() == "canu"):
     print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT).")
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(2)
@@ -124,7 +124,7 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting GraphBin...\n")
+    print("Exiting prepResult.py...\n")
     sys.exit(2)
 
 
@@ -170,6 +170,9 @@ for bin_file in files:
                         
                     contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
                     line.append('contig-'+str(contig_num))
+                
+                elif assembler.lower() == "canu" or assembler.lower() == "flye":
+                    line.append(str(contig_name))
 
             except:
                 print("\nContig naming does not match with the assembler type provided. Please make sure to provide the correct assembler type.")

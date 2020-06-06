@@ -88,8 +88,8 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+    print("Exiting visualiseResult...\nBye...!\n")
+    sys.exit(1)
 
 
 # Format type if provided
@@ -139,8 +139,8 @@ try:
     print("Number of bins available in initial binning result:", n_bins)
 except:
     print("\nPlease make sure that the correct path to the initial binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+    print("Exiting visualiseResult...\nBye...!\n")
+    sys.exit(1)
 
 
 print("\nConstructing the assembly graph...")
@@ -214,7 +214,7 @@ try:
 
     for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= str(i)
+        assembly_graph.vs[i]["label"]= 'NODE_'+str(contigs_map[i])
         
     # Iterate links
     for link in links:
@@ -229,8 +229,8 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided.")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+    print("Exiting visualiseResult...\nBye...!\n")
+    sys.exit(1)
 
 
 # Get initial binning result
@@ -256,8 +256,8 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+    print("Exiting visualiseResult...\nBye...!\n")
+    sys.exit(1)
 
 
 # Get list of colours according to number of bins
@@ -357,8 +357,8 @@ try:
 
 except:
     print("\nPlease make sure that the correct path to the final binning result file is provided and it is having the correct format")
-    print("Exiting visualiseResult.py...\nBye...!\n")
-    sys.exit(2)
+    print("Exiting visualiseResult...\nBye...!\n")
+    sys.exit(1)
 
 
 # Visualise the final assembly graph
