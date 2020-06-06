@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""flye_gfa2fasta.py: Obtain the sequences corresponding to edges in the Flye assembly graph in FASTA format.
+"""flye_miniasm_gfa2fasta.py: Obtain the sequences corresponding to edges in the Flye and Miniasm assembly graphs in FASTA format.
 
 The assembly graph file of Flye (assembly_graph.gfa) should be provided as inputs.
 
@@ -26,8 +26,8 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 # Sample command
 # -------------------------------------------------------------------
-# python flye_gfa2fasta.py     --graph /path/to/folder_with_binning_result
-#                              --output /path/to/output_folder
+# python flye_miniasm_gfa2fasta.py  --graph /path/to/folder_with_binning_result
+#                                   --output /path/to/output_folder
 # -------------------------------------------------------------------
 
 
@@ -37,11 +37,14 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
+ap.add_argument("--assembler", required=True, type=str, default='flye', help="type of the assembler (Flye or Miniasm)")
 ap.add_argument("--output", required=True, type=str, help="path to the output folder")
 ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
 
 args = vars(ap.parse_args())
 
+assembler = args["assembler"]
+assembler_name = ""
 assembly_graph_file = args["graph"]
 output_path = args["output"]
 prefix = ""
@@ -49,8 +52,14 @@ prefix = ""
 # Check assembly graph file
 if not os.path.isfile(assembly_graph_file):
     print("\nFailed to open the assembly graph file.")
-    print("Exiting flye_gfa2fasta.py...\nBye...!\n")
+    print("Exiting flye_miniasm_gfa2fasta.py...\nBye...!\n")
     sys.exit(1)
+
+# Check assembler type
+if assembler.lower() == "flye":
+    assembler_name = "Flye"
+elif assembler.lower() == "miniasm":
+    assembler_name = "Miniasm"
 
 
 # Check if output folder exists
@@ -78,7 +87,7 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting flye_gfa2fasta.py...\n")
+    print("Exiting flye_miniasm_gfa2fasta.py...\n")
     sys.exit(1)
 
 
@@ -105,13 +114,18 @@ with open(assembly_graph_file) as file:
 
 print("\nWriting edge sequences to FASTA file")
 
-with open(output_path + prefix + "edges.fasta", "w") as output_handle:
+if assembler.lower() == "flye":
+    final_file = "edges.fasta"
+elif assembler.lower() == "miniasm":
+    final_file = "unitigs.fasta"
+
+with open(output_path + prefix + final_file, "w") as output_handle:
     SeqIO.write(sequenceset, output_handle, "fasta")
 
-print("\nThe FASTA file with Flye edge sequences can be found at", output_handle.name)
+print("\nThe FASTA file with", assembler_name, "sequences can be found at", output_handle.name)
 
 
 # Exit program
 #--------------
 
-print("\nThank you for using flye_gfa2fasta for GraphBin!\n")
+print("\nThank you for using flye_miniasm_gfa2fasta for GraphBin!\n")
