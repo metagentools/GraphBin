@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""graphbin.py: Improved binning of metagenomic contigs using SPAdes assembly graphs."""
+"""graphbin.py: Refined binning of metagenomic contigs using assembly graphs."""
 
 import argparse
 import os
@@ -81,8 +81,8 @@ diff_threshold = args["diff_threshold"]
 #---------------------------------------------------
 
 # Check assembler type
-if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit"):
-    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT).")
+if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "canu"):
+    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA, MEGAHIT or Canu).")
     print("Exiting GraphBin...\nBye...!\n")
     sys.exit(1)
 
@@ -165,6 +165,16 @@ elif assembler.lower() == "sga":
 
 elif assembler.lower() == "megahit":
     cmdGraphBin = """python "{0}src/graphbin_MEGAHIT.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
+        os.path.dirname(__file__), 
+        assembly_graph_file,
+        contig_bins_file, 
+        output_path,
+        prefix,
+        max_iteration,
+        diff_threshold)
+
+elif assembler.lower() == "canu":
+    cmdGraphBin = """python "{0}src/graphbin_Canu.py" --graph "{1}" --binned "{2}" --output "{3}" --prefix "{4}" --max_iteration "{5}" --diff_threshold "{6}" """.format(
         os.path.dirname(__file__), 
         assembly_graph_file,
         contig_bins_file, 

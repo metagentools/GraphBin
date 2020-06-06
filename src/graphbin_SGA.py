@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""graphbin_SGA.py: Improved binning of metagenomic contigs using SGA assembly graphs.
+"""graphbin_SGA.py: Refined binning of metagenomic contigs using SGA assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -76,7 +76,7 @@ fileHandler.setLevel(logging.INFO)
 fileHandler.setFormatter(formatter)
 logger.addHandler(fileHandler)
 
-logger.info("Welcome to GraphBin: Improved Binning of Metagenomic Contigs using Assembly Graphs.")
+logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
 logger.info("This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.")
 
 logger.info("Assembly graph file: "+assembly_graph_file)
