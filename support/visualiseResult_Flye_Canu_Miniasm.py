@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_Flye_Canu.py: Visualise the binning result from on the Flye and Canu assembly graphs.
+"""visualiseResult_Flye_Canu_Miniasm.py: Visualise the binning result from on the Flye, Canu and Miniasm assembly graphs.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial
@@ -32,15 +32,15 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 # Sample command
 # -------------------------------------------------------------------
-# python visualiseResult_Flye_Canu.py     --initial /path/to/file_with_initial_binning_result
-#                                   --final /path/to/file_with_final_GraphBin_binning_result
-#                                   --graph /path/to/graph_file.asqg
-#                                   --output /path/to/output_folder
-#                                   --prefix prefix for output image files
-#                                   --type type_of_the_image
-#                                   --width width_of_image
-#                                   --height height_of_image
-#                                   --dpi dpi_value
+# python visualiseResult_Flye_Canu_Miniasm.py   --initial /path/to/file_with_initial_binning_result
+#                                               --final /path/to/file_with_final_GraphBin_binning_result
+#                                               --graph /path/to/graph_file.asqg
+#                                               --output /path/to/output_folder
+#                                               --prefix prefix for output image files
+#                                               --type type_of_the_image
+#                                               --width width_of_image
+#                                               --height height_of_image
+#                                               --dpi dpi_value
 # -------------------------------------------------------------------
 
 
@@ -76,7 +76,7 @@ lsize = args["lsize"]
 image_type = args["type"]
 
 print("\nWelcome to binning result visualiser of GraphBin!")
-print("This version of the visualiser makes use of the assembly graph produced by Flye and Canu long-read assemblers.\n")
+print("This version of the visualiser makes use of the assembly graph produced by Flye, Canu and Miniasm long-read assemblers.\n")
 
 
 # Validate prefix
