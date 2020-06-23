@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 """graphbin.py: Refined binning of metagenomic contigs using assembly graphs."""
 
