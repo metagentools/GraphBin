@@ -17,8 +17,6 @@ Formatted binning result will be stored in a file named `initial_contig_bins.csv
 
 You can see the usage options by typing `python visualiseResult_SPAdes.py -h` or `python visualiseResult_SGA.py -h` or `python visualiseResult_MEGAHIT.py -h` or `python visualiseResult_Flye_Canu_Miniasm.py -h` on the command line.
 
-For example `python visualiseResult_SPAdes.py -h` and `python visualiseResult_SGA.py -h` would show you the following.
-
 ```
 usage: visualiseResult_SPAdes.py [-h] --initial INITIAL --final FINAL --graph
                                  GRAPH --paths PATHS --output OUTPUT
@@ -52,6 +50,31 @@ usage: visualiseResult_SGA.py [-h] --initial INITIAL --final FINAL --graph
                               [--type TYPE] [--width WIDTH] [--height HEIGHT]
                               [--vsize VSIZE] [--lsize LSIZE]
                               [--margin MARGIN] [--dpi DPI]
+
+optional arguments:
+  -h, --help         show this help message and exit
+  --initial INITIAL  path to the file containing the initial binning result
+                     from an existing tool
+  --final FINAL      path to the file containing the final GraphBin binning
+                     result
+  --graph GRAPH      path to the assembly graph file
+  --output OUTPUT    path to the output folder
+  --prefix PREFIX    prefix for the output image files
+  --type TYPE        type of the image (jpg, png, eps, svg)
+  --width WIDTH      width of the image in pixels
+  --height HEIGHT    height of the image in pixels
+  --vsize VSIZE      size of the vertices
+  --lsize LSIZE      size of the vertex labels
+  --margin MARGIN    margin of the figure
+  --dpi DPI          dpi value
+```
+```
+usage: visualiseResult_MEGAHIT.py [-h] --initial INITIAL --final FINAL --graph
+                                  GRAPH --output OUTPUT [--prefix PREFIX]
+                                  [--type TYPE] [--width WIDTH]
+                                  [--height HEIGHT] [--vsize VSIZE]
+                                  [--lsize LSIZE] [--margin MARGIN]
+                                  [--dpi DPI]
 
 optional arguments:
   -h, --help         show this help message and exit
