@@ -129,6 +129,7 @@ print("Width of image:", width, "pixels")
 print("Height of image:", height, "pixels")
 print("Size of the vertices:", vsize, "pt")
 print("Size of the vertex labels:", lsize, "pt")
+print("Size of the margin:", margin, "pt")
 
 
 # Get the number of bins from the initial binning result
