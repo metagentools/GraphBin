@@ -13,9 +13,11 @@ Formatted binning result will be stored in a file named `initial_contig_bins.csv
 
 ## visualiseResult_SPAdes.py, visualiseResult_SGA.py and visualiseResult_MEGAHIT.py
 
-`visualiseResult_SPAdes.py`, `visualiseResult_SGA.py` and `visualiseResult_MEGAHIT.py` allows you to visualize the binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. You can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin and compare.
+`visualiseResult_SPAdes.py`, `visualiseResult_SGA.py`, `visualiseResult_MEGAHIT.py` and `visualiseResult_Flye_Canu_Miniasm.py` allows you to visualize the binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. You can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin and compare.
 
-You can see the usage options by typing `python visualiseResult_SPAdes.py -h` or `python visualiseResult_SGA.py -h` or `python visualiseResult_MEGAHIT.py -h` on the command line.
+You can see the usage options by typing `python visualiseResult_SPAdes.py -h` or `python visualiseResult_SGA.py -h` or `python visualiseResult_MEGAHIT.py -h` or `python visualiseResult_Flye_Canu_Miniasm.py -h` on the command line.
+
+Please note that, if you are using Flye assemblies, you should provide the edge sequences (not the contigs output from Flye) as the assembly graph consists of these edge sequences.
 
 If you come across a Python3 error when plotting graphs, please refer to [this thread](https://github.com/igraph/python-igraph/issues/88) to fix it.
 
