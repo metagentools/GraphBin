@@ -243,7 +243,4 @@ Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binn
     url = {https://doi.org/10.1093/bioinformatics/btaa180},
     eprint = {https://academic.oup.com/bioinformatics/article-pdf/36/11/3307/33329097/btaa180.pdf},
 }
-
-
-
 ```
