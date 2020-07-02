@@ -94,7 +94,7 @@ optional arguments:
   --dpi DPI          dpi value
 ```
 
-Please note that, if you are using Flye assemblies, you should provide the edge sequences (not the contigs output from Flye) as the assembly graph consists of these edge sequences.
+Please note that, if you are using Flye/Miniasm assemblies, you should provide the edge sequences for the initial binning tool (not the contigs output from Flye/Miniasm). To get the edge sequences from the GFA file, you can use [this script](https://github.com/Vini2/GraphBin/blob/master/support/flye_miniasm_gfa2fasta.py) as the assembly graph consists of these edge sequences and not contigs.
 
 If you come across a Python3 error when plotting graphs, please refer to [this thread](https://github.com/igraph/python-igraph/issues/88) to fix it.
 
