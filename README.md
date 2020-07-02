@@ -135,7 +135,7 @@ contig-3,1
 contig-4,2
 ...
 ```
-GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [SupportREADME.md](https://github.com/Vini2/GraphBin/blob/master/support/SupportREADME.md) file for more details.
+GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) file for more details.
 
 ## Example Usage
 
@@ -151,7 +151,7 @@ python graphbin.py --assembler megahit --graph /path/to/graph_file.gfa --binned 
 
 ## Support Scripts
 
-GraphBin provides support scripts to format an initial binning result and visualise binning results in the assembly graph. Details about support scripts and how to execute them are provided in [SupportREADME.md](https://github.com/Vini2/GraphBin/blob/master/support/SupportREADME.md) file.
+GraphBin provides support scripts to format an initial binning result and visualise binning results in the assembly graph. Details about support scripts and how to execute them are provided in [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) file.
 
 ## Test Data
 
