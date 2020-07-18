@@ -30,23 +30,21 @@ Now go in to the GraphBin folder using the command
 cd GraphBin/
 ```
 
-### Setting up the environment
-We recommend that you use [Conda](https://docs.conda.io/en/latest/) to run GraphBin. You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
+### Installing GraphBin
 
-Once you have installed Conda, make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
+This installation requires python 3.6 or above with pip3. You can install GraphBin globally or per user depending on your privileges to the system.
 
+#### Installing as admin
 ```
-conda env create -f environment.yml
-conda activate graphbin
+pip3 install .
+```
+
+#### Installing for the active user
+```
+pip3 install . --user
 ```
 
 Now you are ready to run GraphBin.
-
-If you want to switch back to your normal environment, run the following command.
-
-```
-conda deactivate
-```
 
 
 ## Assembly
@@ -65,14 +63,15 @@ The assembly of contigs can be done using 3 assembly software.
 Once you have obtained the assembly output, you can run GraphBin.
 
 ## Using GraphBin
-You can see the usage options of GraphBin by typing ```python graphbin.py -h``` on the command line. For example,
+You can see the usage options of GraphBin by typing ```graphbin -h``` on the command line. For example,
 
 ```
-python graphbin.py -h
-usage: graphbin.py [-h] --assembler ASSEMBLER --graph GRAPH [--paths PATHS]
-                   --binned BINNED --output OUTPUT [--prefix PREFIX]
-                   [--max_iteration MAX_ITERATION]
-                   [--diff_threshold DIFF_THRESHOLD]
+graphbin -h
+usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED]
+                [--output OUTPUT] [--prefix PREFIX]
+                [--max_iteration MAX_ITERATION]
+                [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
+                [--paths PATHS]
 
 GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
 the contig connectivity information from the assembly graph to bin contigs. It
@@ -140,13 +139,13 @@ GraphBin provides a support script to generate similar files once the initial bi
 ## Example Usage
 
 ```
-python graphbin.py --assembler spades --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler spades --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python graphbin.py --assembler sga --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler sga --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-python graphbin.py --assembler megahit --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler megahit --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Support Scripts
