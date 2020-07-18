@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_MEGAHIT.py: Refined binning of metagenomic contigs using MEGAHIT assembly graphs.
+"""graphbin_Canu.py: Refined binning of metagenomic contigs using Canu assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,7 +8,7 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
+graphbin_Canu.py makes use of the assembly graphs produced by Canu long read assembler.
 """
 
 import sys
@@ -22,16 +22,16 @@ import re
 import logging
 
 from igraph import *
-from graphbin.labelpropagation.labelprop import LabelProp
-from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin.graphbin_Func import getClosestLabelledVertices
-from graphbin.graphbin_Options import PARSER
+from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin_utils.graphbin_Func import getClosestLabelledVertices
+from graphbin_utils.graphbin_Options import PARSER
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_MEGAHIT.py    --graph /path/to/graph_file.gfa
-#                               --binned /path/to/binning_result.csv
-#                               --output /path/to/output_folder
+# python graphbin_Canu.py    --graph /path/to/graph_file.asqg
+#                            --binned /path/to/binning_result.csv
+#                            --output /path/to/output_folder
 # -------------------------------------------------------------------
 
 
@@ -47,6 +47,7 @@ def run(args):
     logger.addHandler(consoleHeader)
 
     start_time = time.time()
+
 
 
     assembly_graph_file = args.graph
@@ -66,7 +67,7 @@ def run(args):
     logger.addHandler(fileHandler)
 
     logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-    logger.info("This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach.")
+    logger.info("This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach.")
 
     logger.info("Assembly graph file: "+assembly_graph_file)
     logger.info("Existing binning output file: "+contig_bins_file)
@@ -94,84 +95,83 @@ def run(args):
         bins_list.sort()
 
         n_bins = len(bins_list)
-        logger.info("Number of bins available in the initial binning result: "+str(n_bins))
+        logger.info("Number of bins available in the binning result: "+str(n_bins))
     except:
-        logger.error("Please make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
+        logger.error("Please make sure that the correct path to the binning result file is provided and it is having the correct format.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
 
     logger.info("Constructing the assembly graph")
 
-
-    ## Construct the assembly graph
-    #-------------------------------
-
-    node_count = 0
-
-    links = []
+    # Get the links from the .gfa file
+    #-----------------------------------
 
     my_map = BidirectionalMap()
 
+    node_count = 0
+
+    nodes = []
+
+    links = []
+
     try:
-
-        # Get links from .gfa file
+        # Get contig connections from .gfa file
         with open(assembly_graph_file) as file:
-
             line = file.readline()
 
             while line != "":
 
-                # Identify lines with link information
-                if line.startswith("L"):
-                    link = []
+                # Count the number of contigs
+                if "S" in line:
+                    strings = line.split("\t")
+                    my_node = strings[1]
+                    my_map[node_count] = my_node
+                    nodes.append(my_node)
+                    node_count += 1
 
+                # Identify lines with link information
+                elif "L" in line:
+
+                    link = []
                     strings = line.split("\t")
 
-                    start_1 = 'NODE_'
-                    end_1 = '_length'
-
-                    link1 = int(re.search('%s(.*)%s' % (start_1, end_1), strings[1]).group(1))
-
-                    start_2 = 'NODE_'
-                    end_2 = '_length'
-
-                    link2 = int(re.search('%s(.*)%s' % (start_2, end_2), strings[3]).group(1))
-
-                    link.append(link1)
-                    link.append(link2)
-                    links.append(link)
-
-                elif line.startswith("S"):
-                    strings = line.split()
-
-                    start = 'NODE_'
-                    end = '_length'
-
-                    contig_num = int(re.search('%s(.*)%s' % (start, end), strings[1]).group(1))
-
-                    my_map[node_count] = int(contig_num)
-
-                    node_count += 1
+                    if strings[1] != strings[3]:
+                        start = strings[1]
+                        end = strings[3]
+                        link.append(start)
+                        link.append(end)
+                        links.append(link)
 
                 line = file.readline()
 
+    except:
+        logger.error("Please make sure that the correct path to the assembly graph file is provided.")
+        logger.info("Exiting GraphBin... Bye...!")
+        sys.exit(1)
 
-        logger.info("Total number of contigs available: "+str(node_count))
+    contigs_map = my_map
+    contigs_map_rev = my_map.inverse
 
-        contigs_map = my_map
-        contigs_map_rev = my_map.inverse
+    logger.info("Total number of contigs available: "+str(node_count))
 
-        # Create graph
+
+    ## Construct the assembly graph
+    #-------------------------------
+
+    try:
+
+        # Create the graph
         assembly_graph = Graph()
-
-        # Add vertices
-        assembly_graph.add_vertices(node_count)
 
         # Create list of edges
         edge_list = []
 
-        for i in range(node_count):
+        # Add vertices
+        assembly_graph.add_vertices(node_count)
+
+        # Name vertices
+        for i in range(len(assembly_graph.vs)):
             assembly_graph.vs[i]["id"]= i
             assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
@@ -205,9 +205,7 @@ def run(args):
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=',')
             for row in readCSV:
-                start = 'NODE_'
-                end = ''
-                contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+                contig_num = contigs_map_rev[row[0]]
 
                 bin_num = int(row[1])-1
                 bins[bin_num].append(contig_num)
@@ -471,7 +469,7 @@ def run(args):
         for k in range(n_bins):
             if i in bins[k]:
                 line = []
-                line.append("NODE_"+str(contigs_map[i]))
+                line.append(str(contigs_map[i]))
                 line.append(k+1)
                 output_bins.append(line)
 
@@ -491,7 +489,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append("NODE_"+str(contigs_map[i]))
+            line.append(str(contigs_map[i]))
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs)!=0:
@@ -523,5 +521,5 @@ def main():
     run(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_Flye.py: Refined binning of metagenomic contigs using Flye assembly graphs.
+"""graphbin_SGA.py: Refined binning of metagenomic contigs using SGA assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,7 +8,7 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Flye.py makes use of the assembly graphs produced by Flye long read assembler.
+graphbin_SGA.py makes use of the assembly graphs produced by SGA (String Graph Assembler).
 """
 
 import sys
@@ -22,15 +22,15 @@ import re
 import logging
 
 from igraph import *
-from graphbin.labelpropagation.labelprop import LabelProp
-from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin.graphbin_Func import getClosestLabelledVertices
-from graphbin.graphbin_Options import PARSER
+from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin_utils.graphbin_Func import getClosestLabelledVertices
+from graphbin_utils.graphbin_Options import PARSER
 
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_Flye.py    --graph /path/to/graph_file.asqg
+# python graphbin_SGA.py     --graph /path/to/graph_file.asqg
 #                            --binned /path/to/binning_result.csv
 #                            --output /path/to/output_folder
 # -------------------------------------------------------------------
@@ -39,6 +39,7 @@ from graphbin.graphbin_Options import PARSER
 def run(args):
     # Setup logger
     #-----------------------
+   
     logger = logging.getLogger('GraphBin 1.1')
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -48,14 +49,12 @@ def run(args):
 
     start_time = time.time()
 
-
     assembly_graph_file = args.graph
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
-
 
     # Setup output path for log file
     #---------------------------------------------------
@@ -66,7 +65,7 @@ def run(args):
     logger.addHandler(fileHandler)
 
     logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-    logger.info("This version of GraphBin makes use of the assembly graph produced by Flye which is a long reads assembler based on the de Bruijn graph approach.")
+    logger.info("This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach.")
 
     logger.info("Assembly graph file: "+assembly_graph_file)
     logger.info("Existing binning output file: "+contig_bins_file)
@@ -103,45 +102,37 @@ def run(args):
 
     logger.info("Constructing the assembly graph")
 
-    # Get the links from the .gfa file
+    # Get the links from the .asqg file
     #-----------------------------------
+
+    links = []
 
     my_map = BidirectionalMap()
 
     node_count = 0
 
-    nodes = []
-
-    links = []
-
     try:
-        # Get contig connections from .gfa file
+        # Get contig connections from .asqg file
         with open(assembly_graph_file) as file:
             line = file.readline()
 
             while line != "":
 
                 # Count the number of contigs
-                if "S" in line:
-                    strings = line.split("\t")
-                    my_node = strings[1]
-                    my_map[node_count] = my_node
-                    nodes.append(my_node)
+                if "VT" in line:
+                    start = 'contig-'
+                    end = ''
+                    contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
+                    my_map[node_count] = contig_num
                     node_count += 1
 
                 # Identify lines with link information
-                elif "L" in line:
-
+                elif "ED" in line:
                     link = []
-                    strings = line.split("\t")
-
-                    if strings[1] != strings[3]:
-                        start = strings[1]
-                        end = strings[3]
-                        link.append(start)
-                        link.append(end)
-                        links.append(link)
-
+                    strings = line.split("\t")[1].split()
+                    link.append(int(strings[0][7:]))
+                    link.append(int(strings[1][7:]))
+                    links.append(link)
                 line = file.readline()
 
     except:
@@ -204,7 +195,9 @@ def run(args):
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=',')
             for row in readCSV:
-                contig_num = contigs_map_rev[row[0]]
+                start = 'contig-'
+                end = ''
+                contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
 
                 bin_num = int(row[1])-1
                 bins[bin_num].append(contig_num)
@@ -216,7 +209,6 @@ def run(args):
         logger.error("Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
-
 
     # Remove labels of ambiguous vertices
     #-------------------------------------
@@ -468,7 +460,7 @@ def run(args):
         for k in range(n_bins):
             if i in bins[k]:
                 line = []
-                line.append(str(contigs_map[i]))
+                line.append("contig-"+str(contigs_map[i]))
                 line.append(k+1)
                 output_bins.append(line)
 
@@ -488,7 +480,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append(str(contigs_map[i]))
+            line.append("contig-"+str(contigs_map[i]))
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs)!=0:
@@ -516,7 +508,7 @@ def main():
     # Setup argument parser
     #-----------------------
     ap = PARSER
-    args = ap.parse_args()
+    args = ap.parser_args()
     run(args)
 
 

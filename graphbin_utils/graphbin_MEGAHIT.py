@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_SPAdes.py: Refined binning of metagenomic contigs using SPAdes assembly graphs.
+"""graphbin_MEGAHIT.py: Refined binning of metagenomic contigs using MEGAHIT assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,7 +8,7 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_SPAdes.py makes use of the assembly graphs produced by SPAdes.
+graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
 """
 
 import sys
@@ -22,17 +22,14 @@ import re
 import logging
 
 from igraph import *
-from collections import defaultdict
-
-from graphbin.labelpropagation.labelprop import LabelProp
-from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin.graphbin_Func import getClosestLabelledVertices
-from graphbin.graphbin_Options import PARSER
+from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin_utils.graphbin_Func import getClosestLabelledVertices
+from graphbin_utils.graphbin_Options import PARSER
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_SPAdes.py     --graph /path/to/graph_file.gfa
-#                               --paths /path/to/paths_file.paths
+# python graphbin_MEGAHIT.py    --graph /path/to/graph_file.gfa
 #                               --binned /path/to/binning_result.csv
 #                               --output /path/to/output_folder
 # -------------------------------------------------------------------
@@ -41,6 +38,7 @@ from graphbin.graphbin_Options import PARSER
 def run(args):
     # Setup logger
     #-----------------------
+
     logger = logging.getLogger('GraphBin 1.1')
     logger.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
@@ -50,13 +48,14 @@ def run(args):
 
     start_time = time.time()
 
+
     assembly_graph_file = args.graph
-    contig_paths = args.paths
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
+
 
     # Setup output path for log file
     #---------------------------------------------------
@@ -67,11 +66,9 @@ def run(args):
     logger.addHandler(fileHandler)
 
     logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-    logger.info("This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach.")
+    logger.info("This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach.")
 
-    logger.info("Input arguments:")
     logger.info("Assembly graph file: "+assembly_graph_file)
-    logger.info("Contig paths file: "+contig_paths)
     logger.info("Existing binning output file: "+contig_bins_file)
     logger.info("Final binning output file: "+output_path)
     logger.info("Maximum number of iterations: "+str(max_iteration))
@@ -81,7 +78,7 @@ def run(args):
 
 
     # Get the number of bins from the initial binning result
-    #---------------------------------------------------
+    #--------------------------------------------------------
 
     n_bins = 0
 
@@ -92,7 +89,7 @@ def run(args):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 all_bins_list.append(row[1])
-            
+
         bins_list = list(set(all_bins_list))
         bins_list.sort()
 
@@ -106,83 +103,64 @@ def run(args):
 
     logger.info("Constructing the assembly graph")
 
-    # Get contig paths from contigs.paths
-    #-------------------------------------
-
-    paths = {}
-    segment_contigs = {}
-    node_count = 0
-
-    my_map = BidirectionalMap()
-
-    current_contig_num = ""
-
-    try:
-        with open(contig_paths) as file:
-            name = file.readline()
-            path = file.readline()
-        
-            while name != "" and path != "":
-                
-                while ";" in path:
-                    path = path[:-2]+","+file.readline()
-            
-                start = 'NODE_'
-                end = '_length_'
-                contig_num = str(int(re.search('%s(.*)%s' % (start, end), name).group(1)))
-            
-                segments = path.rstrip().split(",")
-
-                if current_contig_num != contig_num:
-                    my_map[node_count] = int(contig_num)
-                    current_contig_num = contig_num
-                    node_count += 1
-            
-                if contig_num not in paths:
-                    paths[contig_num] = [segments[0], segments[-1]]
-            
-                for segment in segments:
-                    if segment not in segment_contigs:
-                        segment_contigs[segment] = set([contig_num])
-                    else:
-                        segment_contigs[segment].add(contig_num)
-            
-                name = file.readline()
-                path = file.readline()
-
-    except:
-        logger.error("Please make sure that the correct path to the contig paths file is provided.")
-        logger.info("Exiting GraphBin... Bye...!")
-        sys.exit(1)
-
-    contigs_map = my_map
-    contigs_map_rev = my_map.inverse
-
-    logger.info("Total number of contigs available: "+str(node_count))
-
-    links = []
-    links_map = defaultdict(set)
-
 
     ## Construct the assembly graph
     #-------------------------------
 
+    node_count = 0
+
+    links = []
+
+    my_map = BidirectionalMap()
+
     try:
-        # Get links from assembly_graph_with_scaffolds.gfa
+
+        # Get links from .gfa file
         with open(assembly_graph_file) as file:
+
             line = file.readline()
-        
+
             while line != "":
-            
+
                 # Identify lines with link information
-                if "L" in line:
+                if line.startswith("L"):
+                    link = []
+
                     strings = line.split("\t")
-                    f1, f2 = strings[1]+strings[2], strings[3]+strings[4]
-                    links_map[f1].add(f2)
-                    links_map[f2].add(f1)
-                    links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
+
+                    start_1 = 'NODE_'
+                    end_1 = '_length'
+
+                    link1 = int(re.search('%s(.*)%s' % (start_1, end_1), strings[1]).group(1))
+
+                    start_2 = 'NODE_'
+                    end_2 = '_length'
+
+                    link2 = int(re.search('%s(.*)%s' % (start_2, end_2), strings[3]).group(1))
+
+                    link.append(link1)
+                    link.append(link2)
+                    links.append(link)
+
+                elif line.startswith("S"):
+                    strings = line.split()
+
+                    start = 'NODE_'
+                    end = '_length'
+
+                    contig_num = int(re.search('%s(.*)%s' % (start, end), strings[1]).group(1))
+
+                    my_map[node_count] = int(contig_num)
+
+                    node_count += 1
+
                 line = file.readline()
-            
+
+
+        logger.info("Total number of contigs available: "+str(node_count))
+
+        contigs_map = my_map
+        contigs_map_rev = my_map.inverse
 
         # Create graph
         assembly_graph = Graph()
@@ -193,47 +171,16 @@ def run(args):
         # Create list of edges
         edge_list = []
 
-        # Name vertices
         for i in range(node_count):
             assembly_graph.vs[i]["id"]= i
             assembly_graph.vs[i]["label"]= str(contigs_map[i])
 
-        for i in range(len(paths)):
-            segments = paths[str(contigs_map[i])]
-        
-            start = segments[0]
-            start_rev = ""
-
-            if start.endswith("+"):
-                start_rev = start[:-1]+"-"
-            else:
-                start_rev = start[:-1]+"+"
-            
-            end = segments[1]
-            end_rev = ""
-
-            if end.endswith("+"):
-                end_rev = end[:-1]+"-"
-            else:
-                end_rev = end[:-1]+"+"
-        
-            new_links = []
-        
-            if start in links_map:
-                new_links.extend(list(links_map[start]))
-            if start_rev in links_map:
-                new_links.extend(list(links_map[start_rev]))
-            if end in links_map:
-                new_links.extend(list(links_map[end]))
-            if end_rev in links_map:
-                new_links.extend(list(links_map[end_rev]))
-        
-            for new_link in new_links:
-                if new_link in segment_contigs:
-                    for contig in segment_contigs[new_link]:
-                        if i!=contigs_map_rev[int(contig)]:
-                            # Add edge to list of edges
-                            edge_list.append((i,contigs_map_rev[int(contig)]))
+        # Iterate links
+        for link in links:
+            # Remove self loops
+            if link[0] != link[1]:
+                # Add edge to list of edges
+                edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
 
         # Add edges to the graph
         assembly_graph.add_edges(edge_list)
@@ -261,7 +208,7 @@ def run(args):
                 start = 'NODE_'
                 end = ''
                 contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
-            
+
                 bin_num = int(row[1])-1
                 bins[bin_num].append(contig_num)
 
@@ -296,9 +243,9 @@ def run(args):
 
             # Determine whether all the closest labelled vertices have the same label as its own
             neighbours_have_same_label = True
-        
+
             neighbours_binned = False
-        
+
             for neighbour in closest_neighbours:
                 for k in range(n_bins):
                     if neighbour in bins[k]:
@@ -306,7 +253,7 @@ def run(args):
                         if k != my_bin:
                             neighbours_have_same_label = False
                             break
-                        
+
             if not neighbours_have_same_label:
                 remove_labels.append(i)
             elif neighbours_binned:
@@ -322,11 +269,11 @@ def run(args):
 
     for n in range(n_bins):
         binned_contigs = sorted(binned_contigs+bins[n])
-            
+
     for b in range(n_bins):
 
         for i in bins[b]:
-        
+
             if i not in neighbours_have_same_label_list:
 
                 my_bin = b
@@ -359,8 +306,8 @@ def run(args):
             if i in bins[n]:
                 bins[n].remove(i)
 
-    logger.info("Obtaining the refined binning result")
-        
+    logger.info("Obtaining refined binning result")
+
 
     # Get vertices which are not isolated and not in components without any labels
     #-----------------------------------------------------------------------------
@@ -370,7 +317,7 @@ def run(args):
     non_isolated = []
 
     for i in range(node_count):
-    
+
         if i not in non_isolated and i in binned_contigs:
 
             component = []
@@ -416,7 +363,7 @@ def run(args):
     data = []
 
     for contig in range(node_count):
-    
+
         # Consider vertices that are not isolated
 
         if contig in non_isolated:
@@ -429,7 +376,7 @@ def run(args):
                 if contig in bins[i]:
                     line.append(i+1)
                     assigned = True
-        
+
             if not assigned:
                 line.append(0)
 
@@ -481,14 +428,14 @@ def run(args):
 
             # Determine whether all the closest labelled vertices have the same label as its own
             neighbours_have_same_label = True
-        
+
             for neighbour in closest_neighbours:
                 for k in range(n_bins):
                     if neighbour in bins[k]:
                         if k != my_bin:
                             neighbours_have_same_label = False
                             break
-                        
+
             if not neighbours_have_same_label:
                 remove_labels.append(i)
 
@@ -532,7 +479,7 @@ def run(args):
 
     with open(output_file, mode='w') as out_file:
         output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    
+
         for row in output_bins:
             output_writer.writerow(row)
 
@@ -552,7 +499,7 @@ def run(args):
 
         with open(unbinned_file, mode='w') as out_file:
             output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        
+
             for row in unbinned_contigs:
                 output_writer.writerow(row)
 
@@ -570,14 +517,11 @@ def run(args):
 
 def main():
     # Setup argument parser
-    #---------------------------------------------------
+    #-----------------------
     ap = PARSER
-    ap.add_argument(
-        "--paths", type=str, help="path to the contigs.paths file"
-    )
     args = ap.parse_args()
     run(args)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

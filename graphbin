@@ -6,7 +6,7 @@ import argparse
 import os
 import sys
 
-from graphbin import (
+from graphbin_utils import (
     graphbin_Options,
     graphbin_Canu,
     graphbin_Flye,
@@ -44,6 +44,7 @@ def main():
         "--assembler",
         type=str,
         help="name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye, Canu and Miniasm long-read assemblies as well.",
+        default=""
     )
     parser.add_argument(
         "--paths",
@@ -61,6 +62,9 @@ def main():
     # Validation of inputs
     # ---------------------------------------------------
     # Check assembler type
+    if len(sys.argv)==1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
     if not (
         args.assembler.lower() == "spades"
         or args.assembler.lower() == "sga"
@@ -72,31 +76,36 @@ def main():
         print(
             "\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT). GraphBin supports Flye, Canu and Miniasm long-read assemblies as well."
         )
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Check assembly graph file
     if not os.path.isfile(args.graph):
         print("\nFailed to open the assembly graph file.")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Check if paths files is provided when the assembler type is SPAdes
     if args.assembler.lower() == "spades" and args.paths is None:
         print("\nPlease make sure to provide the path to the contigs.paths file.")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Check contigs.paths file for SPAdes
     if args.assembler.lower() == "spades" and not os.path.isfile(args.paths):
         print("\nFailed to open the contigs.paths file.")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Check the file with the initial binning output
     if not os.path.isfile(args.binned):
         print("\nFailed to open the file with the initial binning output.")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Handle for missing trailing forwardslash in output folder path
@@ -114,13 +123,15 @@ def main():
     # Validate max_iteration
     if args.max_iteration <= 0:
         print("\nPlease enter a valid number for max_iteration")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Validate diff_threshold
     if args.diff_threshold < 0:
         print("\nPlease enter a valid number for diff_threshold")
-        print("Exiting GraphBin...\nBye...!\n")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Run GraphBin

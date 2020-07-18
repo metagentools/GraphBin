@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 """
 This code has been modified from the source found at https://github.com/ZwEin27/python-labelpropagation

@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 
 import os
-from setuptools import setup
+from setuptools import setup, find_packages
 
 with open("README.md") as f:
     long_description = f.read()
 
-packages = ["graphbin"]
+packages = find_packages()
 package_data = {
-    "graphbin": [
-        "graphbin/*.py",
-        "graphbin/bidirectionalmap/*.py",
-        "graphbin/labelpropagation/*.py",
+    "graphbin_utils": [
+        "graphbin_utils/*.py",
+        "graphbin_utils/bidirectionalmap/*.py",
+        "graphbin_utils/labelpropagation/*.py",
     ]
 }
 data_files = [(".", ["LICENSE", "README.md"])]
@@ -25,7 +25,7 @@ setup(
     package_data=package_data,
     data_files=data_files,
     include_package_data=True,
-    scripts=['bin/graphbin'],
+    scripts=['graphbin'],
     url='https://github.com/Vini2/graphbin',
     license='GPLv2',
     long_description_content_type="text/markdown",

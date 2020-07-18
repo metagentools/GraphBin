@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_Canu.py: Refined binning of metagenomic contigs using Canu assembly graphs.
+"""graphbin_Miniasm.py: Refined binning of metagenomic contigs using Miniasm assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,7 +8,7 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Canu.py makes use of the assembly graphs produced by Canu long read assembler.
+graphbin_Miniasm.py makes use of the assembly graphs produced by Miniasm long read assembler.
 """
 
 import sys
@@ -22,16 +22,17 @@ import re
 import logging
 
 from igraph import *
-from graphbin.labelpropagation.labelprop import LabelProp
-from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin.graphbin_Func import getClosestLabelledVertices
-from graphbin.graphbin_Options import PARSER
+from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin_utils.graphbin_Func import getClosestLabelledVertices
+from graphbin_utils.graphbin_Options import PARSER
+
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_Canu.py    --graph /path/to/graph_file.asqg
-#                            --binned /path/to/binning_result.csv
-#                            --output /path/to/output_folder
+# python graphbin_Miniasm.py    --graph /path/to/graph_file.asqg
+#                               --binned /path/to/binning_result.csv
+#                               --output /path/to/output_folder
 # -------------------------------------------------------------------
 
 
@@ -47,8 +48,6 @@ def run(args):
     logger.addHandler(consoleHeader)
 
     start_time = time.time()
-
-
 
     assembly_graph_file = args.graph
     contig_bins_file = args.binned
@@ -67,7 +66,7 @@ def run(args):
     logger.addHandler(fileHandler)
 
     logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-    logger.info("This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach.")
+    logger.info("This version of GraphBin makes use of the assembly graph produced by Miniasm.")
 
     logger.info("Assembly graph file: "+assembly_graph_file)
     logger.info("Existing binning output file: "+contig_bins_file)
@@ -90,7 +89,7 @@ def run(args):
             readCSV = csv.reader(csvfile, delimiter=',')
             for row in readCSV:
                 all_bins_list.append(row[1])
-
+            
         bins_list = list(set(all_bins_list))
         bins_list.sort()
 
@@ -119,7 +118,7 @@ def run(args):
         # Get contig connections from .gfa file
         with open(assembly_graph_file) as file:
             line = file.readline()
-
+        
             while line != "":
 
                 # Count the number of contigs
@@ -132,10 +131,10 @@ def run(args):
 
                 # Identify lines with link information
                 elif "L" in line:
-
+                
                     link = []
                     strings = line.split("\t")
-
+                
                     if strings[1] != strings[3]:
                         start = strings[1]
                         end = strings[3]
@@ -206,7 +205,7 @@ def run(args):
             readCSV = csv.reader(contig_bins, delimiter=',')
             for row in readCSV:
                 contig_num = contigs_map_rev[row[0]]
-
+            
                 bin_num = int(row[1])-1
                 bins[bin_num].append(contig_num)
 
@@ -221,6 +220,7 @@ def run(args):
 
     # Remove labels of ambiguous vertices
     #-------------------------------------
+
 
     logger.info("Determining ambiguous vertices")
 
@@ -241,9 +241,9 @@ def run(args):
 
             # Determine whether all the closest labelled vertices have the same label as its own
             neighbours_have_same_label = True
-
+        
             neighbours_binned = False
-
+        
             for neighbour in closest_neighbours:
                 for k in range(n_bins):
                     if neighbour in bins[k]:
@@ -271,7 +271,7 @@ def run(args):
     for b in range(n_bins):
 
         for i in bins[b]:
-
+        
             if i not in neighbours_have_same_label_list:
 
                 my_bin = b
@@ -315,7 +315,7 @@ def run(args):
     non_isolated = []
 
     for i in range(node_count):
-
+    
         if i not in non_isolated and i in binned_contigs:
 
             component = []
@@ -361,7 +361,7 @@ def run(args):
     data = []
 
     for contig in range(node_count):
-
+    
         # Consider vertices that are not isolated
 
         if contig in non_isolated:
@@ -426,7 +426,7 @@ def run(args):
 
             # Determine whether all the closest labelled vertices have the same label as its own
             neighbours_have_same_label = True
-
+        
             for neighbour in closest_neighbours:
                 for k in range(n_bins):
                     if neighbour in bins[k]:
@@ -477,7 +477,7 @@ def run(args):
 
     with open(output_file, mode='w') as out_file:
         output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
+    
         for row in output_bins:
             output_writer.writerow(row)
 
@@ -497,7 +497,7 @@ def run(args):
 
         with open(unbinned_file, mode='w') as out_file:
             output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-
+        
             for row in unbinned_contigs:
                 output_writer.writerow(row)
 
