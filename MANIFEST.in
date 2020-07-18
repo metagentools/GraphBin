@@ -1,15 +1,13 @@
 include *.md
 include LICENSE
 
-include bin/graphbin
+recursive-include graphbin_utils/ *
+recursive-include graphbin_utils/bidirectionalmap *
+recursive-include graphbin_utils/labelpropagation *
 
-recursive-include graphbin/ *
-recursive-include graphbin/bidirectionalmap *
-recursive-include graphbin/labelpropagation *
-
-global-exclude graphbin/ *.pyc
-global-exclude graphbin/__pycache__ *.pyc
-global-exclude graphbin/bidirectionalmap *.pyc
-global-exclude graphbin/bidirectionalmap/__pycache__ *.pyc
-global-exclude graphbin/labelpropagation *.pyc
-global-exclude graphbin/labelpropagation/__pycache__ *.pyc
+global-exclude graphbin_utils/ *.pyc
+global-exclude graphbin_utils/__pycache__ *.pyc
+global-exclude graphbin_utils/bidirectionalmap *.pyc
+global-exclude graphbin_utils/bidirectionalmap/__pycache__ *.pyc
+global-exclude graphbin_utils/labelpropagation *.pyc
+global-exclude graphbin_utils/labelpropagation/__pycache__ *.pyc
