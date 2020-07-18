@@ -18,7 +18,7 @@ data_files = [(".", ["LICENSE", "README.md"])]
 
 setup(
     name='graphbin',
-    version="1.1",
+    version="1.2",
     author="Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin",
     author_email="vijini.mallawaarachchi@anu.edu.au",
     packages=packages,
