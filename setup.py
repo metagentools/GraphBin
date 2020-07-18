@@ -40,5 +40,7 @@ setup(
     ],
     install_requires=[
         "python-igraph",
+        "biopython",
+        "cairocffi",
         "setuptools"],
     zip_safe=False)
