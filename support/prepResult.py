@@ -155,13 +155,26 @@ for bin_file in files:
 
             try:
 
-                if assembler.lower() == "spades" or assembler.lower() == "megahit":
+                if assembler.lower() == "spades":
 
                     start_n = 'NODE_'
                     end_n = '_length'
                         
                     contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
                     line.append('NODE_'+str(contig_num))
+
+                elif assembler.lower() == "megahit":
+
+                    start_k = 'k'
+                    end_k = '_'
+
+                    k_num = int(re.search('%s(.*)%s' % (start_k, end_k), contig_name).group(1))
+
+                    start_n = '_'
+                    end_n = ''
+                        
+                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
+                    line.append('k'+str(k_num)+'_'+str(contig_num))
 
                 elif assembler.lower() == "sga":
 

@@ -50,7 +50,13 @@ def main():
         "--paths",
         default=None,
         required=False,
-        help="path to the contigs.paths file, only SPAdes need",
+        help="path to the contigs.paths file, only needed for SPAdes",
+    )
+    parser.add_argument(
+        "--contigs",
+        default=None,
+        required=False,
+        help="path to the final.contigs.fa file, only needed for MEGAHIT",
     )
 
     args = parser.parse_args()
@@ -97,6 +103,20 @@ def main():
     # Check contigs.paths file for SPAdes
     if args.assembler.lower() == "spades" and not os.path.isfile(args.paths):
         print("\nFailed to open the contigs.paths file.")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
+        sys.exit(1)
+    
+    # Check if final.contigs.fa files is provided when the assembler type is MEGAHIT
+    if args.assembler.lower() == "megahit" and args.contigs is None:
+        print("\nPlease make sure to provide the path to the final.contigs.fa file.")
+        
+        print("\nExiting GraphBin...\nBye...!\n")
+        sys.exit(1)
+
+    # Check final.contigs.fa file for MEGAHIT
+    if args.assembler.lower() == "megahit" and not os.path.isfile(args.contigs):
+        print("\nFailed to open the final.contigs.fa file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)

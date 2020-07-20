@@ -21,6 +21,7 @@ import argparse
 import re
 import logging
 
+from Bio import SeqIO
 from igraph import *
 from graphbin_utils.labelpropagation.labelprop import LabelProp
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
@@ -50,6 +51,7 @@ def run(args):
 
 
     assembly_graph_file = args.graph
+    contigs_file = args.contigs
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
@@ -104,10 +106,21 @@ def run(args):
     logger.info("Constructing the assembly graph")
 
 
-    ## Construct the assembly graph
+    # Get original contig IDs
+    #-------------------------------
+
+    original_contigs = {}
+
+    for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+        original_contigs[record.id] = str(record.seq)
+
+
+    # Construct the assembly graph
     #-------------------------------
 
     node_count = 0
+
+    graph_contigs = {}
 
     links = []
 
@@ -152,6 +165,8 @@ def run(args):
 
                     my_map[node_count] = int(contig_num)
 
+                    graph_contigs[contig_num] = strings[2]
+
                     node_count += 1
 
                 line = file.readline()
@@ -194,6 +209,18 @@ def run(args):
     logger.info("Total number of edges in the assembly graph: "+str(len(edge_list)))
 
 
+    # Map original contig IDs to contig IDS of assembly graph
+    #--------------------------------------------------------
+
+    graph_to_contig_map = BidirectionalMap()    
+
+    for (n,m), (n2,m2) in zip(graph_contigs.items(), original_contigs.items()):
+        if m==m2:
+            graph_to_contig_map[n] = n2
+    
+    graph_to_contig_map_rev = graph_to_contig_map.inverse
+
+
     # Get initial binning result
     #----------------------------
 
@@ -205,9 +232,7 @@ def run(args):
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=',')
             for row in readCSV:
-                start = 'NODE_'
-                end = ''
-                contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+                contig_num = contigs_map_rev[int(graph_to_contig_map_rev[row[0]])]
 
                 bin_num = int(row[1])-1
                 bins[bin_num].append(contig_num)
@@ -471,7 +496,7 @@ def run(args):
         for k in range(n_bins):
             if i in bins[k]:
                 line = []
-                line.append("NODE_"+str(contigs_map[i]))
+                line.append(graph_to_contig_map[contigs_map[i]])
                 line.append(k+1)
                 output_bins.append(line)
 
@@ -491,7 +516,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append("NODE_"+str(contigs_map[i]))
+            line.append(graph_to_contig_map[contigs_map[i]])
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs)!=0:
