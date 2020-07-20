@@ -56,9 +56,9 @@ prefix = ""
 #---------------------------------------------------
 
 if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "flye" or assembler.lower() == "canu"):
-    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA or MEGAHIT).")
+    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA, MEGAHIT, Flye or Canu).")
     print("\nExiting prepResult.py...\nBye...!\n")
-    sys.exit(2)
+    sys.exit(1)
 
 
 # Check if folder to initial binning result exists
@@ -72,7 +72,7 @@ if contig_bins_folder[-1:] != "/":
 if not os.path.isdir(contig_bins_folder):
     print("\nPlease enter a valid path to the folder containing the initial binning result.")
     print("\nExiting prepResult.py...\nBye...!\n")
-    sys.exit(2)
+    sys.exit(1)
 
 # Get list of files in the folder path of binning result.
 files = os.listdir(contig_bins_folder)
@@ -83,20 +83,20 @@ files = os.listdir(contig_bins_folder)
 if len(files) == 0:
     print("\nFolder containing the initial binning result is empty. Please enter a valid path to the folder containing the initial binning result.")
     print("\nExiting prepResult.py...\nBye...!\n")
-    sys.exit(2)
+    sys.exit(1)
 
 
 # Check if binning result folder contains fasta files.
 #---------------------------------------------------
 isFasta = False
 for myfile in files:
-    if myfile.lower().endswith(('.fasta', '.fa')):
+    if myfile.lower().endswith(('.fasta', '.fa', '.fna')):
         isFasta = True
     
 if not isFasta:
-    print("\nMake sure the folder containing the initial binning result contains fasta files.")
+    print("\nMake sure the folder containing the initial binning result contains fasta files (.fasta, .fa or .fna).")
     print("\nExiting prepResult.py...\nBye...!\n")
-    sys.exit(2)
+    sys.exit(1)
 
 
 # Check if output folder exists
@@ -126,7 +126,7 @@ try:
 except:
     print("\nPlease enter a valid string for prefix")
     print("Exiting prepResult.py...\n")
-    sys.exit(2)
+    sys.exit(1)
 
 
 # Format binning results.
@@ -140,7 +140,7 @@ bin_ids = []
 
 for bin_file in files:
 
-    if bin_file.lower().endswith(('.fasta', '.fa')):
+    if bin_file.lower().endswith(('.fasta', '.fa', '.fna')):
 
         bin_line = []
         bin_line.append(str(bin_file))
@@ -191,7 +191,7 @@ for bin_file in files:
             except:
                 print("\nContig naming does not match with the assembler type provided. Please make sure to provide the correct assembler type.")
                 print("\nExiting prepResult.py...\nBye...!\n")
-                sys.exit(2)
+                sys.exit(1)
 
             line.append(str(i))
             contig_bins.append(line)
