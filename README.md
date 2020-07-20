@@ -114,7 +114,7 @@ For the SGA version, `graphbin.py` takes in 2 files as inputs (required).
 * Binning output from an existing tool (in `.csv` format)
 
 For the MEGAHIT version, `graphbin.py`  takes in 2 files as inputs (required).
-* Assembly graph file (in `.gfa` format)
+* Assembly graph file (in `.gfa` format. To convert fastg to gfa refer [here](https://github.com/Vini2/GraphBin/blob/master/support/README.md#fastg2gfa))
 * Contigs file (in `.fa` format)
 * Binning output from an existing tool (in `.csv` format)
 
