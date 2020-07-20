@@ -51,6 +51,10 @@ pip3 install .
 pip3 install . --user
 ```
 
+#### Note for Ubuntu users
+
+If you come across an error as `Failed building wheel for python-igraph` when installing GraphBin, you can install python-igraph as shown in [this thread](https://stackoverflow.com/questions/34962410/igraph-failed-to-install-through-pip).
+
 Now you are ready to run GraphBin.
 
 
