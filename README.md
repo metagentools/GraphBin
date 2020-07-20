@@ -32,14 +32,14 @@ cd GraphBin/
 
 ### Dependencies
 
-You will need the following dependencies to run GraphBin and related support scripts.
+GraphBin installation requires python 3.6 or above with pip3. You will need the following dependencies to run GraphBin and related support scripts.
 * [python-igraph](https://igraph.org/python/)
 * [biopython](https://biopython.org/)
 * [cairocffi](https://pypi.org/project/cairocffi/)
 
 ### Installing GraphBin
 
-This installation requires python 3.6 or above with pip3. You can install GraphBin globally or per user depending on your privileges to the system.
+You can install GraphBin globally or per user depending on your privileges to the system.
 
 #### Installing as admin
 ```
