@@ -74,7 +74,7 @@ The assembly of contigs can be done using 3 assembly software.
 Once you have obtained the assembly output, you can run GraphBin.
 
 ## Using GraphBin
-You can see the usage options of GraphBin by typing ```graphbin -h``` on the command line. For example,
+You can see the usage options of GraphBin by typing `graphbin -h` or `./graphbin -h` on the command line. For example,
 
 ```
 usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED] [--output OUTPUT] [--prefix PREFIX] [--max_iteration MAX_ITERATION] [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
@@ -147,7 +147,7 @@ k99_18709,1
 k99_15596,2
 ...
 ```
-GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) file for more details.
+GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) for more details.
 
 ## Example Usage
 
