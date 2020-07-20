@@ -77,35 +77,27 @@ Once you have obtained the assembly output, you can run GraphBin.
 You can see the usage options of GraphBin by typing ```graphbin -h``` on the command line. For example,
 
 ```
-graphbin -h
-usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED]
-                [--output OUTPUT] [--prefix PREFIX]
-                [--max_iteration MAX_ITERATION]
-                [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
-                [--paths PATHS]
+usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED] [--output OUTPUT] [--prefix PREFIX] [--max_iteration MAX_ITERATION] [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
+                [--paths PATHS] [--contigs CONTIGS]
 
-GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
-the contig connectivity information from the assembly graph to bin contigs. It
-utilizes the binning result of an existing binning tool and a label
-propagation algorithm to correct mis-binned contigs and predict the labels of
-contigs which are discarded due to short length.
+GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an
+existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
 optional arguments:
   -h, --help            show this help message and exit
-  --assembler ASSEMBLER
-                        name of the assembler used (SPAdes, SGA or MEGAHIT)
+  --version
   --graph GRAPH         path to the assembly graph file
-  --paths PATHS         path to the contigs.paths file
-  --binned BINNED       path to the .csv file with the initial binning output
-                        from an existing tool
+  --binned BINNED       path to the .csv file with the initial binning output from an existing tool
   --output OUTPUT       path to the output folder
   --prefix PREFIX       prefix for the output file
   --max_iteration MAX_ITERATION
-                        maximum number of iterations for label propagation
-                        algorithm. [default: 100]
+                        maximum number of iterations for label propagation algorithm. [default: 100]
   --diff_threshold DIFF_THRESHOLD
-                        difference threshold for label propagation algorithm.
-                        [default: 0.1]
+                        difference threshold for label propagation algorithm. [default: 0.1]
+  --assembler ASSEMBLER
+                        name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye, Canu and Miniasm long-read assemblies as well.
+  --paths PATHS         path to the contigs.paths file, only needed for SPAdes
+  --contigs CONTIGS     path to the final.contigs.fa file, only needed for MEGAHIT
 ```
 
 `max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
@@ -123,11 +115,12 @@ For the SGA version, `graphbin.py` takes in 2 files as inputs (required).
 
 For the MEGAHIT version, `graphbin.py`  takes in 2 files as inputs (required).
 * Assembly graph file (in `.gfa` format)
+* Contigs file (in `.fa` format)
 * Binning output from an existing tool (in `.csv` format)
 
 **Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and the numbering of bins starts from 1.
 
-Example metaSPAdes and MEGAHIT binned input
+Example metaSPAdes binned input
 ```
 NODE_1,1
 NODE_2,1
@@ -145,6 +138,15 @@ contig-3,1
 contig-4,2
 ...
 ```
+Example MEGAHIT binned input
+```
+k99_10059,1
+k99_9367,1
+k99_15595,2
+k99_18709,1
+k99_15596,2
+...
+```
 GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) file for more details.
 
 ## Example Usage
@@ -156,7 +158,7 @@ graphbin --assembler spades --graph /path/to/graph_file.gfa --paths /path/to/pat
 graphbin --assembler sga --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-graphbin --assembler megahit --graph /path/to/graph_file.gfa --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Support Scripts
