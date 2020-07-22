@@ -9,9 +9,7 @@
 
 **GraphBin** is a NGS data-based metagenomic contig bin refinment tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
-## Getting Started
-
-### Downloading GraphBin
+## Downloading GraphBin
 You can download the latest release of GraphBin from [Releases](https://github.com/Vini2/GraphBin/releases) or clone the GraphBin repository to your machine.
 
 ```
@@ -30,14 +28,37 @@ Now go in to the GraphBin folder using the command
 cd GraphBin/
 ```
 
-### Dependencies
+## Dependencies
 
-GraphBin installation requires python 3.6 or above with pip3. You will need the following dependencies to run GraphBin and related support scripts.
+GraphBin installation requires python 3.6 or above. You will need the following dependencies to run GraphBin and related support scripts.
 * [python-igraph](https://igraph.org/python/)
 * [biopython](https://biopython.org/)
 * [cairocffi](https://pypi.org/project/cairocffi/)
 
-### Installing GraphBin
+## Installing GraphBin
+
+You can use Conda to setup an environemnt to run GraphBin **OR** you can use pip3 too install GraphBin.
+
+### Using Conda
+
+You can use [Conda](https://docs.conda.io/en/latest/) to run GraphBin. You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
+
+Once you have installed Conda, make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
+
+```
+conda env create -f environment.yml
+conda activate graphbin
+```
+
+Now you are ready to run GraphBin.
+
+If you want to switch back to your normal environment, run the following command.
+
+```
+conda deactivate
+```
+
+### Using pip3
 
 You can install GraphBin globally or per user depending on your privileges to the system.
 
