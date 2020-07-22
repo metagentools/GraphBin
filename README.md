@@ -50,6 +50,12 @@ conda env create -f environment.yml
 conda activate graphbin
 ```
 
+Add GraphBin to your PATH variable.
+```
+echo export PATH=$PATH:$(pwd) >> ~/.bashrc   # adding path to bashrc file to be available on login
+export PATH=$PATH:$(pwd)                     # enabling the PATH for current terminal session
+```
+
 Now you are ready to run GraphBin.
 
 If you want to switch back to your normal environment, run the following command.
