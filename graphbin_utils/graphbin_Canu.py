@@ -392,6 +392,22 @@ def run(args):
 
             data.append(line)
 
+    # Check if initial binning result consists of contigs belonging to multiple bins
+
+    multiple_bins = False
+    
+    for item in data:
+        if len(item) == 4 and type(item[1]) is int and type(item[2]) is int:
+            multiple_bins = True
+            break
+
+    if multiple_bins:
+        logger.error("Initial binning result consists of contigs belonging to multiple bins. Please make sure that each contig in the initial binning result belongs to only one bin.")
+        logger.info("Exiting GraphBin... Bye...!")
+        sys.exit(1)
+    
+    # Label propagation
+    
     lp = LabelProp()
 
     lp.load_data_from_mem(data)
