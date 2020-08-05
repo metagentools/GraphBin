@@ -145,6 +145,8 @@ For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 * Contigs file (in `.fa` format)
 * Binning output from an existing tool (in `.csv` format)
 
+**Note:** Make sure that the initial binning result consists of contigs belonging to only one bin. GraphBin is designed to handle initial contigs which belong to only one bin. Multiple bins for the initial contigs are not supported.
+
 **Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and the numbering of bins starts from 1.
 
 Example metaSPAdes binned input
