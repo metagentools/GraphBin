@@ -87,7 +87,7 @@ def main():
         sys.exit(1)
 
     # Check assembly graph file
-    if not os.path.isfile(args.graph):
+    if not os.path.exists(args.graph):
         print("\nFailed to open the assembly graph file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
@@ -101,7 +101,7 @@ def main():
         sys.exit(1)
 
     # Check contigs.paths file for SPAdes
-    if args.assembler.lower() == "spades" and not os.path.isfile(args.paths):
+    if args.assembler.lower() == "spades" and not os.path.exists(args.paths):
         print("\nFailed to open the contigs.paths file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
@@ -115,14 +115,14 @@ def main():
         sys.exit(1)
 
     # Check contigs.fa file for MEGAHIT
-    if args.assembler.lower() == "megahit" and not os.path.isfile(args.contigs):
+    if args.assembler.lower() == "megahit" and not os.path.exists(args.contigs):
         print("\nFailed to open the contigs.fa file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
     # Check the file with the initial binning output
-    if not os.path.isfile(args.binned):
+    if not os.path.exists(args.binned):
         print("\nFailed to open the file with the initial binning output.")
         
         print("\nExiting GraphBin...\nBye...!\n")
@@ -153,6 +153,14 @@ def main():
         
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
+    
+    # Remove previous files if they exist
+    if os.path.exists(args.output+args.prefix+"graphbin.log"):
+        os.remove(args.output+args.prefix+"graphbin.log")
+    if os.path.exists(args.output+args.prefix+"graphbin_output.csv"):
+        os.remove(args.output+args.prefix+"graphbin_output.csv")
+    if os.path.exists(args.output+args.prefix+"graphbin_unbinned.csv"):
+        os.remove(args.output+args.prefix+"graphbin_unbinned.csv")
 
     # Run GraphBin
     # ---------------------------------------------------

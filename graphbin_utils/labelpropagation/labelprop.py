@@ -4,6 +4,11 @@
 This code has been modified from the source found at https://github.com/ZwEin27/python-labelpropagation
 """
 
+import logging
+
+# create logger
+logger = logging.getLogger('GraphBin 1.2')
+
 class Edge():
     def __init__(self, src, dest, weight):
         self.src = src
@@ -13,6 +18,8 @@ class Edge():
 class LabelProp():
 
     def __init__(self):
+        self.logger = logging.getLogger('GraphBin 1.2')
+        self.logger.info('Creating an instance of LabelProp')
         self.initialize_env()
 
 ################################################################################
@@ -189,7 +196,7 @@ class LabelProp():
     def run(self, eps, max_iter, show_log=False, clean_result=False):
         diff = 0.
         for i in range(max_iter):
-            print("Iteration "+str(i+1))
+            logger.debug("Iteration "+str(i+1))
             diff = self.iterate()
             if diff < eps:
                 break
@@ -216,15 +223,15 @@ class LabelProp():
 ################################################################################
 
     def show_detail(self, diff, eps, i, max_iter):
-        print("Total number of vertices:\t\t", self.vertex_size)
-        print("Number of class labels:\t\t\t", self.label_size)
-        print("Previous number of unlabeled vertices:\t", (self.vertex_size - self.labelled_size))
-        print("Previous numebr of labeled vertices:\t", self.labelled_size)
-        print("Value of eps parameter:\t\t\t", eps)
-        print("Value of max_iteration parameter:\t", max_iter)
-        print("Final values:")
-        print("iter = ", i+1, ", diff = ", diff)
+        logger.info("Total number of vertices:\t\t" + str(self.vertex_size))
+        logger.info("Number of class labels:\t\t" + str(self.label_size))
+        logger.info("Previous number of unlabeled vertices:\t" + str(self.vertex_size - self.labelled_size))
+        logger.info("Previous numebr of labeled vertices:\t" + str(self.labelled_size))
+        logger.info("Value of eps parameter:\t\t" + str(eps))
+        logger.info("Value of max_iteration parameter:\t" + str(max_iter))
+        logger.info("Final values:")
+        logger.info("iter = " + str(i+1) + ", diff = " +  str(diff))
 
     def show_vertex_adj(self):
         for k, v in self.vertex_adj_map.items():
-            print(str([4, [[_.src, _.dest, _.weight] for _ in v]]))
+            logger.debug(str([4, [[_.src, _.dest, _.weight] for _ in v]]))

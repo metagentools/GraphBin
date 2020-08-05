@@ -40,7 +40,7 @@ def run(args):
     #-----------------------
 
     logger = logging.getLogger('GraphBin 1.2')
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
     consoleHeader.setFormatter(formatter)
