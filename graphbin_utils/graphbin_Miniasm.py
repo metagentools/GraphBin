@@ -397,7 +397,7 @@ def run(args):
     multiple_bins = False
     
     for item in data:
-        if len(item) == 4 and type(item[1]) is int and type(item[2]) is int:
+        if type(item[1]) is int and type(item[2]) is int:
             multiple_bins = True
             break
 
