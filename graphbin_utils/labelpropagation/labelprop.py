@@ -7,7 +7,7 @@ This code has been modified from the source found at https://github.com/ZwEin27/
 import logging
 
 # create logger
-logger = logging.getLogger('GraphBin 1.2')
+logger = logging.getLogger('GraphBin 1.3')
 
 class Edge():
     def __init__(self, src, dest, weight):
@@ -18,7 +18,7 @@ class Edge():
 class LabelProp():
 
     def __init__(self):
-        self.logger = logging.getLogger('GraphBin 1.2')
+        self.logger = logging.getLogger('GraphBin 1.3')
         self.logger.info('Creating an instance of LabelProp')
         self.initialize_env()
 

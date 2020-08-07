@@ -41,7 +41,7 @@ from graphbin_utils.graphbin_Options import PARSER
 def run(args):
     # Setup logger
     #-----------------------
-    logger = logging.getLogger('GraphBin 1.2')
+    logger = logging.getLogger('GraphBin 1.3')
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
