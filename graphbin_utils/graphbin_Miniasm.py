@@ -45,6 +45,7 @@ def run(args):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
     consoleHeader.setFormatter(formatter)
+    consoleHeader.setLevel(logging.DEBUG)
     logger.addHandler(consoleHeader)
 
     start_time = time.time()

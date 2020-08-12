@@ -44,6 +44,7 @@ def run(args):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
     consoleHeader.setFormatter(formatter)
+    consoleHeader.setLevel(logging.INFO)
     logger.addHandler(consoleHeader)
 
     start_time = time.time()
@@ -61,7 +62,7 @@ def run(args):
     #---------------------------------------------------
 
     fileHandler = logging.FileHandler(output_path+"/"+prefix+"graphbin.log")
-    fileHandler.setLevel(logging.INFO)
+    fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)
 
