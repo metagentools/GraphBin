@@ -6,6 +6,7 @@
 
 ![GitHub](https://img.shields.io/github/license/Vini2/GraphBin) 
 ![GitHub top language](https://img.shields.io/github/languages/top/Vini2/GraphBin)
+![GitHub top language](https://img.shields.io/github/v/release/Vini2/GraphBin)
 
 **GraphBin** is a NGS data-based metagenomic contig bin refinment tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
