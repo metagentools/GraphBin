@@ -1,4 +1,4 @@
-# Support scripts for GraphBin
+# Support scripts for GraphBin2
 
 ## prepResult.py
 
