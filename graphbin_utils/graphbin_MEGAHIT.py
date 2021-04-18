@@ -235,7 +235,7 @@ def run(args):
             for row in readCSV:
                 contig_num = contigs_map_rev[int(graph_to_contig_map_rev[row[0]])]
 
-                bin_num = int(row[1])-1
+                bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
 
         for i in range(n_bins):
@@ -514,7 +514,7 @@ def run(args):
             if i in bins[k]:
                 line = []
                 line.append(graph_to_contig_map[contigs_map[i]])
-                line.append(k+1)
+                line.append(bins_list[k])
                 output_bins.append(line)
 
     output_file = output_path + prefix + 'graphbin_output.csv'
