@@ -55,8 +55,7 @@ def main():
     parser.add_argument(
         "--contigs",
         default=None,
-        required=False,
-        help="path to the contigs.fa file, only needed for MEGAHIT",
+        help="path to the contigs.fa file.",
     )
 
     args = parser.parse_args()
@@ -110,16 +109,16 @@ def main():
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
     
-    # Check if contigs.fa files is provided when the assembler type is MEGAHIT
-    if args.assembler.lower() == "megahit" and args.contigs is None:
-        print("\nPlease make sure to provide the path to the contigs.fa file.")
+    # Check if contigs.fa files is provided
+    if args.contigs is None:
+        print("\nPlease make sure to provide the path to the contigs file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)
 
-    # Check contigs.fa file for MEGAHIT
-    if args.assembler.lower() == "megahit" and not os.path.exists(args.contigs):
-        print("\nFailed to open the contigs.fa file.")
+    # Check contigs file
+    if not os.path.exists(args.contigs):
+        print("\nFailed to open the contigs file.")
         
         print("\nExiting GraphBin...\nBye...!\n")
         sys.exit(1)

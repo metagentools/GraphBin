@@ -26,6 +26,7 @@ from graphbin_utils.labelpropagation.labelprop import LabelProp
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
+from Bio import SeqIO
 
 
 # Sample command
@@ -51,6 +52,7 @@ def run(args):
     start_time = time.time()
 
     assembly_graph_file = args.graph
+    contigs_file = args.contigs
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
@@ -103,10 +105,18 @@ def run(args):
 
     logger.info("Constructing the assembly graph")
 
+
+    contig_descriptions = {}
+
+    for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+        contig_descriptions[record.id] = record.description
+
     # Get the links from the .asqg file
     #-----------------------------------
 
     links = []
+
+    contig_names = {}
 
     my_map = BidirectionalMap()
 
@@ -123,8 +133,10 @@ def run(args):
                 if "VT" in line:
                     start = 'contig-'
                     end = ''
-                    contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
+                    contig_name = str(line.split()[1])
+                    contig_num = int(re.search('%s(.*)%s' % (start, end), contig_name).group(1))
                     my_map[node_count] = contig_num
+                    contig_names[node_count] = contig_name.strip()
                     node_count += 1
 
                 # Identify lines with link information
@@ -471,25 +483,26 @@ def run(args):
 
     logger.info("Writing the Final Binning result to file")
 
-    output_bins = []
+    output_bins_path = output_path + prefix + "bins/"
 
-    for i in range(node_count):
-        for k in range(n_bins):
-            if i in bins[k]:
-                line = []
-                line.append("contig-"+str(contigs_map[i]))
-                line.append(bins_list[k])
-                output_bins.append(line)
+    if not os.path.isdir(output_bins_path):
+        subprocess.run("mkdir -p "+output_bins_path, shell=True)
 
-    output_file = output_path + prefix + 'graphbin_output.csv'
+    for b in range(len(bins)):
 
-    with open(output_file, mode='w') as out_file:
-        output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
+            for contig in bins[b]:
+                bin_file.write(contig_descriptions[contig_names[contig]]+"\n")
+        
+        bin_split_cmd = "awk -F'>' 'NR==FNR{ids[$0]; next} NF>1{f=($2 in ids)} f' " + output_bins_path + "bin_" + str(b+1) + "_ids.txt " + contigs_file + " > " + output_bins_path + "bin_" +str(b+1) +"_seqs.fasta"
+        
+        subprocess.run(bin_split_cmd, shell=True)
 
-        for row in output_bins:
-            output_writer.writerow(row)
+        with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
+            for contig in bins[b]:
+                bin_file.write(contig_names[contig]+"\n")
 
-    logger.info("Final binning results can be found at "+output_file)
+    logger.info("Final binning results can be found in "+str(output_bins_path))
 
 
     unbinned_contigs = []
@@ -497,7 +510,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append("contig-"+str(contigs_map[i]))
+            line.append(contig_names[i])
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs)!=0:

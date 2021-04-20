@@ -51,6 +51,7 @@ def run(args):
 
 
     assembly_graph_file = args.graph
+    contigs_file = args.contigs
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
@@ -479,25 +480,20 @@ def run(args):
 
     logger.info("Writing the Final Binning result to file")
 
-    output_bins = []
+    output_bins_path = output_path + prefix + "bins/"
 
-    for i in range(node_count):
-        for k in range(n_bins):
-            if i in bins[k]:
-                line = []
-                line.append(str(contigs_map[i]))
-                line.append(bins_list[k])
-                output_bins.append(line)
+    if not os.path.isdir(output_bins_path):
+        subprocess.run("mkdir -p "+output_bins_path, shell=True)
 
-    output_file = output_path + prefix + 'graphbin_output.csv'
+    for b in range(len(bins)):
 
-    with open(output_file, mode='w') as out_file:
-        output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
+            for contig in bins[b]:
+                bin_file.write(str(contigs_map[contig])+"\n")
 
-        for row in output_bins:
-            output_writer.writerow(row)
+        subprocess.run("awk -F'>' 'NR==FNR{ids[$0]; next} NF>1{f=($2 in ids)} f' " + output_bins_path + "bin_" + str(b+1) + "_ids.txt " + contigs_file + " > " + output_bins_path + "bin_" +str(b+1) +"_seqs.fasta", shell=True)
 
-    logger.info("Final binning results can be found at "+output_file)
+    logger.info("Final binning results can be found in "+str(output_bins_path))
 
 
     unbinned_contigs = []
