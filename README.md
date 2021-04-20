@@ -107,27 +107,42 @@ Once you have obtained the assembly output, you can run GraphBin.
 You can see the usage options of GraphBin by typing `graphbin -h` on the command line. For example,
 
 ```
-usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED] [--output OUTPUT] [--prefix PREFIX] [--max_iteration MAX_ITERATION] [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
-                [--paths PATHS] [--contigs CONTIGS]
+usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED]
+                [--output OUTPUT] [--prefix PREFIX]
+                [--max_iteration MAX_ITERATION]
+                [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
+                [--paths PATHS] [--contigs CONTIGS] [--delimiter DELIMITER]
 
-GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an
-existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
+GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
+the contig connectivity information from the assembly graph to bin contigs. It
+utilizes the binning result of an existing binning tool and a label
+propagation algorithm to correct mis-binned contigs and predict the labels of
+contigs which are discarded due to short length.
 
 optional arguments:
   -h, --help            show this help message and exit
   --version
   --graph GRAPH         path to the assembly graph file
-  --binned BINNED       path to the .csv file with the initial binning output from an existing tool
+  --binned BINNED       path to the .csv file with the initial binning output
+                        from an existing tool
   --output OUTPUT       path to the output folder
   --prefix PREFIX       prefix for the output file
   --max_iteration MAX_ITERATION
-                        maximum number of iterations for label propagation algorithm. [default: 100]
+                        maximum number of iterations for label propagation
+                        algorithm. [default: 100]
   --diff_threshold DIFF_THRESHOLD
-                        difference threshold for label propagation algorithm. [default: 0.1]
+                        difference threshold for label propagation algorithm.
+                        [default: 0.1]
   --assembler ASSEMBLER
-                        name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye, Canu and Miniasm long-read assemblies as well.
+                        name of the assembler used (SPAdes, SGA or MEGAHIT).
+                        GraphBin supports Flye, Canu and Miniasm long-read
+                        assemblies as well.
   --paths PATHS         path to the contigs.paths file, only needed for SPAdes
-  --contigs CONTIGS     path to the final.contigs.fa file, only needed for MEGAHIT
+  --contigs CONTIGS     path to the contigs.fa file.
+  --delimiter DELIMITER
+                        delimiter for input/output results. Supports a comma
+                        (,), a semicolon (;), a tab ($'\t'), a space (" ") and
+                        a pipe (|) [default: , (comma)]
 ```
 
 `max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
@@ -151,6 +166,8 @@ For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 * Binning output from an existing tool (in `.csv` format)
 
 **Note:** Make sure that the initial binning result consists of contigs belonging to only one bin. GraphBin is designed to handle initial contigs which belong to only one bin. Multiple bins for the initial contigs are not supported.
+
+**Note:** You can specify the delimiter for the initial binning result file and the final output file using the delimiter paramter. Enter the following values for different delimiters; `,` for a comma, `;` for a semicolon, `$'\t'` for a tab, `" "` for a space and `|` for a pipe.
 
 **Note:** The binning output file should have comma separated values ```(contig_identifier, bin_identifier)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and bin identifier.
 
