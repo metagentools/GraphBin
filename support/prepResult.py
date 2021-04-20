@@ -29,7 +29,6 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 # Sample command
 # -------------------------------------------------------------------
 # python prepResult.py     --binned /path/to/folder_with_binning_result
-#                          --assembler name of the assembler used (SPAdes or SGA)
 #                          --output /path/to/output_folder
 # -------------------------------------------------------------------
 
@@ -40,25 +39,14 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--binned", required=True, type=str, help="path to the folder containing the initial binning result from an existing tool")
-ap.add_argument("--assembler", required=True, type=str, help="name of the assembler used (SPAdes, SGA or MEGAHIT). GraphBin supports Flye and Canu long-read assemblies as well.")
 ap.add_argument("--output", required=True, type=str, help="path to the output folder")
 ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
 
 args = vars(ap.parse_args())
 
 contig_bins_folder = args["binned"]
-assembler = args["assembler"]
 output_path = args["output"]
 prefix = ""
-
-
-# Check assembler type
-#---------------------------------------------------
-
-if not (assembler.lower() == "spades" or assembler.lower() == "sga" or assembler.lower() == "megahit" or assembler.lower() == "flye" or assembler.lower() == "canu"):
-    print("\nPlease make sure to provide the correct assembler type (SPAdes, SGA, MEGAHIT, Flye or Canu).")
-    print("\nExiting prepResult.py...\nBye...!\n")
-    sys.exit(1)
 
 
 # Check if folder to initial binning result exists
@@ -153,40 +141,7 @@ for bin_file in files:
             contig_num = 0
 
             line = []
-
-            try:
-
-                if assembler.lower() == "spades":
-
-                    start_n = 'NODE_'
-                    end_n = '_length'
-                        
-                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
-                    line.append('NODE_'+str(contig_num))
-
-                elif assembler.lower() == "megahit":
-
-                    start_k = 'k'
-                    end_k = '_'
-
-                    k_num = int(re.search('%s(.*)%s' % (start_k, end_k), contig_name).group(1))
-
-                    start_n = '_'
-                    end_n = ''
-                        
-                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
-                    line.append('k'+str(k_num)+'_'+str(contig_num))
-
-                elif assembler.lower() == "sga":
-
-                    start_n = 'contig-'
-                    end_n = ''
-                        
-                    contig_num = int(re.search('%s(.*)%s' % (start_n, end_n), contig_name).group(1))
-                    line.append('contig-'+str(contig_num))
-                
-                elif assembler.lower() == "canu" or assembler.lower() == "flye":
-                    line.append(str(contig_name))
+            line.append(str(contig_name))
 
             except:
                 print("\nContig naming does not match with the assembler type provided. Please make sure to provide the correct assembler type.")
