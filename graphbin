@@ -57,6 +57,13 @@ def main():
         default=None,
         help="path to the contigs.fa file.",
     )
+    parser.add_argument("--delimiter", 
+        required=False, 
+        type=str, 
+        default=",", 
+        help="delimiter for input/output results. Supports a comma (,), a semicolon (;), a tab ($'\\t'), a space (\" \") and a pipe (|) [default: , (comma)]"
+    )
+
 
     args = parser.parse_args()
 
@@ -141,6 +148,14 @@ def main():
     if args.prefix != "":
         if not args.prefix.endswith("_"):
             args.prefix = args.prefix + "_"
+
+    # Validate delimiter
+    delimiters = [",", ";", " ", "\t", "|"]
+
+    if args.delimiter not in delimiters:
+        print("\nPlease enter a valid delimiter")
+        print("Exiting GraphBin...\nBye...!\n")
+        sys.exit(1)
 
     # Validate max_iteration
     if args.max_iteration <= 0:

@@ -38,15 +38,38 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--binned", required=True, type=str, help="path to the folder containing the initial binning result from an existing tool")
-ap.add_argument("--output", required=True, type=str, help="path to the output folder")
-ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
+ap.add_argument("--binned", 
+    required=True, 
+    type=str, 
+    help="path to the folder containing the initial binning result from an existing tool"
+)
+
+ap.add_argument("--output", 
+    required=True, 
+    type=str, 
+    help="path to the output folder"
+)
+
+ap.add_argument("--prefix", 
+    required=False, 
+    type=str, 
+    default='', 
+    help="prefix for the output file"
+)
+
+ap.add_argument("--delimiter", 
+    required=False, 
+    type=str, 
+    default=",", 
+    help="delimiter for input/output results. Supports a comma (,), a semicolon (;), a tab ($'\\t'), a space (\" \") and a pipe (|) [default: , (comma)]"
+)
 
 args = vars(ap.parse_args())
 
 contig_bins_folder = args["binned"]
 output_path = args["output"]
 prefix = ""
+delimiter = args["delimiter"]
 
 
 # Check if folder to initial binning result exists
@@ -117,6 +140,15 @@ except:
     sys.exit(1)
 
 
+# Validate delimiter
+delimiters = [",", ";", " ", "\t", "|"]
+
+if delimiter not in delimiters:
+    print("\nPlease enter a valid delimiter")
+    print("Exiting prepResult.py...\n")
+    sys.exit(1)
+
+
 # Format binning results.
 #---------------------------------------------------
 
@@ -141,11 +173,6 @@ for bin_file in files:
             line = []
             line.append(str(contig_name))
 
-            except:
-                print("\nContig naming does not match with the assembler type provided. Please make sure to provide the correct assembler type.")
-                print("\nExiting prepResult.py...\nBye...!\n")
-                sys.exit(1)
-
             line.append(str(i))
             contig_bins.append(line)
 
@@ -158,13 +185,13 @@ for bin_file in files:
 print("\nWriting initial binning results to output file")
 
 with open(output_path + prefix + 'initial_contig_bins.csv', mode='w') as contig_bins_file:
-    contig_writer = csv.writer(contig_bins_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    contig_writer = csv.writer(contig_bins_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
     
     for row in contig_bins:
         contig_writer.writerow(row)
 
 with open(output_path + prefix + 'bin_ids.csv', mode='w') as bin_ids_file:
-    bin_id_writer = csv.writer(bin_ids_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    bin_id_writer = csv.writer(bin_ids_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
     
     for row in bin_ids:
         bin_id_writer.writerow(row)
