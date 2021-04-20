@@ -201,7 +201,7 @@ GraphBin provides support scripts to format an initial binning result and visual
 
 ## Test Data
 
-The data used to test GraphBin can be found in the `test_data` folder. The test data for each of the datasets include the following files.
+The simple datasets used to test GraphBin can be found in the `test_data` folder. The test data for each of the datasets include the following files.
 * Contigs file
 * Assembly graph file
 * Paths file for the assembly graph (for the datasets assembled using metaSPAdes)
