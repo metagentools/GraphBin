@@ -568,7 +568,7 @@ def run(args):
         unbinned_file = output_path + prefix + 'graphbin_unbinned.csv'
 
         with open(unbinned_file, mode='w') as out_file:
-            output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
         
             for row in unbinned_contigs:
                 output_writer.writerow(row)

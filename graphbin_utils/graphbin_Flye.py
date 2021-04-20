@@ -55,6 +55,7 @@ def run(args):
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
+    delimiter = args.delimiter
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
 
@@ -88,7 +89,7 @@ def run(args):
         all_bins_list = []
 
         with open(contig_bins_file) as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=',')
+            readCSV = csv.reader(csvfile, delimiter=delimiter)
             for row in readCSV:
                 all_bins_list.append(row[1])
 
@@ -204,7 +205,7 @@ def run(args):
 
     try:
         with open(contig_bins_file) as contig_bins:
-            readCSV = csv.reader(contig_bins, delimiter=',')
+            readCSV = csv.reader(contig_bins, delimiter=delimiter)
             for row in readCSV:
                 contig_num = contigs_map_rev[row[0]]
 
@@ -508,7 +509,7 @@ def run(args):
         unbinned_file = output_path + prefix + 'graphbin_unbinned.csv'
 
         with open(unbinned_file, mode='w') as out_file:
-            output_writer = csv.writer(out_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
 
             for row in unbinned_contigs:
                 output_writer.writerow(row)
