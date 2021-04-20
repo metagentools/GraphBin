@@ -136,29 +136,31 @@ optional arguments:
 
 For the SPAdes version, `graphbin` takes in 3 files as inputs (required).
 * Assembly graph file (in `.gfa` format)
+* Contigs file (in FASTA format)
 * Paths of contigs (in `.paths` format)
 * Binning output from an existing tool (in `.csv` format)
 
 For the SGA version, `graphbin` takes in 2 files as inputs (required).
 * Assembly graph file (in `.asqg` format)
+* Contigs file (in FASTA format)
 * Binning output from an existing tool (in `.csv` format)
 
 For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 * Assembly graph file (in `.gfa` format. To convert fastg to gfa refer [here](https://github.com/Vini2/GraphBin/blob/master/support/README.md#fastg2gfa))
-* Contigs file (in `.fa` format)
+* Contigs file (in FASTA format)
 * Binning output from an existing tool (in `.csv` format)
 
 **Note:** Make sure that the initial binning result consists of contigs belonging to only one bin. GraphBin is designed to handle initial contigs which belong to only one bin. Multiple bins for the initial contigs are not supported.
 
-**Note:** The binning output file should have comma separated values ```(contig_identifier, bin_number)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and the numbering of bins starts from 1.
+**Note:** The binning output file should have comma separated values ```(contig_identifier, bin_identifier)``` for each contig. The contents of the binning output file should look similar to the example given below. Contigs are named according to their original identifier and bin identifier.
 
 Example metaSPAdes binned input
 ```
-NODE_1,1
-NODE_2,1
-NODE_3,1
-NODE_4,2
-NODE_5,2
+NODE_1_length_458813_cov_136.660185,1
+NODE_2_length_409135_cov_127.776630,1
+NODE_3_length_346431_cov_35.887787,2
+NODE_4_length_333835_cov_129.134427,1
+NODE_5_length_282512_cov_36.193003,2
 ...
 ```
 Example SGA binned input
