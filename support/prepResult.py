@@ -138,8 +138,6 @@ for bin_file in files:
         for index, record in enumerate(SeqIO.parse(contig_bins_folder+bin_file, "fasta")):
             contig_name = str(record.id)
 
-            contig_num = 0
-
             line = []
             line.append(str(contig_name))
 
