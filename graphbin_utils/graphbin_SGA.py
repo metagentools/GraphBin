@@ -484,7 +484,10 @@ def run(args):
 
     logger.info("Writing the Final Binning result to file")
 
+    output_bins = []
+
     output_bins_path = output_path + prefix + "bins/"
+    output_file = output_path + prefix + 'graphbin_output.csv'
 
     if not os.path.isdir(output_bins_path):
         subprocess.run("mkdir -p "+output_bins_path, shell=True)
@@ -493,6 +496,10 @@ def run(args):
 
         with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
             for contig in bins[b]:
+                line = []
+                line.append(contig_descriptions[contig_names[contig]])
+                line.append(bins_list[b])
+                output_bins.append(line)
                 bin_file.write(contig_descriptions[contig_names[contig]]+"\n")
         
         bin_split_cmd = "awk -F'>' 'NR==FNR{ids[$0]; next} NF>1{f=($2 in ids)} f' " + output_bins_path + "bin_" + str(b+1) + "_ids.txt " + contigs_file + " > " + output_bins_path + "bin_" +str(b+1) +"_seqs.fasta"
@@ -503,6 +510,11 @@ def run(args):
             for contig in bins[b]:
                 bin_file.write(contig_names[contig]+"\n")
 
+    with open(output_file, mode='w') as out_file:
+        output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        for row in output_bins:
+            output_writer.writerow(row)
+    
     logger.info("Final binning results can be found in "+str(output_bins_path))
 
 
