@@ -59,6 +59,7 @@ def run(args):
     delimiter = args.delimiter
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
+    MIN_BIN_COUNT = 10
 
     # Setup output path for log file
     #---------------------------------------------------
@@ -229,6 +230,8 @@ def run(args):
 
     logger.info("Determining ambiguous vertices")
 
+    remove_by_bin = {}
+
     remove_labels = []
 
     neighbours_have_same_label_list = []
@@ -258,7 +261,15 @@ def run(args):
                             break
 
             if not neighbours_have_same_label:
-                remove_labels.append(i)
+                if my_bin in remove_by_bin:
+                    if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
+                        remove_labels.append(i)
+                        remove_by_bin[my_bin].append(i)
+                else:
+                    if len(bins[my_bin]) >= MIN_BIN_COUNT:
+                        remove_labels.append(i)
+                        remove_by_bin[my_bin] = [i]
+            
             elif neighbours_binned:
                 neighbours_have_same_label_list.append(i)
 
@@ -297,7 +308,14 @@ def run(args):
                                     break
 
                     if not neighbours_have_same_label and i not in remove_labels:
-                        remove_labels.append(i)
+                        if my_bin in remove_by_bin:
+                            if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
+                                remove_labels.append(i)
+                                remove_by_bin[my_bin].append(i)
+                        else:
+                            if len(bins[my_bin]) >= MIN_BIN_COUNT:
+                                remove_labels.append(i)
+                                remove_by_bin[my_bin] = [i]
 
     remove_labels.sort()
 
@@ -435,6 +453,8 @@ def run(args):
 
     logger.info("Determining ambiguous vertices")
 
+    remove_by_bin = {}
+    
     remove_labels = []
 
     for b in range(n_bins):
@@ -456,7 +476,14 @@ def run(args):
                             break
 
             if not neighbours_have_same_label:
-                remove_labels.append(i)
+                if my_bin in remove_by_bin:
+                    if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
+                        remove_labels.append(i)
+                        remove_by_bin[my_bin].append(i)
+                else:
+                    if len(bins[my_bin]) >= MIN_BIN_COUNT:
+                        remove_labels.append(i)
+                        remove_by_bin[my_bin] = [i]
 
     remove_labels.sort()
 
