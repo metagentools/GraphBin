@@ -14,6 +14,14 @@
 
 **Note:** Due to recent requests from the community, we have added support for long-read assemblies produced from Flye, Canu and Miniasm. Please note that GraphBin has not been tested extensively on long-read assemblies. We originally developed GraphBin for short-read assemblies. Long-read assemblies might have sparsely connected graphs which can make the label propagation process less effective and may not result in improvements.
 
+
+## Dependencies
+
+GraphBin installation requires python 3 (tested on Python 3.6 and 3.7). The following dependencies are required to run GraphBin and related support scripts.
+* [python-igraph](https://igraph.org/python/) - version 0.7.1
+* [biopython](https://biopython.org/) - version 1.74
+* [cairocffi](https://pypi.org/project/cairocffi/)
+
 ## Downloading GraphBin
 
 ### Method 1: Conda Install
@@ -28,7 +36,7 @@ conda install -c bioconda graphbin
 
 Check if GraphBin is properly installed by typing `graphbin -h` on the command line. You should see the usage options as shown in section [Using GraphBin](https://github.com/Vini2/GraphBin#using-graphbin)
 
-### Method 2: GitHub Release
+### Method 2: Setting up from GitHub repo
 You can download the latest release of GraphBin from [Releases](https://github.com/Vini2/GraphBin/releases) or clone the GraphBin repository to your machine.
 
 ```
@@ -47,18 +55,13 @@ Now go in to the GraphBin folder using the command
 cd GraphBin/
 ```
 
-### Dependencies
+Now we have to setup and install GraphBin.
 
-GraphBin installation requires python 3 (tested on Python 3.6 and 3.7). You will need the following dependencies to run GraphBin and related support scripts.
-* [python-igraph](https://igraph.org/python/) - version 0.7.1
-* [biopython](https://biopython.org/) - version 1.74
-* [cairocffi](https://pypi.org/project/cairocffi/)
+### Setting up GraphBin
 
-### Installing GraphBin
+You can use Conda to setup an environemnt to run GraphBin **OR** you can use pip3 to install GraphBin.
 
-You can use Conda to setup an environemnt to run GraphBin **OR** you can use pip3 too install GraphBin.
-
-#### Using Conda
+#### Option 1: Setup and environment using Conda
 
 For this option, you need to have [Conda](https://docs.conda.io/en/latest/) installed on your machine. Then make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
 
@@ -81,7 +84,7 @@ If you want to switch back to your normal environment, run the following command
 conda deactivate
 ```
 
-#### Using pip3
+#### Option 2: Install using pip3
 
 You can install GraphBin globally or per user depending on your privileges to the system.
 
