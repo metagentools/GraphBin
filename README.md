@@ -10,9 +10,25 @@
 
 **GraphBin** is a NGS data-based metagenomic contig bin refinment tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
+**NEW:** The conda package of GraphBin is now available on bioconda at [https://anaconda.org/bioconda/graphbin](https://anaconda.org/bioconda/graphbin).
+
 **Note:** Due to recent requests from the community, we have added support for long-read assemblies produced from Flye, Canu and Miniasm. Please note that GraphBin has not been tested extensively on long-read assemblies. We originally developed GraphBin for short-read assemblies. Long-read assemblies might have sparsely connected graphs which can make the label propagation process less effective and may not result in improvements.
 
 ## Downloading GraphBin
+
+### Method 1: Conda Install
+
+You can install GraphBin via [Conda](https://docs.conda.io/en/latest/). You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
+
+Once you have installed Conda, you can install conda directly from the bioconda distribution using the command
+
+```
+conda install -c bioconda graphbin
+```
+
+Check if GraphBin is properly installed by typing `graphbin -h` on the command line. You should see the usage options as shown in section [Using GraphBin](https://github.com/Vini2/GraphBin#using-graphbin)
+
+### Method 2: GitHub Release
 You can download the latest release of GraphBin from [Releases](https://github.com/Vini2/GraphBin/releases) or clone the GraphBin repository to your machine.
 
 ```
@@ -31,22 +47,20 @@ Now go in to the GraphBin folder using the command
 cd GraphBin/
 ```
 
-## Dependencies
+### Dependencies
 
 GraphBin installation requires python 3 (tested on Python 3.6 and 3.7). You will need the following dependencies to run GraphBin and related support scripts.
 * [python-igraph](https://igraph.org/python/) - version 0.7.1
 * [biopython](https://biopython.org/) - version 1.74
 * [cairocffi](https://pypi.org/project/cairocffi/)
 
-## Installing GraphBin
+### Installing GraphBin
 
 You can use Conda to setup an environemnt to run GraphBin **OR** you can use pip3 too install GraphBin.
 
-### Using Conda
+#### Using Conda
 
-You can use [Conda](https://docs.conda.io/en/latest/) to run GraphBin. You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
-
-Once you have installed Conda, make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
+For this option, you need to have [Conda](https://docs.conda.io/en/latest/) installed on your machine. Then make sure you are in the GraphBin folder. Now run the following commands to create a Conda environment and activate it to run GraphBin.
 
 ```
 conda env create -f environment.yml
@@ -67,7 +81,7 @@ If you want to switch back to your normal environment, run the following command
 conda deactivate
 ```
 
-### Using pip3
+#### Using pip3
 
 You can install GraphBin globally or per user depending on your privileges to the system.
 
@@ -81,7 +95,7 @@ pip3 install .
 pip3 install . --user
 ```
 
-#### Note for Ubuntu users
+**Note for Ubuntu users**
 
 If you come across an error as `Failed building wheel for python-igraph` when installing GraphBin, you can install python-igraph as shown in [this thread](https://stackoverflow.com/questions/34962410/igraph-failed-to-install-through-pip).
 
