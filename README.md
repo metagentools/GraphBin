@@ -220,10 +220,10 @@ GraphBin provides a support script to generate similar files once the initial bi
 ## Example Usage
 
 ```
-graphbin --assembler spades --graph /path/to/graph_file.gfa --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler spades --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fasta --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
-graphbin --assembler sga --graph /path/to/graph_file.asqg --binned /path/to/binning_result.csv --output /path/to/output_folder
+graphbin --assembler sga --graph /path/to/graph_file.asqg --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
 graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
