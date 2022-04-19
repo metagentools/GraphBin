@@ -350,25 +350,29 @@ except:
 
 print("\nPicking colours...")
 
-def colours(n):
-  ret = []
-  r = int(random.random() * 256)
-  g = int(random.random() * 256)
-  b = int(random.random() * 256)
-  step = 256 / n
-  for i in range(n):
-    r += step
-    g += step
-    b += step
-    r = int(r) % 256
-    g = int(g) % 256
-    b = int(b) % 256
+# def colours(n):
+#   ret = []
+#   r = int(random.random() * 256)
+#   g = int(random.random() * 256)
+#   b = int(random.random() * 256)
+#   step = 256 / n
+#   for i in range(n):
+#     r += step
+#     g += step
+#     b += step
+#     r = int(r) % 256
+#     g = int(g) % 256
+#     b = int(b) % 256
 
-    ret.append('#%02x%02x%02x' % (r,g,b))
+#     ret.append('#%02x%02x%02x' % (r,g,b))
 
-  return ret
+#   return ret
 
-my_colours = colours(n_bins)
+# my_colours = colours(n_bins)
+my_colours = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', 
+              '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', 
+              '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', 
+              '#000075', '#808080', '#ffffff', '#000000']
 
 
 # Visualise the initial assembly graph
@@ -388,7 +392,7 @@ for i in range(node_count):
             no_bin = False
     
     if no_bin:
-        node_colours.append("grey")
+        node_colours.append("white")
 
 assembly_graph.vs["color"] = node_colours
 
@@ -461,7 +465,7 @@ for i in range(node_count):
             no_bin = False
     
     if no_bin:
-        node_colours.append("grey")
+        node_colours.append("white")
 
 assembly_graph.vs["color"] = node_colours
 
