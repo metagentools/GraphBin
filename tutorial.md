@@ -33,7 +33,7 @@ Any contig binning tool can be used to get an initial binning result. We will be
 `prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig identifiers and bin ID. Contigs are named according to their original identifier and bins are numbered according to the fasta file name. You can run `prepResult.py` as follows.
 
 ```
-python support/prepResult.py --binned $my_path/folder_with_binning_result --output $my_path/
+python support/prepResult.py --binned $my_path/maxbin_bins --output $my_path/
 ```
 
 ## Using GraphBin
