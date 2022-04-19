@@ -1,4 +1,4 @@
-# GraphBin Tutorial
+# GraphBin Tutorial - FAME Bioinfo meeting
 
 This tutorial walks you through the steps and commands used to setup GraphBin, prepare results, run GraphBin and visualise results.
 
