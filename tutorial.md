@@ -40,7 +40,7 @@ python support/prepResult.py --binned $my_path/maxbin_bins --output $my_path/
 
 You can run the metaSPAdes version of GraphBin as follows.
 ```
-graphbin --assembler spades --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --binned $my_path/to/initial_contig_bins.csv --output $my_path/
+graphbin --assembler spades --graph $my_path/assembly_graph_with_scaffolds.gfa --contigs $my_path/contigs.fasta --paths $my_path/contigs.paths --binned $my_path/to/initial_contig_bins.csv --output $my_path/
 ```
 
 The final binning result from GraphBin can be found in the file `graphbin_output.csv`.
