@@ -294,6 +294,30 @@ except:
     sys.exit(1)
 
 
+# Get the number of bins from the initial binning result
+#---------------------------------------------------
+
+n_bins = 0
+
+try:
+    all_bins_list = []
+
+    with open(initial_binning_result) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        for row in readCSV:
+            all_bins_list.append(row[1])
+        
+    bins_list = list(set(all_bins_list))
+    bins_list.sort()
+
+    n_bins = len(bins_list)
+    print("Number of bins available in the initial binning result: "+str(n_bins))
+except:
+    print("Please make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
+    print("Exiting GraphBin... Bye...!")
+    sys.exit(1)
+
+
 # Get initial binning result
 #----------------------------
 
@@ -309,7 +333,7 @@ try:
             end = '_length_'
             contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
             
-            bin_num = int(row[1])-1
+            bin_num = bins_list.index(row[1])
             bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
@@ -403,7 +427,7 @@ try:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
             if row[1] != 'unbinned':
-                bin_num = int(row[1])-1
+                bin_num = bins_list.index(row[1])
                 
                 start = 'NODE_'
                 end = '_length_'
