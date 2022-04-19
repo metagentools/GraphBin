@@ -40,7 +40,7 @@ python support/prepResult.py --binned $my_path/folder_with_binning_result --outp
 
 You can run the metaSPAdes version of GraphBin as follows.
 ```
-graphbin --assembler spades --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --binned $my_path/to/initial_binning_result.csv --output $my_path/
+graphbin --assembler spades --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --binned $my_path/to/initial_contig_bins.csv --output $my_path/
 ```
 
 The final binning result from GraphBin can be found in the file `graphbin_output.csv`.
@@ -50,5 +50,5 @@ The final binning result from GraphBin can be found in the file `graphbin_output
 `visualiseResult_SPAdes.py` allows you to visualize the metaSPAdes binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. You can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin and compare.
 
 ```
-python support/visualiseResult_SPAdes.py --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --initial $my_path/initial_binning_result.csv --final $my_path/graphbin_output.csv --output $my_path/
+python support/visualiseResult_SPAdes.py --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --initial $my_path/initial_contig_bins.csv --final $my_path/graphbin_output.csv --output $my_path/
 ```
