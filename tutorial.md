@@ -25,7 +25,7 @@ spades --meta -1 $my_path/Reads_1.fastq -2 $my_path/Reads_2.fastq -o $my_path/ -
 
 ### Initial binning
 
-Any contig binning tool can be used to get an initial binning result. We will be using [MaxBin 2](https://sourceforge.net/projects/maxbin2/) in this example.
+Any contig binning tool can be used to get an initial binning result. We will be using [MaxBin 2](https://sourceforge.net/projects/maxbin2/){:target="_blank"} in this example.
 
 
 ### Prepare binning results
