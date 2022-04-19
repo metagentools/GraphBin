@@ -23,6 +23,11 @@ We can assemble our set of reads into contigs. For this purpose, we will use **m
 spades --meta -1 $my_path/Reads_1.fastq -2 $my_path/Reads_2.fastq -o $my_path/ -t 8
 ```
 
+### Initial binning
+
+Any contig binning tool can be used to get an initial binning result. We will be using [MaxBin 2](https://sourceforge.net/projects/maxbin2/) in this example.
+
+
 ### Prepare binning results
 
 `prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig identifiers and bin ID. Contigs are named according to their original identifier and bins are numbered according to the fasta file name. You can run `prepResult.py` as follows.
