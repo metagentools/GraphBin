@@ -306,7 +306,7 @@ try:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
             start = 'NODE_'
-            end = ''
+            end = '_length_'
             contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
             
             bin_num = int(row[1])-1
@@ -404,7 +404,11 @@ try:
         for row in readCSV:
             if row[1] != 'unbinned':
                 bin_num = int(row[1])-1
-                contig_num = int(row[0][5:])-1
+                
+                start = 'NODE_'
+                end = '_length_'
+                contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
+
                 bins[bin_num].append(contig_num)
 
     for i in range(n_bins):
