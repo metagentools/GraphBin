@@ -2,7 +2,7 @@
 
 ## prepResult.py
 
-`prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig identifiers and bin ID. Contigs are named according to their original identifier and bins are numbered starting from 1. You can run `prepResult.py` as follows.
+`prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig identifiers and bin ID. Contigs are named according to their original identifier and bins are numbered according to the fasta file name. You can run `prepResult.py` as follows.
 
 ```
 python prepResult.py --binned /path/to/folder_with_binning_result --output /path/to/output_folder
