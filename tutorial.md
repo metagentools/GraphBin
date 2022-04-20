@@ -15,6 +15,11 @@ Let's create a new conda environment and install GraphBin from bioconda using th
 conda create -n graphbin -c bioconda graphbin
 ```
 
+Activate the conda environment using,
+```
+conda activate graphbin
+```
+
 We can check if GraphBin is working properly using the following command.
 ```
 graphbin -h
