@@ -2,7 +2,9 @@
 
 This tutorial walks through the steps and commands used to set up GraphBin, prepare results for input, run GraphBin and visualise the final results. 
 
-## Prerequisite
+## Prerequisites
+
+Make sure you have installed the following.
 * [Conda](https://docs.conda.io/en/latest/miniconda.html)
 * [Git](https://github.com/git-guides/install-git)
 
