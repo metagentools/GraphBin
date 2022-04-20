@@ -154,18 +154,11 @@ if delimiter not in delimiters:
 
 print("\nFormatting initial binning results")
 
-i = 1
 contig_bins = []
-bin_ids = []
 
 for bin_file in files:
 
     if bin_file.lower().endswith(('.fasta', '.fa', '.fna')):
-
-        bin_line = []
-        bin_line.append(str(bin_file))
-        bin_line.append(str(i))
-        bin_ids.append(bin_line)
 
         for index, record in enumerate(SeqIO.parse(contig_bins_folder+bin_file, "fasta")):
             contig_name = str(record.id)
@@ -173,10 +166,8 @@ for bin_file in files:
             line = []
             line.append(str(contig_name))
 
-            line.append(str(i))
+            line.append(str(bin_file))
             contig_bins.append(line)
-
-        i = i + 1
 
 
 # Write binning results to output file.
@@ -190,14 +181,7 @@ with open(output_path + prefix + 'initial_contig_bins.csv', mode='w') as contig_
     for row in contig_bins:
         contig_writer.writerow(row)
 
-with open(output_path + prefix + 'bin_ids.csv', mode='w') as bin_ids_file:
-    bin_id_writer = csv.writer(bin_ids_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    
-    for row in bin_ids:
-        bin_id_writer.writerow(row)
-
 print("\nFormatted initial binning results can be found at", contig_bins_file.name)
-print("\nBin IDs and corresponding names of fasta files can be found at", bin_ids_file.name)
 
 
 # Exit program
