@@ -1,6 +1,10 @@
 # GraphBin Tutorial - FAME Fortnightly Bioinf Meeting
 
-This tutorial walks through the steps and commands used to set up GraphBin, prepare results for input, run GraphBin and visualise the final results.
+This tutorial walks through the steps and commands used to set up GraphBin, prepare results for input, run GraphBin and visualise the final results. 
+
+## Prerequisite
+* [Conda](https://docs.conda.io/en/latest/miniconda.html)
+* [Git](https://github.com/git-guides/install-git)
 
 ## Step 1 - Installing GraphBin
 
