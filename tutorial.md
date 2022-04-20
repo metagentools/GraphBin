@@ -59,7 +59,7 @@ The final binning result from GraphBin can be found in the file `graphbin_output
 
 ## Visualising the binning results
 
-`visualiseResult_SPAdes.py` allows you to visualize the metaSPAdes binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. We can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin, and compare the differences.
+`visualiseResult_SPAdes.py` allows you to visualise the metaSPAdes binning result by denoting coloured contigs in the assembly graph according to their corresponding bins. We can visualise the initial binning result obtained from an existing binning tool and the final binning result obtained from GraphBin, and compare the differences.
 
 ```
 python support/visualiseResult_SPAdes.py --graph $my_path/assembly_graph_with_scaffolds.gfa --paths $my_path/contigs.paths --initial $my_path/initial_contig_bins.csv --final $my_path/graphbin_output.csv --output $my_path/
