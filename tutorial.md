@@ -9,6 +9,18 @@ Let's create a new conda environment and install GraphBin from bioconda using th
 conda create -n graphbin -c bioconda graphbin
 ```
 
+Now we can clone the GraphBin repository to our local machine.
+
+```
+git clone https://github.com/Vini2/GraphBin.git
+```
+
+Now go in to the GraphBin folder using the command
+
+```
+cd GraphBin/
+```
+
 ## Preprocessing
 
 Let's set the path to our data as follows
