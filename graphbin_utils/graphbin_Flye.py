@@ -52,6 +52,7 @@ def run(args):
 
     assembly_graph_file = args.graph
     contigs_file = args.contigs
+    contig_paths = args.paths
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
@@ -74,6 +75,7 @@ def run(args):
 
     logger.info("Assembly graph file: "+assembly_graph_file)
     logger.info("Existing binning output file: "+contig_bins_file)
+    logger.info("Contig paths file: "+contig_paths)
     logger.info("Final binning output file: "+output_path)
     logger.info("Maximum number of iterations: "+str(max_iteration))
     logger.info("Difference threshold: "+str(diff_threshold))
@@ -107,54 +109,166 @@ def run(args):
 
     logger.info("Constructing the assembly graph")
 
-    # Get the links from the .gfa file
+    # Get contig names
     #-----------------------------------
 
-    my_map = BidirectionalMap()
+    contig_names = BidirectionalMap()
 
-    node_count = 0
+    contig_num = 0
 
-    nodes = []
+    with open(contig_paths, "r") as file:
 
-    links = []
+        for line in file.readlines():
+
+            if not line.startswith("#"):
+                name = line.strip().split()[0]
+                contig_names[contig_num] = name
+                contig_num += 1
+
+    contig_names_rev = contig_names.inverse
+
+    
+    # Get the paths and edges
+    #-----------------------------------
+
+    paths = {}
+    segment_contigs = {}
+
+    contig_segments = {}
 
     try:
-        # Get contig connections from .gfa file
+        
+        with open(contig_paths) as file:
+
+            for line in file.readlines():
+
+                if not line.startswith("#"):
+
+                    strings = line.strip().split()
+
+                    contig_name = strings[0]
+
+                    path = strings[-1]
+                    path = path.replace("*", "")
+
+                    if path.startswith(","):
+                        path = path[1:]
+                    
+                    if path.endswith(","):
+                        path = path[:-1]
+
+                    segments = path.rstrip().split(",")
+
+                    contig_num = contig_names_rev[contig_name]
+
+                    if contig_num not in paths:
+                        paths[contig_num] = segments
+
+                    for segment in segments:
+                        
+                        if segment != "":
+
+                            if segment not in segment_contigs:
+                                segment_contigs[segment] = set([contig_num])
+                            else:
+                                segment_contigs[segment].add(contig_num)
+
+
+        links = []
+        links_map = defaultdict(set)
+
+        # Get links from assembly_graph.gfa
         with open(assembly_graph_file) as file:
             line = file.readline()
 
             while line != "":
 
-                # Count the number of contigs
-                if "S" in line:
-                    strings = line.split("\t")
-                    my_node = strings[1]
-                    my_map[node_count] = my_node
-                    nodes.append(my_node)
-                    node_count += 1
-
                 # Identify lines with link information
-                elif "L" in line:
-
-                    link = []
+                if "L" in line:
                     strings = line.split("\t")
 
-                    if strings[1] != strings[3]:
-                        start = strings[1]
-                        end = strings[3]
-                        link.append(start)
-                        link.append(end)
-                        links.append(link)
+                    f1, f2 = "", ""
+
+                    if strings[2] == "+":
+                        f1 = strings[1][5:]
+                    if strings[2] == "-":
+                        f1 = "-"+strings[1][5:]
+                    if strings[4] == "+":
+                        f2 = strings[3][5:]
+                    if strings[4] == "-":
+                        f2 = "-"+strings[3][5:]
+
+                    links_map[f1].add(f2)
+                    links_map[f2].add(f1)
 
                 line = file.readline()
+
+        # Create list of edges
+        edge_list = []
+
+        for i in paths:
+            segments = paths[i]
+
+            new_links = []
+
+            for segment in segments:
+                
+                my_segment = segment
+                my_segment_num = ""
+
+                my_segment_rev = ""
+
+                if my_segment.startswith("-"):
+                    my_segment_rev = my_segment[1:]
+                    my_segment_num = my_segment[1:]
+                else:
+                    my_segment_rev = "-"+my_segment
+                    my_segment_num = my_segment
+
+                if my_segment in links_map:
+                    new_links.extend(list(links_map[my_segment]))
+
+                if my_segment_rev in links_map:
+                    new_links.extend(list(links_map[my_segment_rev]))
+
+                if my_segment in segment_contigs:
+                    for contig in segment_contigs[my_segment]:
+                        if i != contig:
+                            # Add edge to list of edges
+                            edge_list.append((i, contig))
+                            
+                if my_segment_rev in segment_contigs:
+                    for contig in segment_contigs[my_segment_rev]:
+                        if i != contig:
+                            # Add edge to list of edges
+                            edge_list.append((i, contig))
+
+                if my_segment_num in segment_contigs:
+                    for contig in segment_contigs[my_segment_num]:
+                        if i != contig:
+                            # Add edge to list of edges
+                            edge_list.append((i, contig))
+
+            for new_link in new_links:
+                if new_link in segment_contigs:
+                    for contig in segment_contigs[new_link]:
+                        if i != contig:
+                            # Add edge to list of edges
+                            edge_list.append((i, contig))
+                            
+                if new_link.startswith("-"):
+                    if new_link[1:] in segment_contigs:
+                        for contig in segment_contigs[new_link[1:]]:
+                            if i != contig:
+                                # Add edge to list of edges
+                                edge_list.append((i, contig))
+
+        node_count = len(contig_names_rev)
 
     except:
         logger.error("Please make sure that the correct path to the assembly graph file is provided.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
-
-    contigs_map = my_map
-    contigs_map_rev = my_map.inverse
 
     logger.info("Total number of contigs available: "+str(node_count))
 
@@ -167,23 +281,13 @@ def run(args):
         # Create the graph
         assembly_graph = Graph()
 
-        # Create list of edges
-        edge_list = []
-
         # Add vertices
         assembly_graph.add_vertices(node_count)
 
         # Name vertices
         for i in range(len(assembly_graph.vs)):
             assembly_graph.vs[i]["id"]= i
-            assembly_graph.vs[i]["label"]= str(contigs_map[i])
-
-        # Iterate links
-        for link in links:
-            # Remove self loops
-            if link[0] != link[1]:
-                # Add edge to list of edges
-                edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
+            assembly_graph.vs[i]["label"]= str(contig_names[i])
 
         # Add edges to the graph
         assembly_graph.add_edges(edge_list)
@@ -208,7 +312,7 @@ def run(args):
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=delimiter)
             for row in readCSV:
-                contig_num = contigs_map_rev[row[0]]
+                contig_num = contig_names_rev[row[0]]
 
                 bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
@@ -521,10 +625,10 @@ def run(args):
         with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
             for contig in bins[b]:
                 line = []
-                line.append(str(contigs_map[contig]))
+                line.append(str(contig_names[contig]))
                 line.append(bins_list[b])
                 output_bins.append(line)
-                bin_file.write(str(contigs_map[contig])+"\n")
+                bin_file.write(str(contig_names[contig])+"\n")
 
         subprocess.run("awk -F'>' 'NR==FNR{ids[$0]; next} NF>1{f=($2 in ids)} f' " + output_bins_path + "bin_" + str(b+1) + "_ids.txt " + contigs_file + " > " + output_bins_path + "bin_" +str(b+1) +"_seqs.fasta", shell=True)
 
@@ -541,7 +645,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append(str(contigs_map[i]))
+            line.append(str(contig_names[i]))
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs)!=0:
