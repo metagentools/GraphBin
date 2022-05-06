@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="GraphBin_logo.png" width="400" title="Final Labelling" alt="Final Labelling">
+  <img src="GraphBin_logo.png" width="400" title="GraphBin logo" alt="Final Labelling">
 </p>
 
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
