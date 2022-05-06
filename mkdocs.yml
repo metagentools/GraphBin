@@ -1,0 +1,16 @@
+site_name: GraphBin
+site_url: "https://github.com/Vini2/GraphBin"
+site_author: "Vijini Mallawaarachchi"
+repo_url: "https://github.com/Vini2/GraphBin"
+repo_name: 'GitHub'
+theme:
+    name: readthedocs
+    highlightjs: true
+    hljs_languages:
+        - yaml
+        - bash
+        - shell
+        - text
+nav:
+    - Home: 'index.md'
+
