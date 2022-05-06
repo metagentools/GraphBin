@@ -12,5 +12,16 @@ theme:
         - shell
         - text
 nav:
-    - Home: 'index.md'
-
+    - HOME:
+      - Introduction: index.md
+      - Workflow: workflow.md
+#      - Pipeline: pipeline.md
+#      - Databases: databases.md
+#      - Outputs: outputs.md
+      - Citation: citation.md
+    - RUNNING:
+      - Install: install.md
+      - Preprocess: preprocess.md
+      - Usage: usage.md
+      - Testing: testing.md
+      - Support: support.md

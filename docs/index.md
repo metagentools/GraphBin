@@ -1,10 +1,4 @@
-<p align="center">
-  <img src="GraphBin_logo.png" width="400" title="GraphBin logo" alt="Final Labelling">
-</p>
-
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/license.svg)](https://anaconda.org/bioconda/graphbin)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/installer/conda.svg)](https://anaconda.org/bioconda/graphbin)
+![](images/GraphBin_logo.png)
 
 **GraphBin** is a NGS data-based metagenomic contig bin refinment tool that makes use of the contig connectivity information from the assembly graph to bin contigs. It utilizes the binning result of an existing binning tool and a label propagation algorithm to correct mis-binned contigs and predict the labels of contigs which are discarded due to short length.
 
