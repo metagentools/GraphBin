@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-"""flye_miniasm_gfa2fasta.py: Obtain the sequences corresponding to edges in the Flye and Miniasm assembly graphs in FASTA format.
+"""miniasm_gfa2fasta.py: Obtain the sequences corresponding to edges in the Miniasm assembly graphs in FASTA format.
 
-The assembly graph file of Flye (assembly_graph.gfa) should be provided as inputs.
+The assembly graph file (assembly_graph.gfa) should be provided as inputs.
 
 """
 
@@ -26,7 +26,7 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 
 # Sample command
 # -------------------------------------------------------------------
-# python flye_miniasm_gfa2fasta.py  --graph /path/to/folder_with_binning_result
+# python miniasm_gfa2fasta.py  --graph /path/to/folder_with_binning_result
 #                                   --output /path/to/output_folder
 # -------------------------------------------------------------------
 
@@ -52,7 +52,7 @@ prefix = ""
 # Check assembly graph file
 if not os.path.isfile(assembly_graph_file):
     print("\nFailed to open the assembly graph file.")
-    print("Exiting flye_miniasm_gfa2fasta.py...\nBye...!\n")
+    print("Exiting miniasm_gfa2fasta.py...\nBye...!\n")
     sys.exit(1)
 
 # Check assembler type
@@ -87,7 +87,7 @@ try:
 
 except:
     print("\nPlease enter a valid string for prefix")
-    print("Exiting flye_miniasm_gfa2fasta.py...\n")
+    print("Exiting miniasm_gfa2fasta.py...\n")
     sys.exit(1)
 
 
@@ -128,4 +128,4 @@ print("\nThe FASTA file with", assembler_name, "sequences can be found at", outp
 # Exit program
 #--------------
 
-print("\nThank you for using flye_miniasm_gfa2fasta for GraphBin!\n")
+print("\nThank you for using miniasm_gfa2fasta for GraphBin!\n")
