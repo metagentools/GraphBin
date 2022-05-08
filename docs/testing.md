@@ -16,19 +16,10 @@ The simple datasets used to test GraphBin can be found in the `test_data` folder
 
 You can try running GraphBin using these test data files.
 
-## Visualization of ESC+metaSPAdes Test Dataset
+## ES+metaSPAdes Test Dataset
 
-### Initial Assembly Graph
-![](images/3G_SPAdes_graph_plot.png)
+![](images/Visualization_of_labels_2G.png)
 
-### TAXAassign Labelling
-![](images/3G_SPAdes_taxaassign_graph_plot.png)
+## ESC+metaSPAdes Test Dataset
 
-### Original MaxBin Labelling
-![](images/3G_SPAdes_maxbin_graph_plot_edit.png)
-
-### Refined Labels
-![](images/3G_SPAdes_maxbin_graph_plot_correct.png)
-
-### Final Labelling of GraphBin
-![](images/3G_SPAdes_after_label_prop_graph_plot.png)
+![](images/Visualization_of_labels_3G.png)
