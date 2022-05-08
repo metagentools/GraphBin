@@ -1,5 +1,7 @@
 # Support scripts for GraphBin
 
+GraphBin provides a set of support scripts on [GitHub](https://github.com/Vini2/GraphBin/tree/master/support). Details of these support scripts are as follows.
+
 ## prepResult.py
 
 `prepResult.py` is a support script that allows you to format an initial binning result in to the .csv format with contig identifiers and bin ID. Contigs are named according to their original identifier and bins are numbered according to the fasta file name. You can run `prepResult.py` as follows.

@@ -44,7 +44,7 @@ optional arguments:
 
 `max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
 
-## Input Format
+## Inputs
 
 For the SPAdes version, `graphbin` takes in 3 files as inputs (required).
 
@@ -73,32 +73,32 @@ For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 
 Example metaSPAdes binned input
 ```
-NODE_1_length_458813_cov_136.660185,1
-NODE_2_length_409135_cov_127.776630,1
-NODE_3_length_346431_cov_35.887787,2
-NODE_4_length_333835_cov_129.134427,1
-NODE_5_length_282512_cov_36.193003,2
+NODE_1_length_458813_cov_136.660185,bin_1
+NODE_2_length_409135_cov_127.776630,bin_1
+NODE_3_length_346431_cov_35.887787,bin_2
+NODE_4_length_333835_cov_129.134427,bin_1
+NODE_5_length_282512_cov_36.193003,bin_2
 ...
 ```
 Example SGA binned input
 ```
-contig-0,1
-contig-1,2
-contig-2,1
-contig-3,1
-contig-4,2
+contig-0,bin_1
+contig-1,bin_2
+contig-2,bin_1
+contig-3,bin_1
+contig-4,bin_2
 ...
 ```
 Example MEGAHIT binned input
 ```
-k99_10059,1
-k99_9367,1
-k99_15595,2
-k99_18709,1
-k99_15596,2
+k99_10059,bin_1
+k99_9367,bin_1
+k99_15595,bin_2
+k99_18709,bin_1
+k99_15596,bin_2
 ...
 ```
-GraphBin provides a support script to generate similar files once the initial binning output folder is provided. You can refer to [support/README.md](https://github.com/Vini2/GraphBin/blob/master/support/README.md) for more details.
+Make sure to follow the steps provided in the [preprocessing section](https://graphbin.readthedocs.io/en/latest/preprocess/) to prepare the initial binning result.
 
 ## Example Usage
 
@@ -111,3 +111,7 @@ graphbin --assembler sga --graph /path/to/graph_file.asqg --contigs /path/to/con
 ```
 graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
+
+## Output
+
+The output from GraphBin will be a `.csv` file with comma separated values ```(contig_identifier, bin_identifier)``` for the refined binning result and the `.fasta` files of the refined bins.
