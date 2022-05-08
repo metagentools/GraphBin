@@ -3,6 +3,7 @@
 ## Dependencies
 
 GraphBin installation requires python 3 (tested on Python 3.6 and 3.7). The following dependencies are required to run GraphBin and related support scripts.
+
 * [python-igraph](https://igraph.org/python/) - version 0.7.1
 * [biopython](https://biopython.org/) - version 1.74
 * [cairocffi](https://pypi.org/project/cairocffi/)
