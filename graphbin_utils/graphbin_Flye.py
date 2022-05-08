@@ -15,10 +15,7 @@ import sys
 import os
 import subprocess
 import csv
-import operator
 import time
-import argparse
-import re
 import logging
 
 from igraph import *
@@ -134,8 +131,6 @@ def run(args):
     paths = {}
     segment_contigs = {}
 
-    contig_segments = {}
-
     try:
         
         with open(contig_paths) as file:
@@ -174,7 +169,6 @@ def run(args):
                                 segment_contigs[segment].add(contig_num)
 
 
-        links = []
         links_map = defaultdict(set)
 
         # Get links from assembly_graph.gfa
@@ -342,8 +336,6 @@ def run(args):
         for i in bins[b]:
 
             my_bin = b
-
-            dist = {}
 
             # Get set of closest labelled vertices with distance = 1
             closest_neighbours = assembly_graph.neighbors(i, mode=ALL)

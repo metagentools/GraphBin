@@ -2,7 +2,6 @@
 
 """graphbin: Refined binning of metagenomic contigs using assembly graphs."""
 
-import argparse
 import os
 import sys
 

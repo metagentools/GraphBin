@@ -18,7 +18,6 @@ import subprocess
 import random
 
 from igraph import *
-from base64 import b16encode
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 __author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
@@ -84,11 +83,9 @@ print("This version of the visualiser makes use of the assembly graph produced b
 # Validate prefix
 #---------------------------------------------------
 try:
-    if args["prefix"] != '':
-        if args["prefix"].endswith("_"):
-            prefix = args["prefix"]
-        else:
-            prefix = args["prefix"]+"_"
+    if prefix != '':
+        if not prefix.endswith("_"):
+            prefix = prefix+"_"
     else:
         prefix = ''
 
@@ -100,10 +97,8 @@ except:
 
 # Format type if provided
 #---------------------------------------------------
-if args["type"].startswith("."):
-    image_type = args["type"][1:]
-else:
-    image_type = args["type"]
+if image_type.startswith("."):
+    image_type = image_type[1:]
 
 
 # Check if output folder exists

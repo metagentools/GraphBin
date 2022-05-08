@@ -15,9 +15,7 @@ import sys
 import os
 import subprocess
 import csv
-import operator
 import time
-import argparse
 import re
 import logging
 
@@ -241,8 +239,6 @@ def run(args):
         for i in bins[b]:
 
             my_bin = b
-
-            dist = {}
 
             # Get set of closest labelled vertices with distance = 1
             closest_neighbours = assembly_graph.neighbors(i, mode=ALL)

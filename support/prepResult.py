@@ -12,7 +12,6 @@ import sys
 import os
 import csv
 import argparse
-import re
 import subprocess
 
 from Bio import SeqIO
