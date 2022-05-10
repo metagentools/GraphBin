@@ -40,7 +40,7 @@ cd GraphBin/
 
 ## Step 2 - Preprocessing
 
-Let's set the path to our data as follows. You can use the path to our test data in `test_data`.
+Let's set the path to our data as follows. You can use the path to our test data in [`tests/data`](https://github.com/Vini2/GraphBin/tree/master/tests/data).
 ```
 mypath=/path/to/data/folder
 ```
