@@ -24,6 +24,17 @@ from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
 
+
+__author__ = "Vijini Mallawaarachchi"
+__copyright__ = "Copyright 2019-2022, GraphBin Project"
+__credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
+__license__ = "GPL"
+__version__ = "1.5"
+__maintainer__ = "Vijini Mallawaarachchi"
+__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__status__ = "Production"
+
+
 # Sample command
 # -------------------------------------------------------------------
 # python graphbin_Canu.py    --graph /path/to/graph_file.asqg

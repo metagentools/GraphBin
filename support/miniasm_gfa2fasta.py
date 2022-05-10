@@ -15,13 +15,15 @@ from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
 
-__author__ = "Vijini Mallawaarachchi, Anuradha Wickramarachchi, and Yu Lin"
+
+__author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019, GraphBin Project"
-__credits__ = "Benjamin Kaehler and Gavin Huttley"
+__credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
 __license__ = "GPL"
 __type__ = "Support Script"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
+__status__ = "Production"
 
 
 # Sample command
