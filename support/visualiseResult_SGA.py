@@ -160,12 +160,11 @@ my_map = BidirectionalMap()
 try:
     # Get contig connections from .asqg file
     with open(assembly_graph_file) as file:
-        line = file.readline()
-        
-        while line != "":
+        for line in file.readlines():
+            line = line.strip()
 
             # Count the number of contigs
-            if "VT" in line:
+            if line.startswith("VT"):
                 start = 'contig-'
                 end = ''
                 contig_num = int(re.search('%s(.*)%s' % (start, end), str(line.split()[1])).group(1))
@@ -173,13 +172,12 @@ try:
                 n_contigs += 1
             
             # Identify lines with link information
-            elif "ED" in line:
+            elif line.startswith("ED"):
                 link = []
                 strings = line.split("\t")[1].split()
                 link.append(int(strings[0][7:]))
                 link.append(int(strings[1][7:]))
                 links.append(link)
-            line = file.readline()
 
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")

@@ -164,12 +164,12 @@ links = []
 try:
     # Get contig connections from .gfa file
     with open(assembly_graph_file) as file:
-        line = file.readline()
         
-        while line != "":
+        for line in file.readlines():
+            line = line.strip()
 
             # Count the number of contigs
-            if "S" in line:
+            if line.startswith("S"):
                 strings = line.split("\t")
                 my_node = strings[1]
                 my_map[node_count] = my_node
@@ -177,7 +177,7 @@ try:
                 node_count += 1
             
             # Identify lines with link information
-            elif "L" in line:
+            elif line.startswith("L"):
                 
                 link = []
                 strings = line.split("\t")
@@ -189,7 +189,6 @@ try:
                     link.append(end)
                     links.append(link)
 
-            line = file.readline()
 
 except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided")

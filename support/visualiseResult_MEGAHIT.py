@@ -165,9 +165,8 @@ try:
     # Get links from .gfa file
     with open(assembly_graph_file) as file:
 
-        line = file.readline()
-
-        while line != "":
+        for line in file.readlines():
+            line = line.strip()
 
             # Identify lines with link information
             if line.startswith("L"):
@@ -201,7 +200,6 @@ try:
 
                 node_count += 1
             
-            line = file.readline()
 
 
     print("\nTotal number of contigs available:", node_count)

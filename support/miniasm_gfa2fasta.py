@@ -101,18 +101,19 @@ print("\nObtaining edge sequences")
 sequenceset = []
 
 with open(assembly_graph_file) as file:
-    line = file.readline()
+    
+    for line in file.readlines():
+        line = line.strip()
 
-    while line != "":
-
-        if "S" in line:
+        if line.startswith("S"):
+            
             strings = line.split("\t")
+
+            print(strings)
             
             record = SeqRecord(Seq(re.sub('[^GATC]',"",str(strings[2]).upper())), id=str(strings[1]), name=str(strings[1]), description="")
             
             sequenceset.append(record)
-
-        line = file.readline()
 
 print("\nWriting edge sequences to FASTA file")
 

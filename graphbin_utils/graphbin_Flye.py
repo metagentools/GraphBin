@@ -183,12 +183,12 @@ def run(args):
 
         # Get links from assembly_graph.gfa
         with open(assembly_graph_file) as file:
-            line = file.readline()
-
-            while line != "":
+            
+            for line in file.readlines():
+                line = line.strip()
 
                 # Identify lines with link information
-                if "L" in line:
+                if line.startswith("L"):
                     strings = line.split("\t")
 
                     f1, f2 = "", ""
@@ -204,8 +204,6 @@ def run(args):
 
                     links_map[f1].add(f2)
                     links_map[f2].add(f1)
-
-                line = file.readline()
 
         # Create list of edges
         edge_list = []

@@ -135,12 +135,12 @@ def run(args):
     try:
         # Get contig connections from .asqg file
         with open(assembly_graph_file) as file:
-            line = file.readline()
 
-            while line != "":
+            for line in file.readlines():
+                line = line.strip()
 
                 # Count the number of contigs
-                if "VT" in line:
+                if line.startswith("VT"):
                     start = 'contig-'
                     end = ''
                     contig_name = str(line.split()[1])
@@ -150,13 +150,12 @@ def run(args):
                     node_count += 1
 
                 # Identify lines with link information
-                elif "ED" in line:
+                elif line.startswith("ED"):
                     link = []
                     strings = line.split("\t")[1].split()
                     link.append(int(strings[0][7:]))
                     link.append(int(strings[1][7:]))
                     links.append(link)
-                line = file.readline()
 
     except:
         logger.error("Please make sure that the correct path to the assembly graph file is provided.")

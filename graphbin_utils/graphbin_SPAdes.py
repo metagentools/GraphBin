@@ -186,18 +186,17 @@ def run(args):
     try:
         # Get links from assembly_graph_with_scaffolds.gfa
         with open(assembly_graph_file) as file:
-            line = file.readline()
-        
-            while line != "":
+            
+            for line in file.readlines():
+                line = line.strip()
             
                 # Identify lines with link information
-                if "L" in line:
+                if line.startswith("L"):
                     strings = line.split("\t")
                     f1, f2 = strings[1]+strings[2], strings[3]+strings[4]
                     links_map[f1].add(f2)
                     links_map[f2].add(f1)
                     links.append(strings[1]+strings[2]+" "+strings[3]+strings[4])
-                line = file.readline()
             
 
         # Create graph
