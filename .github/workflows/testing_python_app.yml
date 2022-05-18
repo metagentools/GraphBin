@@ -36,10 +36,10 @@ jobs:
         run: |
           pip install pytest
           pip install pytest-cov
-          "pytest --cov=./ --cov-report=xml --junit-xml=./tests/${{ matrix.os }}-${{ matrix.python-version }}-coverage.xml"
+          "pytest --cov=./ --cov-report=xml --junit-xml=tests/${{ matrix.os }}-${{ matrix.python-version }}-coverage.xml"
           
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          file: ./tests/*-coverage.xml
+          file: tests/*-coverage.xml
           fail_ci_if_error: true
