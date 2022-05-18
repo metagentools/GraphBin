@@ -9,7 +9,7 @@ import logging
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Lingzhe Teng", "Vijini Mallawaarachchi"]
-__license__ = "GPL"
+__license__ = "BSD-3"
 __version__ = "1.6"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
