@@ -5,6 +5,7 @@
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
 [![CI](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml)
+[![codecov](https://codecov.io/gh/metagentools/GraphBin/branch/master/graph/badge.svg?token=0S310F6QXJ)](https://codecov.io/gh/metagentools/GraphBin)
 ![GitHub](https://img.shields.io/github/license/Vini2/GraphBin)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/installer/conda.svg)](https://anaconda.org/bioconda/graphbin)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Vini2/GraphBin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Vini2/GraphBin/context:python)
