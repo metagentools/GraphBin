@@ -589,7 +589,7 @@ def main():
     # Setup argument parser
     #-----------------------
     ap = PARSER
-    args = ap.parser_args()
+    args = ap.parse_args()
     run(args)
 
 

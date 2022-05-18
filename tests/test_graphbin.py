@@ -47,8 +47,43 @@ def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         raise RuntimeError(f"FAILED: {cmnd}\n{err}")
     return out.decode("utf8") if out is not None else None
 
+def test_graphbin_spades_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_SPAdes.py --help"
+    exec_command(cmd)
 
-def test_graphbin_spades_command(tmp_dir):
+
+def test_graphbin_megahit_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_MEGAHIT.py --help"
+    exec_command(cmd)
+
+
+def test_graphbin_sga_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_SGA.py --help"
+    exec_command(cmd)
+
+
+def test_graphbin_flyw_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Flye.py --help"
+    exec_command(cmd)
+
+
+def test_graphbin_canu_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Canu.py --help"
+    exec_command(cmd)
+
+
+def test_graphbin_miniasm_command():
+    """test graphbin commands"""
+    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Miniasm.py --help"
+    exec_command(cmd)
+
+
+def test_graphbin_on_spades_dataset(tmp_dir):
     """test graphbin on spades assembly"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
     graph = dir_name / "assembly_graph_with_scaffolds.gfa"
@@ -59,7 +94,7 @@ def test_graphbin_spades_command(tmp_dir):
     exec_command(cmd)
 
 
-def test_graphbin_sga_command(tmp_dir):
+def test_graphbin_on_sga_dataset(tmp_dir):
     """test graphbin on sga assembly"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_SGA"
     graph = dir_name / "default-graph.asqg"
@@ -68,7 +103,7 @@ def test_graphbin_sga_command(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler sga --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
-def test_graphbin_megahit_command(tmp_dir):
+def test_graphbin_on_megahit_dataset(tmp_dir):
     """test graphbin on megahit assembly"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_MEGAHIT"
     graph = dir_name / "final.gfa"
@@ -77,7 +112,7 @@ def test_graphbin_megahit_command(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler megahit --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
-def test_graphbin_flye_command(tmp_dir):
+def test_graphbin_on_flye_dataset(tmp_dir):
     """test graphbin on flye assembly"""
     dir_name = TEST_ROOTDIR / "data" / "1Y3B_Flye"
     graph = dir_name / "assembly_graph.gfa"
@@ -87,7 +122,7 @@ def test_graphbin_flye_command(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler flye --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
-def test_graphbin_canu_command(tmp_dir):
+def test_graphbin_on_canu_dataset(tmp_dir):
     """test graphbin on canu assembly"""
     dir_name = TEST_ROOTDIR / "data" / "1Y3B_Canu"
     graph = dir_name / "1y3b.contigs.gfa"
@@ -96,7 +131,7 @@ def test_graphbin_canu_command(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler canu --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
-def test_graphbin_miniasm_command(tmp_dir):
+def test_graphbin_on_miniasm_dataset(tmp_dir):
     """test graphbin on miniasm assembly"""
     dir_name = TEST_ROOTDIR / "data" / "1Y3B_Miniasm"
     graph = dir_name / "reads.gfa"
