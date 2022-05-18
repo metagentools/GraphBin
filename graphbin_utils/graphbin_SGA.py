@@ -20,11 +20,12 @@ import re
 import logging
 
 from igraph import *
+from Bio import SeqIO
+
 from graphbin_utils.labelpropagation.labelprop import LabelProp
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
-from Bio import SeqIO
 
 
 __author__ = "Vijini Mallawaarachchi"
@@ -126,7 +127,7 @@ def run(args):
 
     links = []
 
-    contig_names = {}
+    contig_names = BidirectionalMap()
 
     my_map = BidirectionalMap()
 
@@ -164,6 +165,8 @@ def run(args):
 
     contigs_map = my_map
     contigs_map_rev = my_map.inverse
+
+    contig_names_rev = contig_names.inverse
 
     logger.info("Total number of contigs available: "+str(node_count))
 
@@ -504,8 +507,11 @@ def run(args):
 
     logger.info("Obtaining the Final Refined Binning result")
 
+    final_bins = {}
+
     for i in range(n_bins):
-        bins[i].sort()
+        for contig in bins[i]:
+            final_bins[contig] = bins_list[i]
 
     # Print elapsed time for the process
     logger.info("Elapsed time: "+str(elapsed_time)+" seconds")
@@ -524,23 +530,31 @@ def run(args):
     if not os.path.isdir(output_bins_path):
         subprocess.run("mkdir -p "+output_bins_path, shell=True)
 
+    bin_files = {}
+
+    for bin_name in set(final_bins.values()):
+        bin_files[bin_name] = open(
+            output_bins_path + prefix + "bin_" + bin_name + ".fasta", 'w+')
+
+    for n, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+    
+        contig_num = contig_names_rev[record.id]
+
+        if contig_num in final_bins:
+            bin_files[final_bins[contig_num]].write(
+                f'>{str(record.description)}\n{str(record.seq)}\n')
+
+    # Close output files
+    for c in set(final_bins.values()):
+        bin_files[c].close()
+
     for b in range(len(bins)):
 
-        with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
-            for contig in bins[b]:
-                line = []
-                line.append(contig_descriptions[contig_names[contig]])
-                line.append(bins_list[b])
-                output_bins.append(line)
-                bin_file.write(contig_descriptions[contig_names[contig]]+"\n")
-        
-        bin_split_cmd = "awk -F'>' 'NR==FNR{ids[$0]; next} NF>1{f=($2 in ids)} f' " + output_bins_path + "bin_" + str(b+1) + "_ids.txt " + contigs_file + " > " + output_bins_path + "bin_" +str(b+1) +"_seqs.fasta"
-        
-        subprocess.run(bin_split_cmd, shell=True)
-
-        with open(output_bins_path + "bin_" + str(b+1) + "_ids.txt", "w") as bin_file:
-            for contig in bins[b]:
-                bin_file.write(contig_names[contig]+"\n")
+        for contig in bins[b]:
+            line = []
+            line.append(contig_descriptions[contig_names[contig]])
+            line.append(bins_list[b])
+            output_bins.append(line)
 
     with open(output_file, mode='w') as out_file:
         output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
