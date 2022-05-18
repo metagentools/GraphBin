@@ -54,7 +54,7 @@ def run(args):
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
     consoleHeader.setFormatter(formatter)
-    consoleHeader.setLevel(logging.DEBUG)
+    consoleHeader.setLevel(logging.INFO)
     logger.addHandler(consoleHeader)
 
     start_time = time.time()
@@ -220,9 +220,6 @@ def run(args):
                 bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
 
-        for i in range(n_bins):
-            bins[i].sort()
-
     except:
         logger.error("Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format.")
         logger.info("Exiting GraphBin... Bye...!")
@@ -319,8 +316,6 @@ def run(args):
                             if len(bins[my_bin]) >= MIN_BIN_COUNT:
                                 remove_labels.append(i)
                                 remove_by_bin[my_bin] = [i]
-
-    remove_labels.sort()
 
     logger.info("Removing labels of ambiguous vertices")
 
@@ -441,7 +436,6 @@ def run(args):
     logger.info("Starting label propagation with eps="+str(diff_threshold)+" and max_iteration="+str(max_iteration))
 
     ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False)
-    ans.sort()
 
     logger.info("Obtaining Label Propagation result")
 
@@ -487,8 +481,6 @@ def run(args):
                     if len(bins[my_bin]) >= MIN_BIN_COUNT:
                         remove_labels.append(i)
                         remove_by_bin[my_bin] = [i]
-
-    remove_labels.sort()
 
     logger.info("Removing labels of ambiguous vertices")
 
