@@ -47,41 +47,6 @@ def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
         raise RuntimeError(f"FAILED: {cmnd}\n{err}")
     return out.decode("utf8") if out is not None else None
 
-def test_graphbin_spades_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_SPAdes.py --help"
-    exec_command(cmd)
-
-
-def test_graphbin_megahit_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_MEGAHIT.py --help"
-    exec_command(cmd)
-
-
-def test_graphbin_sga_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_SGA.py --help"
-    exec_command(cmd)
-
-
-def test_graphbin_flyw_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Flye.py --help"
-    exec_command(cmd)
-
-
-def test_graphbin_canu_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Canu.py --help"
-    exec_command(cmd)
-
-
-def test_graphbin_miniasm_command():
-    """test graphbin commands"""
-    cmd = f"python {EXEC_ROOTDIR}/graphbin_utils/graphbin_Miniasm.py --help"
-    exec_command(cmd)
-
 
 def test_graphbin_on_spades_dataset(tmp_dir):
     """test graphbin on spades assembly"""
