@@ -27,16 +27,16 @@ jobs:
         with:
             python-version: "${{ matrix.python-version }}"
 
-      - name: "Install dependencies on ${{ matrix.os }} for ${{ matrix.python-version }}"
+      - name: "Install dependencies on ${{ matrix.os }} for Python ${{ matrix.python-version }}"
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       
-      - name: "Generate coverage report on ${{ matrix.os }} for ${{ matrix.python-version }}"
+      - name: "Generate coverage report on ${{ matrix.os }} for Python ${{ matrix.python-version }}"
         run: |
           pip install pytest
           pip install pytest-cov
-          pytest --cov=./ --cov-report=xml
+          pytest --cov=./ --cov-report=xml --cov-append
           
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
