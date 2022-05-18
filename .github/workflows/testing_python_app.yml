@@ -36,10 +36,10 @@ jobs:
       
       - name: "Test and generate coverage report on ${{ matrix.python-version }}"
         run: |
-          "pytest --cov=./ --cov-report=xml:./tests/${{ matrix.os }}_${{ matrix.python-version }}_coverage.xml"
+          "pytest --cov=./ --junit-xml=./tests/junit-${{ matrix.os }}-${{ matrix.python-version }}-coverage.xml"
           
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v2
         with:
-          file: ./tests/*.xml
+          file: ./tests/junit-*-coverage.xml
           fail_ci_if_error: true
