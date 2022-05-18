@@ -32,7 +32,7 @@ __status__ = "Production"
 
 # Sample command
 # -------------------------------------------------------------------
-# python visualiseResult_SPAdes.py  --initial /path/to/file_with_initial_binning_result
+# python visualise_result_SPAdes.py  --initial /path/to/file_with_initial_binning_result
 #                                   --final /path/to/file_with_final_GraphBin_binning_result
 #                                   --graph /path/to/graph_file.gfa
 #                                   --paths /path/to/paths_file.paths

@@ -29,7 +29,7 @@ __status__ = "Production"
 
 # Sample command
 # -------------------------------------------------------------------
-# python prepResult.py     --binned /path/to/folder_with_binning_result
+# python prep_result.py     --binned /path/to/folder_with_binning_result
 #                          --output /path/to/output_folder
 # -------------------------------------------------------------------
 

@@ -28,7 +28,7 @@ __status__ = "Production"
 
 # Sample command
 # -------------------------------------------------------------------
-# python miniasm_gfa2fasta.py  --graph /path/to/folder_with_binning_result
+# python gfa2fasta.py  --graph /path/to/folder_with_binning_result
 #                                   --output /path/to/output_folder
 # -------------------------------------------------------------------
 

@@ -32,7 +32,7 @@ __status__ = "Production"
 
 # Sample command
 # -------------------------------------------------------------------
-# python visualiseResult_Flye_Canu_Miniasm.py   --initial /path/to/file_with_initial_binning_result
+# python visualis_result_Flye_Canu_Miniasm.py   --initial /path/to/file_with_initial_binning_result
 #                                               --final /path/to/file_with_final_GraphBin_binning_result
 #                                               --graph /path/to/graph_file.asqg
 #                                               --output /path/to/output_folder
