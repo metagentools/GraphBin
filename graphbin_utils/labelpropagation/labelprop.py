@@ -6,8 +6,17 @@ This code has been modified from the source found at https://github.com/ZwEin27/
 
 import logging
 
+__author__ = "Vijini Mallawaarachchi"
+__copyright__ = "Copyright 2019-2022, GraphBin Project"
+__credits__ = ["Lingzhe Teng", "Vijini Mallawaarachchi"]
+__license__ = "GPL"
+__version__ = "1.6"
+__maintainer__ = "Vijini Mallawaarachchi"
+__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__status__ = "Production"
+
 # create logger
-logger = logging.getLogger('GraphBin 1.3')
+logger = logging.getLogger("GraphBin %s" % __version__)
 
 class Edge():
     def __init__(self, src, dest, weight):
@@ -18,7 +27,7 @@ class Edge():
 class LabelProp():
 
     def __init__(self):
-        self.logger = logging.getLogger('GraphBin 1.3')
+        self.logger = logging.getLogger("GraphBin %s" % __version__)
         self.logger.info('Creating an instance of LabelProp')
         self.initialize_env()
 

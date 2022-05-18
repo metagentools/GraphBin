@@ -32,7 +32,7 @@ __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
 __license__ = "GPL"
-__version__ = "1.5"
+__version__ = "1.6"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
 __status__ = "Production"
@@ -50,7 +50,7 @@ def run(args):
     # Setup logger
     #-----------------------
    
-    logger = logging.getLogger('GraphBin 1.3')
+    logger = logging.getLogger("GraphBin %s" % __version__)
     logger.setLevel(logging.DEBUG)
     formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
     consoleHeader = logging.StreamHandler()
