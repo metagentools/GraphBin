@@ -568,7 +568,7 @@ def run(args):
 
         for contig in bins[b]:
             line = []
-            line.append(contig_descriptions[graph_to_contig_map[contigs_map[contig]]])
+            line.append(graph_to_contig_map[contigs_map[contig]])
             line.append(bins_list[b])
             output_bins.append(line)
 

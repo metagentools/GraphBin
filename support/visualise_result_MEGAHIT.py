@@ -18,6 +18,7 @@ import subprocess
 import random
 
 from igraph import *
+from Bio import SeqIO
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 
@@ -53,7 +54,9 @@ ap = argparse.ArgumentParser()
 ap.add_argument("--initial", required=True, type=str, help="path to the file containing the initial binning result from an existing tool")
 ap.add_argument("--final", required=True, type=str, help="path to the file containing the final GraphBin binning result")
 ap.add_argument("--graph", required=True, type=str, help="path to the assembly graph file")
+ap.add_argument("--contigs", required=True, type=str, help="path to the contigs file")
 ap.add_argument("--output", required=True, type=str, help="path to the output folder")
+ap.add_argument("--mode", required=False, type=str, default='all', help="'all' to plot all the contigs and 'connected' to plot connected components")
 ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output image files")
 ap.add_argument("--type", required=False, type=str, default='png', help="type of the image (jpg, png, eps, svg)")
 ap.add_argument("--width", required=False, type=int, default=2000, help="width of the image in pixels")
@@ -68,7 +71,9 @@ args = vars(ap.parse_args())
 initial_binning_result = args["initial"]
 final_binning_result = args["final"]
 assembly_graph_file = args["graph"]
+contigs_file = args["contigs"]
 output_path = args["output"]
+mode = args["output"]
 prefix = args["prefix"]
 dpi = args["dpi"]
 width = args["width"]
@@ -151,10 +156,23 @@ except:
 
 print("\nConstructing the assembly graph...")
 
+# Get original contig IDs
+#-------------------------------
+
+original_contigs = {}
+contig_descriptions = {}
+
+for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+    original_contigs[record.id] = str(record.seq)
+    contig_descriptions[record.id] = record.description
+
+
 ## Construct the assembly graph
 #-------------------------------
 
 node_count = 0
+
+graph_contigs = {}
 
 links = []
 
@@ -198,9 +216,10 @@ try:
 
                 my_map[node_count] = int(contig_num)
 
+                graph_contigs[contig_num] = strings[2]
+
                 node_count += 1
             
-
 
     print("\nTotal number of contigs available:", node_count)
 
@@ -218,8 +237,8 @@ try:
 
     for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
-        assembly_graph.vs[i]["label"]= 'NODE_'+str(contigs_map[i])
-        
+        assembly_graph.vs[i]["label"]= str(contigs_map[i])
+
     # Iterate links
     for link in links:
         # Remove self loops
@@ -227,7 +246,7 @@ try:
             # Add edge to list of edges
             edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
 
-    # Add edges to the graph 
+    # Add edges to the graph
     assembly_graph.add_edges(edge_list)
     assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
@@ -235,6 +254,18 @@ except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided.")
     print("Exiting visualiseResult...\nBye...!\n")
     sys.exit(1)
+
+
+# Map original contig IDs to contig IDS of assembly graph
+#--------------------------------------------------------
+
+graph_to_contig_map = BidirectionalMap()    
+
+for (n,m), (n2,m2) in zip(graph_contigs.items(), original_contigs.items()):
+    if m==m2:
+        graph_to_contig_map[n] = n2
+
+graph_to_contig_map_rev = graph_to_contig_map.inverse
 
 
 # Get initial binning result
@@ -248,15 +279,9 @@ try:
     with open(initial_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            start = 'NODE_'
-            end = ''
-            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
-            
-            bin_num = int(row[1])-1
+            contig_num = contigs_map_rev[int(graph_to_contig_map_rev[row[0]])]
+            bin_num = bins_list.index(row[1])
             bins[bin_num].append(contig_num)
-
-    for i in range(n_bins):
-        bins[i].sort()
 
 except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
@@ -269,26 +294,29 @@ except:
 
 print("\nPicking colours...")
 
-def colours(n):
-  ret = []
-  r = int(random.random() * 256)
-  g = int(random.random() * 256)
-  b = int(random.random() * 256)
-  step = 256 / n
-  for i in range(n):
-    r += step
-    g += step
-    b += step
-    r = int(r) % 256
-    g = int(g) % 256
-    b = int(b) % 256
+# def colours(n):
+#   ret = []
+#   r = int(random.random() * 256)
+#   g = int(random.random() * 256)
+#   b = int(random.random() * 256)
+#   step = 256 / n
+#   for i in range(n):
+#     r += step
+#     g += step
+#     b += step
+#     r = int(r) % 256
+#     g = int(g) % 256
+#     b = int(b) % 256
 
-    ret.append('#%02x%02x%02x' % (r,g,b))
+#     ret.append('#%02x%02x%02x' % (r,g,b))
 
-  return ret
+#   return ret
 
-my_colours = colours(n_bins)
-
+# my_colours = colours(n_bins)
+my_colours = ['#e6194b', '#3cb44b', '#ffe119', '#4363d8', '#f58231', '#911eb4', 
+              '#46f0f0', '#f032e6', '#bcf60c', '#fabebe', '#008080', '#e6beff', 
+              '#9a6324', '#fffac8', '#800000', '#aaffc3', '#808000', '#ffd8b1', 
+              '#000075', '#808080', '#ffffff', '#000000']
 
 # Visualise the initial assembly graph
 #--------------------------------------
@@ -345,15 +373,9 @@ try:
     with open(final_binning_result) as contig_bins:
         readCSV = csv.reader(contig_bins, delimiter=',')
         for row in readCSV:
-            start = 'NODE_'
-            end = ''
-            contig_num = contigs_map_rev[int(re.search('%s(.*)%s' % (start, end), row[0]).group(1))]
-            
-            bin_num = int(row[1])-1
+            contig_num = contigs_map_rev[int(graph_to_contig_map_rev[row[0]])]
+            bin_num = bins_list.index(row[1])
             bins[bin_num].append(contig_num)
-
-    for i in range(n_bins):
-        bins[i].sort()
 
 except:
     print("\nPlease make sure that the correct path to the final binning result file is provided and it is having the correct format")
