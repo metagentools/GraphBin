@@ -114,7 +114,7 @@ def run(args):
         logger.info("Number of bins available in the initial binning result: "+str(n_bins))
     
     except BaseException as err:
-        logger.error(f"Unexpected {err=}, {type(err)=}")
+        logger.error(f"Unexpected {err}")
         logger.error("Please make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
@@ -170,7 +170,7 @@ def run(args):
                 path = file.readline()
 
     except BaseException as err:
-        logger.error(f"Unexpected {err=}, {type(err)=}")
+        logger.error(f"Unexpected {err}")
         logger.error("Please make sure that the correct path to the contig paths file is provided.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
@@ -261,7 +261,7 @@ def run(args):
         assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
 
     except BaseException as err:
-        logger.error(f"Unexpected {err=}, {type(err)=}")
+        logger.error(f"Unexpected {err}")
         logger.error("Please make sure that the correct path to the assembly graph file is provided.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
@@ -288,7 +288,7 @@ def run(args):
                 bins[bin_num].append(contig_num)
 
     except BaseException as err:
-        logger.error(f"Unexpected {err=}, {type(err)=}")
+        logger.error(f"Unexpected {err}")
         logger.error("Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format.")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
