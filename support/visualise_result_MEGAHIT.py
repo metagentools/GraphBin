@@ -73,7 +73,7 @@ final_binning_result = args["final"]
 assembly_graph_file = args["graph"]
 contigs_file = args["contigs"]
 output_path = args["output"]
-mode = args["output"]
+mode = args["mode"]
 prefix = args["prefix"]
 dpi = args["dpi"]
 width = args["width"]
@@ -226,6 +226,17 @@ try:
     contigs_map = my_map
     contigs_map_rev = my_map.inverse
 
+    # Map original contig IDs to contig IDS of assembly graph
+
+    graph_to_contig_map = BidirectionalMap()    
+
+    for (n,m), (n2,m2) in zip(graph_contigs.items(), original_contigs.items()):
+        if m==m2:
+            graph_to_contig_map[n] = n2
+
+    graph_to_contig_map_rev = graph_to_contig_map.inverse
+    
+
     # Create graph
     assembly_graph = Graph()
 
@@ -238,6 +249,7 @@ try:
     for i in range(node_count):
         assembly_graph.vs[i]["id"]= i
         assembly_graph.vs[i]["label"]= str(contigs_map[i])
+        assembly_graph.vs[i]["name"]= graph_to_contig_map[contigs_map[i]]
 
     # Iterate links
     for link in links:
@@ -254,18 +266,6 @@ except:
     print("\nPlease make sure that the correct path to the assembly graph file is provided.")
     print("Exiting visualiseResult...\nBye...!\n")
     sys.exit(1)
-
-
-# Map original contig IDs to contig IDS of assembly graph
-#--------------------------------------------------------
-
-graph_to_contig_map = BidirectionalMap()    
-
-for (n,m), (n2,m2) in zip(graph_contigs.items(), original_contigs.items()):
-    if m==m2:
-        graph_to_contig_map[n] = n2
-
-graph_to_contig_map_rev = graph_to_contig_map.inverse
 
 
 # Get initial binning result
@@ -287,6 +287,18 @@ except:
     print("\nPlease make sure that the correct path to the binning result file is provided and it is having the correct format")
     print("Exiting visualiseResult...\nBye...!\n")
     sys.exit(1)
+
+
+# Get isolated vertices
+#-------------------------------------------------
+
+# Get isolated contigs with no neighbours
+isolated = [v.index for v in assembly_graph.vs if v.degree() == 0]
+print("Total isolated contigs in the assembly graph: " + str(len(isolated)))
+
+if mode=="connected":
+    assembly_graph.delete_vertices(isolated)
+    print(str(len(isolated))+" isolated contigs are removed")
 
 
 # Get list of colours according to number of bins
@@ -327,10 +339,11 @@ initial_out_fig_name = output_path+prefix+"initial_binning_result."+image_type
 
 node_colours = []
 
-for i in range(node_count):
+for i in assembly_graph.vs()["name"]:
+    contig_num = contigs_map_rev[int(graph_to_contig_map_rev[i])]
     no_bin = True
     for j in range(n_bins):
-        if i in bins[j]:
+        if contig_num in bins[j]:
             node_colours.append(my_colours[j])
             no_bin = False
     
@@ -392,10 +405,11 @@ final_out_fig_name = output_path+prefix+"final_GraphBin_binning_result."+image_t
 
 node_colours = []
 
-for i in range(node_count):
+for i in assembly_graph.vs()["name"]:
+    contig_num = contigs_map_rev[int(graph_to_contig_map_rev[i])]
     no_bin = True
     for j in range(n_bins):
-        if i in bins[j]:
+        if contig_num in bins[j]:
             node_colours.append(my_colours[j])
             no_bin = False
     
