@@ -20,7 +20,7 @@ from Bio import SeqIO
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
-__license__ = "GPL"
+__license__ = "BSD-3"
 __type__ = "Support Script"
 __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
