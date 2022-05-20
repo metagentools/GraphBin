@@ -8,14 +8,13 @@ numbered starting from 1.
 
 """
 
-import sys
-import os
-import csv
 import argparse
+import csv
+import os
 import subprocess
+import sys
 
 from Bio import SeqIO
-
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

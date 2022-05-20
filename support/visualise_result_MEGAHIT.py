@@ -9,18 +9,17 @@ result obtained from GraphBin and compare.
 
 """
 
-import sys
-import os
-import csv
 import argparse
+import csv
+import os
+import random
 import re
 import subprocess
-import random
+import sys
 
-from igraph import *
-from Bio import SeqIO
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
-
+from Bio import SeqIO
+from igraph import *
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

@@ -6,15 +6,14 @@ The assembly graph file (assembly_graph.gfa) should be provided as inputs.
 
 """
 
-import sys
-import os
 import argparse
+import os
 import re
+import sys
 
 from Bio import SeqIO
 from Bio.Seq import Seq
 from Bio.SeqRecord import SeqRecord
-
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019, GraphBin Project"

@@ -11,23 +11,22 @@ discarded due to short length.
 graphbin_SPAdes.py makes use of the assembly graphs produced by SPAdes.
 """
 
-import sys
-import os
-import subprocess
 import csv
-import time
-import re
 import logging
-
-from igraph import *
+import os
+import re
+import subprocess
+import sys
+import time
 from collections import defaultdict
-from Bio import SeqIO
 
-from graphbin_utils.labelpropagation.labelprop import LabelProp
+from Bio import SeqIO
+from igraph import *
+
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
-
+from graphbin_utils.labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

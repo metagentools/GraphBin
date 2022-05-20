@@ -11,22 +11,21 @@ discarded due to short length.
 graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
 """
 
-import sys
-import os
-import subprocess
 import csv
-import time
-import re
 import logging
+import os
+import re
+import subprocess
+import sys
+import time
 
-from igraph import *
 from Bio import SeqIO
+from igraph import *
 
-from graphbin_utils.labelpropagation.labelprop import LabelProp
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
-
+from graphbin_utils.labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

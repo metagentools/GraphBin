@@ -11,21 +11,20 @@ discarded due to short length.
 graphbin_Flye.py makes use of the assembly graphs produced by Flye long read assembler.
 """
 
-import sys
+import csv
+import logging
 import os
 import subprocess
-import csv
+import sys
 import time
-import logging
 
-from igraph import *
 from Bio import SeqIO
+from igraph import *
 
-from graphbin_utils.labelpropagation.labelprop import LabelProp
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin_utils.graphbin_Func import getClosestLabelledVertices
 from graphbin_utils.graphbin_Options import PARSER
-
+from graphbin_utils.labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
