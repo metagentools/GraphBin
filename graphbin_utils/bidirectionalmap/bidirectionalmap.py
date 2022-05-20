@@ -6,6 +6,7 @@ https://stackoverflow.com/questions/3318625/how-to-implement-an-efficient-bidire
 answered by user jme
 """
 
+
 class BidirectionalError(Exception):
     """Must set a unique value in a BijectiveMap."""
 

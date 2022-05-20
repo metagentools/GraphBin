@@ -12,9 +12,9 @@ __status__ = "Production"
 
 def getClosestLabelledVertices(graph, node, binned_contigs):
     # Remove labels of ambiguous vertices
-    #-------------------------------------
+    # -------------------------------------
 
-    queu_l = [graph.neighbors(node, mode='ALL')]
+    queu_l = [graph.neighbors(node, mode="ALL")]
     visited_l = [node]
     labelled = []
 
@@ -32,7 +32,7 @@ def getClosestLabelledVertices(graph, node, binned_contigs):
         else:
             temp = []
             for n in active_level:
-                temp += graph.neighbors(n, mode='ALL')
+                temp += graph.neighbors(n, mode="ALL")
                 temp = list(set(temp))
             temp2 = []
 

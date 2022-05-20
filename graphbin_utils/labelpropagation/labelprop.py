@@ -18,30 +18,31 @@ __status__ = "Production"
 # create logger
 logger = logging.getLogger("GraphBin %s" % __version__)
 
-class Edge():
+
+class Edge:
     def __init__(self, src, dest, weight):
         self.src = src
         self.dest = dest
         self.weight = weight
 
-class LabelProp():
 
+class LabelProp:
     def __init__(self):
         self.logger = logging.getLogger("GraphBin %s" % __version__)
-        self.logger.info('Creating an instance of LabelProp')
+        self.logger.info("Creating an instance of LabelProp")
         self.initialize_env()
 
-################################################################################
-#   Prepare Data
-################################################################################
+    ################################################################################
+    #   Prepare Data
+    ################################################################################
 
     def initialize_env(self):
-        self.vertex_adj_map = {}         # int: [Edge]
-        self.vertex_in_adj_map = {}      # int: float
-        self.vertex_deg_map = {}         # int, float
-        self.vertex_label_map = {}       # int, int
-        self.label_index_map = {}        # int, int
-        self.vertex_f_map = {}           # int, [float]
+        self.vertex_adj_map = {}  # int: [Edge]
+        self.vertex_in_adj_map = {}  # int: float
+        self.vertex_deg_map = {}  # int, float
+        self.vertex_label_map = {}  # int, int
+        self.label_index_map = {}  # int, int
+        self.vertex_f_map = {}  # int, [float]
         self.vertex_size = 0
         self.label_size = 0
         self.labelled_size = 0
@@ -60,7 +61,7 @@ class LabelProp():
 
         # setup vertex_deg_map
         for vertex_id in self.vertex_adj_map.keys():
-            degree = .0
+            degree = 0.0
             if vertex_id in self.vertex_deg_map:
                 degree = self.vertex_deg_map[vertex_id]
             for edge in self.vertex_adj_map[vertex_id]:
@@ -88,22 +89,22 @@ class LabelProp():
             if l == 0:
                 # unlabelled
                 for i in range(label_enum):
-                    arr.append(.0)
+                    arr.append(0.0)
             else:
                 # labelled
                 self.labelled_size += 1
                 ix = int(self.label_index_map[self.vertex_label_map[v]])
                 for i in range(label_enum):
                     if i == ix:
-                        arr.append(1.)
+                        arr.append(1.0)
                     else:
-                        arr.append(0.)
+                        arr.append(0.0)
             self.vertex_f_map.setdefault(v, arr)
-
 
     def load_data_from_file(self, filename):
         import ast
-        with open(filename, 'rb') as f:
+
+        with open(filename, "rb") as f:
             lines = [ast.literal_eval(_.strip()) for _ in f.readlines()]
             self.vertex_size = len(lines)
             self.load_data_from_mem(lines)
@@ -119,7 +120,7 @@ class LabelProp():
         # [vertexId, vertexLabel, [edges]]
         # unlabeled vertex if vertexLabel == 0
         # i.e. [2, 1, [[1, 1.0], [3, 1.0]]]
-        
+
         try:
             vertex_id = line[0]
             vertex_label = line[1]
@@ -136,9 +137,9 @@ class LabelProp():
 
             raise Exception("Coundn't parse vertex from line")
 
-################################################################################
-#   Label Propagation
-################################################################################
+    ################################################################################
+    #   Label Propagation
+    ################################################################################
 
     def debug(self):
         labels = []
@@ -147,7 +148,7 @@ class LabelProp():
         ans = []
         for vertex_id in self.vertex_f_map.keys():
             arr = self.vertex_f_map[vertex_id]
-            max_f_val = .0
+            max_f_val = 0.0
             max_f_val_idx = 0
 
             im_ans = [vertex_id]
@@ -163,21 +164,20 @@ class LabelProp():
 
         return ans
 
-
     def iterate(self):
-        next_vertex_f_map = {}              # int, [double]
+        next_vertex_f_map = {}  # int, [double]
         diff = 0
 
         for vertex_id in self.vertex_f_map.keys():
-            if self.vertex_label_map[vertex_id]:    # skip labelled
+            if self.vertex_label_map[vertex_id]:  # skip labelled
                 continue
 
             # update F(vertex_id) .. vertex_f_map
-            next_f_value = []   # double
+            next_f_value = []  # double
             f_values = self.vertex_f_map[vertex_id]
 
             for i in range(self.label_size):
-                f_value = 0.
+                f_value = 0.0
 
                 for edge in self.vertex_in_adj_map[vertex_id]:
                     weight = edge.weight
@@ -201,17 +201,16 @@ class LabelProp():
 
         return diff
 
-
     def run(self, eps, max_iter, show_log=False, clean_result=False):
-        diff = 0.
+        diff = 0.0
         for i in range(max_iter):
-            logger.debug("Iteration "+str(i+1))
+            logger.debug("Iteration " + str(i + 1))
             diff = self.iterate()
             if diff < eps:
                 break
 
         if show_log:
-            self.show_detail(diff, eps, i, max_iter) 
+            self.show_detail(diff, eps, i, max_iter)
 
         ans = self.debug()
 
@@ -223,23 +222,26 @@ class LabelProp():
                     if score:
                         rtn_cleaned.append([line[0], line[1], score])
                 except Exception as e:
-                    raise Exception('r')
+                    raise Exception("r")
             ans = rtn_cleaned
         return ans
 
-################################################################################
-#   Show Info.
-################################################################################
+    ################################################################################
+    #   Show Info.
+    ################################################################################
 
     def show_detail(self, diff, eps, i, max_iter):
         logger.info("Total number of vertices:\t\t" + str(self.vertex_size))
         logger.info("Number of class labels:\t\t" + str(self.label_size))
-        logger.info("Previous number of unlabeled vertices:\t" + str(self.vertex_size - self.labelled_size))
+        logger.info(
+            "Previous number of unlabeled vertices:\t"
+            + str(self.vertex_size - self.labelled_size)
+        )
         logger.info("Previous numebr of labeled vertices:\t" + str(self.labelled_size))
         logger.info("Value of eps parameter:\t\t" + str(eps))
         logger.info("Value of max_iteration parameter:\t" + str(max_iter))
         logger.info("Final values:")
-        logger.info("iter = " + str(i+1) + ", diff = " +  str(diff))
+        logger.info("iter = " + str(i + 1) + ", diff = " + str(diff))
 
     def show_vertex_adj(self):
         for k, v in self.vertex_adj_map.items():

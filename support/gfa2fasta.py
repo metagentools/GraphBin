@@ -34,14 +34,22 @@ __status__ = "Production"
 
 
 # Setup argument parser
-#-----------------------
+# -----------------------
 
 ap = argparse.ArgumentParser()
 
 ap.add_argument("--graph", required=True, help="path to the assembly graph file")
-ap.add_argument("--assembler", required=True, type=str, default='flye', help="type of the assembler (Flye or Miniasm)")
+ap.add_argument(
+    "--assembler",
+    required=True,
+    type=str,
+    default="flye",
+    help="type of the assembler (Flye or Miniasm)",
+)
 ap.add_argument("--output", required=True, type=str, help="path to the output folder")
-ap.add_argument("--prefix", required=False, type=str, default='', help="prefix for the output file")
+ap.add_argument(
+    "--prefix", required=False, type=str, default="", help="prefix for the output file"
+)
 
 args = vars(ap.parse_args())
 
@@ -65,7 +73,7 @@ elif assembler.lower() == "miniasm":
 
 
 # Check if output folder exists
-#---------------------------------------------------
+# ---------------------------------------------------
 
 # Handle for missing trailing forwardslash in output folder path
 if output_path[-1:] != "/":
@@ -73,17 +81,17 @@ if output_path[-1:] != "/":
 
 # Create output folder if it does not exist
 if not os.path.isdir(output_path):
-    subprocess.run("mkdir -p "+output_path, shell=True)
+    subprocess.run("mkdir -p " + output_path, shell=True)
 
 # Validate prefix
-#---------------------------------------------------
+# ---------------------------------------------------
 try:
 
-    if args["prefix"] != '':
+    if args["prefix"] != "":
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
         else:
-            prefix = args["prefix"]+"_"
+            prefix = args["prefix"] + "_"
     else:
         prefix = ""
 
@@ -94,25 +102,30 @@ except:
 
 
 # Get the sequences corresponding to edges of the graph.
-#---------------------------------------------------
+# ---------------------------------------------------
 
 print("\nObtaining edge sequences")
 
 sequenceset = []
 
 with open(assembly_graph_file) as file:
-    
+
     for line in file.readlines():
         line = line.strip()
 
         if line.startswith("S"):
-            
+
             strings = line.split("\t")
 
             print(strings)
-            
-            record = SeqRecord(Seq(re.sub('[^GATC]',"",str(strings[2]).upper())), id=str(strings[1]), name=str(strings[1]), description="")
-            
+
+            record = SeqRecord(
+                Seq(re.sub("[^GATC]", "", str(strings[2]).upper())),
+                id=str(strings[1]),
+                name=str(strings[1]),
+                description="",
+            )
+
             sequenceset.append(record)
 
 print("\nWriting edge sequences to FASTA file")
@@ -125,10 +138,15 @@ elif assembler.lower() == "miniasm":
 with open(output_path + prefix + final_file, "w") as output_handle:
     SeqIO.write(sequenceset, output_handle, "fasta")
 
-print("\nThe FASTA file with", assembler_name, "sequences can be found at", output_handle.name)
+print(
+    "\nThe FASTA file with",
+    assembler_name,
+    "sequences can be found at",
+    output_handle.name,
+)
 
 
 # Exit program
-#--------------
+# --------------
 
 print("\nThank you for using miniasm_gfa2fasta for GraphBin!\n")

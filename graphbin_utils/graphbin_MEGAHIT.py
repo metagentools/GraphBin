@@ -48,18 +48,17 @@ __status__ = "Production"
 
 def run(args):
     # Setup logger
-    #-----------------------
+    # -----------------------
 
     logger = logging.getLogger("GraphBin %s" % __version__)
     logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
     consoleHeader = logging.StreamHandler()
     consoleHeader.setFormatter(formatter)
     consoleHeader.setLevel(logging.INFO)
     logger.addHandler(consoleHeader)
 
     start_time = time.time()
-
 
     assembly_graph_file = args.graph
     contigs_file = args.contigs
@@ -71,29 +70,31 @@ def run(args):
     diff_threshold = args.diff_threshold
     MIN_BIN_COUNT = 10
 
-
     # Setup output path for log file
-    #---------------------------------------------------
+    # ---------------------------------------------------
 
-    fileHandler = logging.FileHandler(output_path+"/"+prefix+"graphbin.log")
+    fileHandler = logging.FileHandler(output_path + "/" + prefix + "graphbin.log")
     fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)
 
-    logger.info("Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs.")
-    logger.info("This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach.")
+    logger.info(
+        "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
+    )
+    logger.info(
+        "This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach."
+    )
 
-    logger.info("Assembly graph file: "+assembly_graph_file)
-    logger.info("Existing binning output file: "+contig_bins_file)
-    logger.info("Final binning output file: "+output_path)
-    logger.info("Maximum number of iterations: "+str(max_iteration))
-    logger.info("Difference threshold: "+str(diff_threshold))
+    logger.info("Assembly graph file: " + assembly_graph_file)
+    logger.info("Existing binning output file: " + contig_bins_file)
+    logger.info("Final binning output file: " + output_path)
+    logger.info("Maximum number of iterations: " + str(max_iteration))
+    logger.info("Difference threshold: " + str(diff_threshold))
 
     logger.info("GraphBin started")
 
-
     # Get the number of bins from the initial binning result
-    #--------------------------------------------------------
+    # --------------------------------------------------------
 
     n_bins = 0
 
@@ -109,20 +110,22 @@ def run(args):
         bins_list.sort()
 
         n_bins = len(bins_list)
-        logger.info("Number of bins available in the initial binning result: "+str(n_bins))
-    
+        logger.info(
+            "Number of bins available in the initial binning result: " + str(n_bins)
+        )
+
     except BaseException as err:
         logger.error(f"Unexpected {err}")
-        logger.error("Please make sure that the correct path to the initial binning result file is provided and it is having the correct format.")
+        logger.error(
+            "Please make sure that the correct path to the initial binning result file is provided and it is having the correct format."
+        )
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
-
     logger.info("Constructing the assembly graph")
 
-
     # Get original contig IDs
-    #-------------------------------
+    # -------------------------------
 
     original_contigs = {}
 
@@ -135,7 +138,7 @@ def run(args):
         contig_descriptions[record.id] = record.description
 
     # Construct the assembly graph
-    #-------------------------------
+    # -------------------------------
 
     node_count = 0
 
@@ -159,15 +162,19 @@ def run(args):
 
                     strings = line.split("\t")
 
-                    start_1 = 'NODE_'
-                    end_1 = '_length'
+                    start_1 = "NODE_"
+                    end_1 = "_length"
 
-                    link1 = int(re.search('%s(.*)%s' % (start_1, end_1), strings[1]).group(1))
+                    link1 = int(
+                        re.search("%s(.*)%s" % (start_1, end_1), strings[1]).group(1)
+                    )
 
-                    start_2 = 'NODE_'
-                    end_2 = '_length'
+                    start_2 = "NODE_"
+                    end_2 = "_length"
 
-                    link2 = int(re.search('%s(.*)%s' % (start_2, end_2), strings[3]).group(1))
+                    link2 = int(
+                        re.search("%s(.*)%s" % (start_2, end_2), strings[3]).group(1)
+                    )
 
                     link.append(link1)
                     link.append(link2)
@@ -176,10 +183,12 @@ def run(args):
                 elif line.startswith("S"):
                     strings = line.split()
 
-                    start = 'NODE_'
-                    end = '_length'
+                    start = "NODE_"
+                    end = "_length"
 
-                    contig_num = int(re.search('%s(.*)%s' % (start, end), strings[1]).group(1))
+                    contig_num = int(
+                        re.search("%s(.*)%s" % (start, end), strings[1]).group(1)
+                    )
 
                     my_map[node_count] = int(contig_num)
 
@@ -187,7 +196,7 @@ def run(args):
 
                     node_count += 1
 
-        logger.info("Total number of contigs available: "+str(node_count))
+        logger.info("Total number of contigs available: " + str(node_count))
 
         contigs_map = my_map
         contigs_map_rev = my_map.inverse
@@ -202,8 +211,8 @@ def run(args):
         edge_list = []
 
         for i in range(node_count):
-            assembly_graph.vs[i]["id"]= i
-            assembly_graph.vs[i]["label"]= str(contigs_map[i])
+            assembly_graph.vs[i]["id"] = i
+            assembly_graph.vs[i]["label"] = str(contigs_map[i])
 
         # Iterate links
         for link in links:
@@ -218,27 +227,27 @@ def run(args):
 
     except BaseException as err:
         logger.error(f"Unexpected {err}")
-        logger.error("Please make sure that the correct path to the assembly graph file is provided.")
+        logger.error(
+            "Please make sure that the correct path to the assembly graph file is provided."
+        )
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
-    logger.info("Total number of edges in the assembly graph: "+str(len(edge_list)))
-
+    logger.info("Total number of edges in the assembly graph: " + str(len(edge_list)))
 
     # Map original contig IDs to contig IDS of assembly graph
-    #--------------------------------------------------------
+    # --------------------------------------------------------
 
-    graph_to_contig_map = BidirectionalMap()    
+    graph_to_contig_map = BidirectionalMap()
 
-    for (n,m), (n2,m2) in zip(graph_contigs.items(), original_contigs.items()):
-        if m==m2:
+    for (n, m), (n2, m2) in zip(graph_contigs.items(), original_contigs.items()):
+        if m == m2:
             graph_to_contig_map[n] = n2
-    
+
     graph_to_contig_map_rev = graph_to_contig_map.inverse
 
-
     # Get initial binning result
-    #----------------------------
+    # ----------------------------
 
     logger.info("Obtaining the initial binning result")
 
@@ -255,13 +264,14 @@ def run(args):
 
     except BaseException as err:
         logger.error(f"Unexpected {err}")
-        logger.error("Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format.")
+        logger.error(
+            "Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format."
+        )
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
-
     # Remove labels of ambiguous vertices
-    #-------------------------------------
+    # -------------------------------------
 
     logger.info("Determining ambiguous vertices")
 
@@ -302,7 +312,7 @@ def run(args):
                     if len(bins[my_bin]) >= MIN_BIN_COUNT:
                         remove_labels.append(i)
                         remove_by_bin[my_bin] = [i]
-            
+
             elif neighbours_binned:
                 neighbours_have_same_label_list.append(i)
 
@@ -315,7 +325,7 @@ def run(args):
     binned_contigs = []
 
     for n in range(n_bins):
-        binned_contigs = sorted(binned_contigs+bins[n])
+        binned_contigs = sorted(binned_contigs + bins[n])
 
     for b in range(n_bins):
 
@@ -326,7 +336,9 @@ def run(args):
                 my_bin = b
 
                 # Get set of closest labelled vertices
-                closest_neighbours = getClosestLabelledVertices(assembly_graph, i, binned_contigs)
+                closest_neighbours = getClosestLabelledVertices(
+                    assembly_graph, i, binned_contigs
+                )
 
                 if len(closest_neighbours) > 0:
 
@@ -342,7 +354,10 @@ def run(args):
 
                     if not neighbours_have_same_label and i not in remove_labels:
                         if my_bin in remove_by_bin:
-                            if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
+                            if (
+                                len(bins[my_bin]) - len(remove_by_bin[my_bin])
+                                >= MIN_BIN_COUNT
+                            ):
                                 remove_labels.append(i)
                                 remove_by_bin[my_bin].append(i)
                         else:
@@ -360,11 +375,12 @@ def run(args):
 
     logger.info("Obtaining refined binning result")
 
-
     # Get vertices which are not isolated and not in components without any labels
-    #-----------------------------------------------------------------------------
+    # -----------------------------------------------------------------------------
 
-    logger.info("Deteremining vertices which are not isolated and not in components without any labels")
+    logger.info(
+        "Deteremining vertices which are not isolated and not in components without any labels"
+    )
 
     non_isolated = []
 
@@ -383,7 +399,7 @@ def run(args):
 
             component = list(set(component))
 
-            while length!= len(component):
+            while length != len(component):
 
                 length = len(component)
 
@@ -406,11 +422,10 @@ def run(args):
                     if j not in non_isolated:
                         non_isolated.append(j)
 
-    logger.info("Number of non-isolated contigs: "+str(len(non_isolated)))
-
+    logger.info("Number of non-isolated contigs: " + str(len(non_isolated)))
 
     # Run label propagation
-    #-----------------------
+    # -----------------------
 
     data = []
 
@@ -426,7 +441,7 @@ def run(args):
 
             for i in range(n_bins):
                 if contig in bins[i]:
-                    line.append(i+1)
+                    line.append(i + 1)
                     assigned = True
 
             if not assigned:
@@ -449,24 +464,31 @@ def run(args):
     # Check if initial binning result consists of contigs belonging to multiple bins
 
     multiple_bins = False
-    
+
     for item in data:
         if type(item[1]) is int and type(item[2]) is int:
             multiple_bins = True
             break
 
     if multiple_bins:
-        logger.error("Initial binning result consists of contigs belonging to multiple bins. Please make sure that each contig in the initial binning result belongs to only one bin.")
+        logger.error(
+            "Initial binning result consists of contigs belonging to multiple bins. Please make sure that each contig in the initial binning result belongs to only one bin."
+        )
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
-    
+
     # Label propagation
-    
+
     lp = LabelProp()
 
     lp.load_data_from_mem(data)
 
-    logger.info("Starting label propagation with eps="+str(diff_threshold)+" and max_iteration="+str(max_iteration))
+    logger.info(
+        "Starting label propagation with eps="
+        + str(diff_threshold)
+        + " and max_iteration="
+        + str(max_iteration)
+    )
 
     ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False)
 
@@ -474,12 +496,11 @@ def run(args):
 
     for l in ans:
         for i in range(n_bins):
-            if l[1]==i+1 and l[0] not in bins[i]:
+            if l[1] == i + 1 and l[0] not in bins[i]:
                 bins[i].append(l[0])
 
-
     # Remove labels of ambiguous vertices
-    #-------------------------------------
+    # -------------------------------------
 
     logger.info("Determining ambiguous vertices")
 
@@ -534,35 +555,36 @@ def run(args):
             final_bins[contig] = bins_list[i]
 
     # Print elapsed time for the process
-    logger.info("Elapsed time: "+str(elapsed_time)+" seconds")
-
+    logger.info("Elapsed time: " + str(elapsed_time) + " seconds")
 
     # Write result to output file
-    #-----------------------------
+    # -----------------------------
 
     logger.info("Writing the Final Binning result to file")
 
     output_bins = []
 
     output_bins_path = output_path + prefix + "bins/"
-    output_file = output_path + prefix + 'graphbin_output.csv'
+    output_file = output_path + prefix + "graphbin_output.csv"
 
     if not os.path.isdir(output_bins_path):
-        subprocess.run("mkdir -p "+output_bins_path, shell=True)
+        subprocess.run("mkdir -p " + output_bins_path, shell=True)
 
     bin_files = {}
 
     for bin_name in set(final_bins.values()):
         bin_files[bin_name] = open(
-            output_bins_path + prefix + "bin_" + bin_name + ".fasta", 'w+')
+            output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
+        )
 
     for n, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
-    
+
         contig_num = contigs_map_rev[graph_to_contig_map_rev[record.id]]
 
         if contig_num in final_bins:
             bin_files[final_bins[contig_num]].write(
-                f'>{str(record.description)}\n{str(record.seq)}\n')
+                f">{str(record.description)}\n{str(record.seq)}\n"
+            )
 
     # Close output files
     for c in set(final_bins.values()):
@@ -576,13 +598,14 @@ def run(args):
             line.append(bins_list[b])
             output_bins.append(line)
 
-    with open(output_file, mode='w') as out_file:
-        output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    with open(output_file, mode="w") as out_file:
+        output_writer = csv.writer(
+            out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL
+        )
         for row in output_bins:
             output_writer.writerow(row)
-    
-    logger.info("Final binning results can be found in "+str(output_bins_path))
 
+    logger.info("Final binning results can be found in " + str(output_bins_path))
 
     unbinned_contigs = []
 
@@ -592,20 +615,21 @@ def run(args):
             line.append(graph_to_contig_map[contigs_map[i]])
             unbinned_contigs.append(line)
 
-    if len(unbinned_contigs)!=0:
-        unbinned_file = output_path + prefix + 'graphbin_unbinned.csv'
+    if len(unbinned_contigs) != 0:
+        unbinned_file = output_path + prefix + "graphbin_unbinned.csv"
 
-        with open(unbinned_file, mode='w') as out_file:
-            output_writer = csv.writer(out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        with open(unbinned_file, mode="w") as out_file:
+            output_writer = csv.writer(
+                out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL
+            )
 
             for row in unbinned_contigs:
                 output_writer.writerow(row)
 
-        logger.info("Unbinned contigs can be found at "+unbinned_file)
-
+        logger.info("Unbinned contigs can be found at " + unbinned_file)
 
     # Exit program
-    #--------------
+    # --------------
 
     logger.info("Thank you for using GraphBin! Bye...!")
 
@@ -615,11 +639,11 @@ def run(args):
 
 def main():
     # Setup argument parser
-    #-----------------------
+    # -----------------------
     ap = PARSER
     args = ap.parse_args()
     run(args)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

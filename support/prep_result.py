@@ -35,34 +35,29 @@ __status__ = "Production"
 
 
 # Setup argument parser
-#-----------------------
+# -----------------------
 
 ap = argparse.ArgumentParser()
 
-ap.add_argument("--binned", 
-    required=True, 
-    type=str, 
-    help="path to the folder containing the initial binning result from an existing tool"
+ap.add_argument(
+    "--binned",
+    required=True,
+    type=str,
+    help="path to the folder containing the initial binning result from an existing tool",
 )
 
-ap.add_argument("--output", 
-    required=True, 
-    type=str, 
-    help="path to the output folder"
+ap.add_argument("--output", required=True, type=str, help="path to the output folder")
+
+ap.add_argument(
+    "--prefix", required=False, type=str, default="", help="prefix for the output file"
 )
 
-ap.add_argument("--prefix", 
-    required=False, 
-    type=str, 
-    default='', 
-    help="prefix for the output file"
-)
-
-ap.add_argument("--delimiter", 
-    required=False, 
-    type=str, 
-    default=",", 
-    help="delimiter for input/output results. Supports a comma (,), a semicolon (;), a tab ($'\\t'), a space (\" \") and a pipe (|) [default: , (comma)]"
+ap.add_argument(
+    "--delimiter",
+    required=False,
+    type=str,
+    default=",",
+    help="delimiter for input/output results. Supports a comma (,), a semicolon (;), a tab ($'\\t'), a space (\" \") and a pipe (|) [default: , (comma)]",
 )
 
 args = vars(ap.parse_args())
@@ -74,7 +69,7 @@ delimiter = args["delimiter"]
 
 
 # Check if folder to initial binning result exists
-#---------------------------------------------------
+# ---------------------------------------------------
 
 # Handle for missing trailing forwardslash in folder path of binning result
 if contig_bins_folder[-1:] != "/":
@@ -82,7 +77,9 @@ if contig_bins_folder[-1:] != "/":
 
 # Throw an error if folder path of binning result does not exist.
 if not os.path.isdir(contig_bins_folder):
-    print("\nPlease enter a valid path to the folder containing the initial binning result.")
+    print(
+        "\nPlease enter a valid path to the folder containing the initial binning result."
+    )
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(1)
 
@@ -91,28 +88,32 @@ files = os.listdir(contig_bins_folder)
 
 
 # Check if folder path of binning result is empty.
-#---------------------------------------------------
+# ---------------------------------------------------
 if len(files) == 0:
-    print("\nFolder containing the initial binning result is empty. Please enter a valid path to the folder containing the initial binning result.")
+    print(
+        "\nFolder containing the initial binning result is empty. Please enter a valid path to the folder containing the initial binning result."
+    )
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(1)
 
 
 # Check if binning result folder contains fasta files.
-#---------------------------------------------------
+# ---------------------------------------------------
 isFasta = False
 for myfile in files:
-    if myfile.lower().endswith(('.fasta', '.fa', '.fna')):
+    if myfile.lower().endswith((".fasta", ".fa", ".fna")):
         isFasta = True
-    
+
 if not isFasta:
-    print("\nMake sure the folder containing the initial binning result contains fasta files (.fasta, .fa or .fna).")
+    print(
+        "\nMake sure the folder containing the initial binning result contains fasta files (.fasta, .fa or .fna)."
+    )
     print("\nExiting prepResult.py...\nBye...!\n")
     sys.exit(1)
 
 
 # Check if output folder exists
-#---------------------------------------------------
+# ---------------------------------------------------
 
 # Handle for missing trailing forwardslash in output folder path
 if output_path[-1:] != "/":
@@ -120,18 +121,18 @@ if output_path[-1:] != "/":
 
 # Create output folder if it does not exist
 if not os.path.isdir(output_path):
-    subprocess.run("mkdir -p "+output_path, shell=True)
+    subprocess.run("mkdir -p " + output_path, shell=True)
 
 
 # Validate prefix
-#---------------------------------------------------
+# ---------------------------------------------------
 try:
 
-    if args["prefix"] != '':
+    if args["prefix"] != "":
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
         else:
-            prefix = args["prefix"]+"_"
+            prefix = args["prefix"] + "_"
     else:
         prefix = ""
 
@@ -151,7 +152,7 @@ if delimiter not in delimiters:
 
 
 # Format binning results.
-#---------------------------------------------------
+# ---------------------------------------------------
 
 print("\nFormatting initial binning results")
 
@@ -159,9 +160,11 @@ contig_bins = []
 
 for bin_file in files:
 
-    if bin_file.lower().endswith(('.fasta', '.fa', '.fna')):
+    if bin_file.lower().endswith((".fasta", ".fa", ".fna")):
 
-        for index, record in enumerate(SeqIO.parse(contig_bins_folder+bin_file, "fasta")):
+        for index, record in enumerate(
+            SeqIO.parse(contig_bins_folder + bin_file, "fasta")
+        ):
             contig_name = str(record.id)
 
             line = []
@@ -172,13 +175,17 @@ for bin_file in files:
 
 
 # Write binning results to output file.
-#---------------------------------------------------
+# ---------------------------------------------------
 
 print("\nWriting initial binning results to output file")
 
-with open(output_path + prefix + 'initial_contig_bins.csv', mode='w') as contig_bins_file:
-    contig_writer = csv.writer(contig_bins_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    
+with open(
+    output_path + prefix + "initial_contig_bins.csv", mode="w"
+) as contig_bins_file:
+    contig_writer = csv.writer(
+        contig_bins_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL
+    )
+
     for row in contig_bins:
         contig_writer.writerow(row)
 
@@ -186,6 +193,6 @@ print("\nFormatted initial binning results can be found at", contig_bins_file.na
 
 
 # Exit program
-#--------------
+# --------------
 
 print("\nThank you for using prepResult for GraphBin!\n")

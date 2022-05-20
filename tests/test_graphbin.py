@@ -40,7 +40,7 @@ def exec_command(cmnd, stdout=subprocess.PIPE, stderr=subprocess.PIPE):
     stdout, stderr : streams
       Default value (PIPE) intercepts process output, setting to None
       blocks this."""
-    
+
     proc = subprocess.Popen(cmnd, shell=True, stdout=stdout, stderr=stderr)
     out, err = proc.communicate()
     if proc.returncode != 0:
@@ -68,6 +68,7 @@ def test_graphbin_on_sga_dataset(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler sga --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
+
 def test_graphbin_on_megahit_dataset(tmp_dir):
     """test graphbin on megahit assembly"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_MEGAHIT"
@@ -76,6 +77,7 @@ def test_graphbin_on_megahit_dataset(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler megahit --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
+
 
 def test_graphbin_on_flye_dataset(tmp_dir):
     """test graphbin on flye assembly"""
@@ -87,6 +89,7 @@ def test_graphbin_on_flye_dataset(tmp_dir):
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler flye --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
+
 def test_graphbin_on_canu_dataset(tmp_dir):
     """test graphbin on canu assembly"""
     dir_name = TEST_ROOTDIR / "data" / "1Y3B_Canu"
@@ -95,6 +98,7 @@ def test_graphbin_on_canu_dataset(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"{EXEC_ROOTDIR}/graphbin --assembler canu --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
+
 
 def test_graphbin_on_miniasm_dataset(tmp_dir):
     """test graphbin on miniasm assembly"""
