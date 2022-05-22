@@ -4,6 +4,8 @@ channels:
   - defaults
 dependencies:
   - python>=3.7.1
-  - biopython>=1.72
-  - python-igraph>=0.7.1
-  - cairocffi
+  - pip
+  - pip:
+    - cogent3
+    - cairocffi
+    - python-igraph>=0.7.1
