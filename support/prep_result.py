@@ -8,13 +8,14 @@ numbered starting from 1.
 
 """
 
+
 import argparse
 import csv
 import os
 import subprocess
 import sys
 
-from Bio import SeqIO
+from cogent3.parse.fasta import MinimalFastaParser
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
@@ -161,15 +162,9 @@ for bin_file in files:
 
     if bin_file.lower().endswith((".fasta", ".fa", ".fna")):
 
-        for index, record in enumerate(
-            SeqIO.parse(contig_bins_folder + bin_file, "fasta")
-        ):
-            contig_name = str(record.id)
+        for contig_name, _ in MinimalFastaParser(contig_bins_folder + bin_file):
 
-            line = []
-            line.append(str(contig_name))
-
-            line.append(str(bin_file))
+            line = [contig_name, str(bin_file)]
             contig_bins.append(line)
 
 
