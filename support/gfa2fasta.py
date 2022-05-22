@@ -11,9 +11,7 @@ import os
 import re
 import sys
 
-from Bio import SeqIO
-from Bio.Seq import Seq
-from Bio.SeqRecord import SeqRecord
+from cogent3 import make_unaligned_seqs
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019, GraphBin Project"
@@ -105,8 +103,7 @@ except:
 
 print("\nObtaining edge sequences")
 
-sequenceset = []
-
+sequences = {}
 with open(assembly_graph_file) as file:
 
     for line in file.readlines():
@@ -118,14 +115,7 @@ with open(assembly_graph_file) as file:
 
             print(strings)
 
-            record = SeqRecord(
-                Seq(re.sub("[^GATC]", "", str(strings[2]).upper())),
-                id=str(strings[1]),
-                name=str(strings[1]),
-                description="",
-            )
-
-            sequenceset.append(record)
+            sequences[str(strings[1])] = re.sub("[^GATC]", "", str(strings[2]).upper())
 
 print("\nWriting edge sequences to FASTA file")
 
@@ -134,8 +124,8 @@ if assembler.lower() == "flye":
 elif assembler.lower() == "miniasm":
     final_file = "unitigs.fasta"
 
-with open(output_path + prefix + final_file, "w") as output_handle:
-    SeqIO.write(sequenceset, output_handle, "fasta")
+sequences = make_unaligned_seqs(data=sequences)
+sequences.write(output_path + prefix + final_file)
 
 print(
     "\nThe FASTA file with",

@@ -19,7 +19,7 @@ import subprocess
 import sys
 import time
 
-from Bio import SeqIO
+from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
@@ -127,14 +127,11 @@ def run(args):
     # -------------------------------
 
     original_contigs = {}
-
-    for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
-        original_contigs[record.id] = str(record.seq)
-
     contig_descriptions = {}
-
-    for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
-        contig_descriptions[record.id] = record.description
+    for label, seq in MinimalFastaParser(contigs_file):
+        name = label.split()[0]
+        original_contigs[name] = seq
+        contig_descriptions[name] = label
 
     # Construct the assembly graph
     # -------------------------------
@@ -576,14 +573,14 @@ def run(args):
             output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
         )
 
-    for n, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+    for label, seq in MinimalFastaParser(
+        contigs_file, label_to_name=lambda x: x.split()[0]
+    ):
 
-        contig_num = contigs_map_rev[graph_to_contig_map_rev[record.id]]
+        contig_num = contigs_map_rev[graph_to_contig_map_rev[label]]
 
         if contig_num in final_bins:
-            bin_files[final_bins[contig_num]].write(
-                f">{str(record.description)}\n{str(record.seq)}\n"
-            )
+            bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
 
     # Close output files
     for c in set(final_bins.values()):

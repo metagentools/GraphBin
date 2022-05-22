@@ -18,7 +18,7 @@ import subprocess
 import sys
 
 from bidirectionalmap.bidirectionalmap import BidirectionalMap
-from Bio import SeqIO
+from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
 __author__ = "Vijini Mallawaarachchi"
@@ -213,9 +213,10 @@ print("\nConstructing the assembly graph...")
 original_contigs = {}
 contig_descriptions = {}
 
-for index, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
-    original_contigs[record.id] = str(record.seq)
-    contig_descriptions[record.id] = record.description
+for label, seq in MinimalFastaParser(contigs_file):
+    name = label.split()[0]
+    original_contigs[name] = seq
+    contig_descriptions[name] = label
 
 
 ## Construct the assembly graph

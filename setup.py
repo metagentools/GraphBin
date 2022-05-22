@@ -39,6 +39,6 @@ setup(
         "Programming Language :: Python :: 3.6",
         "Topic :: Scientific/Engineering :: Bio-Informatics",
     ],
-    install_requires=["python-igraph", "biopython", "cairocffi", "setuptools"],
+    install_requires=["python-igraph", "cogent3", "cairocffi", "setuptools"],
     zip_safe=False,
 )

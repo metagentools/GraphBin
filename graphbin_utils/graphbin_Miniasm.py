@@ -18,7 +18,7 @@ import subprocess
 import sys
 import time
 
-from Bio import SeqIO
+from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
 from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
@@ -543,14 +543,12 @@ def run(args):
             output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
         )
 
-    for n, record in enumerate(SeqIO.parse(contigs_file, "fasta")):
+    for label, seq in MinimalFastaParser(contigs_file):
 
-        contig_num = contigs_map_rev[record.id]
+        contig_num = contigs_map_rev[label]
 
         if contig_num in final_bins:
-            bin_files[final_bins[contig_num]].write(
-                f">{str(record.id)}\n{str(record.seq)}\n"
-            )
+            bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
 
     # Close output files
     for c in set(final_bins.values()):
