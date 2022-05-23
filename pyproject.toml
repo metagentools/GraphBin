@@ -1,0 +1,90 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "graphbin"
+authors = [
+    { name = "Vijini Mallawaarachchi", email = "Vijini.Mallawaarachchi@anu.edu.au"},
+    { name = "Anuradha Wickramarachchi", email = "Anuradha.Wickramarachchi@anu.edu.au"},
+    { name = "Yu Lin", email = "yu.lin@anu.edu.au"},
+]
+keywords = ["genomics", "bioinformatics"]
+readme = "README.md"
+license = { file = "LICENSE" }
+requires-python = ">=3.7"
+dependencies = ["python-igraph", "cogent3", "cairocffi"]
+classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Science/Research",
+        "License :: OSI Approved :: BSD License",
+        "Topic :: Scientific/Engineering :: Bio-Informatics",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",
+        "Programming Language :: Python :: 3.10",
+    ]
+dynamic = ["version", "description"]
+
+[project.urls]
+Documentation = "https://graphbin.readthedocs.io/en/latest/"
+"Bug Tracker" = "https://github.com/metagentools/GraphBin/issues"
+"Source Code" = "https://github.com/metagentools/GraphBin/"
+
+[project.scripts]
+graphbin = "graphbin:main"
+
+[project.optional-dependencies]
+test = [
+    "nox",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+dev = [
+    "black",
+    "click",
+    "docformatter",
+    "flit",
+    "nox",
+    "isort",
+    "pytest",
+    "pytest-cov",
+    "pytest-xdist",
+]
+
+[tool.flit.sdist]
+include = ["docs/", "requirements.txt", "src/*", "pyproject.toml"]
+exclude = ["docs/*.html"]
+
+[tool.pytest.ini_options]
+addopts = ["--strict-config", "-ra"]
+testpaths = "tests"
+
+[tool.black]
+line-length = 88
+target-version = ['py37', 'py38', 'py39', 'py310']
+exclude = '''
+/(
+    \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | build
+  | doc
+  | dist
+  | tests/data
+)/
+'''
+
+[tool.isort]
+atomic=true
+force_grid_wrap=0
+include_trailing_comma=true
+lines_after_imports=2
+lines_between_types=1
+multi_line_output=3
+use_parentheses=true

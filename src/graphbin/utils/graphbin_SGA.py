@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_Miniasm.py: Refined binning of metagenomic contigs using Miniasm assembly graphs.
+"""graphbin_SGA.py: Refined binning of metagenomic contigs using SGA assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,12 +8,13 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Miniasm.py makes use of the assembly graphs produced by Miniasm long read assembler.
+graphbin_SGA.py makes use of the assembly graphs produced by SGA (String Graph Assembler).
 """
 
 import csv
 import logging
 import os
+import re
 import subprocess
 import sys
 import time
@@ -21,10 +22,10 @@ import time
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin_utils.graphbin_Func import getClosestLabelledVertices
-from graphbin_utils.graphbin_Options import PARSER
-from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.utils.graphbin_Func import getClosestLabelledVertices
+from graphbin.utils.graphbin_Options import PARSER
+from graphbin.utils.labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
@@ -38,9 +39,9 @@ __status__ = "Production"
 
 # Sample command
 # -------------------------------------------------------------------
-# python graphbin_Miniasm.py    --graph /path/to/graph_file.asqg
-#                               --binned /path/to/binning_result.csv
-#                               --output /path/to/output_folder
+# python graphbin_SGA.py     --graph /path/to/graph_file.asqg
+#                            --binned /path/to/binning_result.csv
+#                            --output /path/to/output_folder
 # -------------------------------------------------------------------
 
 
@@ -72,7 +73,7 @@ def run(args):
     # ---------------------------------------------------
 
     fileHandler = logging.FileHandler(output_path + "/" + prefix + "graphbin.log")
-    fileHandler.setLevel(logging.INFO)
+    fileHandler.setLevel(logging.DEBUG)
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)
 
@@ -80,7 +81,7 @@ def run(args):
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
     logger.info(
-        "This version of GraphBin makes use of the assembly graph produced by Miniasm."
+        "This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach."
     )
 
     logger.info("Assembly graph file: " + assembly_graph_file)
@@ -120,44 +121,49 @@ def run(args):
 
     logger.info("Constructing the assembly graph")
 
-    # Get the links from the .gfa file
+    contig_descriptions = {}
+
+    for label, _ in MinimalFastaParser(contigs_file):
+        name = label.split()[0]
+        contig_descriptions[name] = label
+
+    # Get the links from the .asqg file
     # -----------------------------------
+
+    links = []
+
+    contig_names = BidirectionalMap()
 
     my_map = BidirectionalMap()
 
     node_count = 0
 
-    nodes = []
-
-    links = []
-
     try:
-        # Get contig connections from .gfa file
+        # Get contig connections from .asqg file
         with open(assembly_graph_file) as file:
 
             for line in file.readlines():
                 line = line.strip()
 
                 # Count the number of contigs
-                if line.startswith("S"):
-                    strings = line.split("\t")
-                    my_node = strings[1]
-                    my_map[node_count] = my_node
-                    nodes.append(my_node)
+                if line.startswith("VT"):
+                    start = "contig-"
+                    end = ""
+                    contig_name = str(line.split()[1])
+                    contig_num = int(
+                        re.search("%s(.*)%s" % (start, end), contig_name).group(1)
+                    )
+                    my_map[node_count] = contig_num
+                    contig_names[node_count] = contig_name.strip()
                     node_count += 1
 
                 # Identify lines with link information
-                elif line.startswith("L"):
-
+                elif line.startswith("ED"):
                     link = []
-                    strings = line.split("\t")
-
-                    if strings[1] != strings[3]:
-                        start = strings[1]
-                        end = strings[3]
-                        link.append(start)
-                        link.append(end)
-                        links.append(link)
+                    strings = line.split("\t")[1].split()
+                    link.append(int(strings[0][7:]))
+                    link.append(int(strings[1][7:]))
+                    links.append(link)
 
     except BaseException as err:
         logger.error(f"Unexpected {err}")
@@ -169,6 +175,8 @@ def run(args):
 
     contigs_map = my_map
     contigs_map_rev = my_map.inverse
+
+    contig_names_rev = contig_names.inverse
 
     logger.info("Total number of contigs available: " + str(node_count))
 
@@ -223,7 +231,11 @@ def run(args):
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=delimiter)
             for row in readCSV:
-                contig_num = contigs_map_rev[row[0]]
+                start = "contig-"
+                end = ""
+                contig_num = contigs_map_rev[
+                    int(re.search("%s(.*)%s" % (start, end), row[0]).group(1))
+                ]
 
                 bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
@@ -543,9 +555,11 @@ def run(args):
             output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
         )
 
-    for label, seq in MinimalFastaParser(contigs_file):
+    for label, seq in MinimalFastaParser(
+        contigs_file, label_to_name=lambda x: x.split()[0]
+    ):
 
-        contig_num = contigs_map_rev[label]
+        contig_num = contig_names_rev[label]
 
         if contig_num in final_bins:
             bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
@@ -558,7 +572,7 @@ def run(args):
 
         for contig in bins[b]:
             line = []
-            line.append(str(contigs_map[contig]))
+            line.append(contig_descriptions[contig_names[contig]])
             line.append(bins_list[b])
             output_bins.append(line)
 
@@ -576,7 +590,7 @@ def run(args):
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append(str(contigs_map[i]))
+            line.append(contig_names[i])
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs) != 0:
