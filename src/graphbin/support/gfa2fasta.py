@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""miniasm_gfa2fasta.py: Obtain the sequences corresponding to edges in the Miniasm assembly graphs in FASTA format.
+"""gfa2fasta.py: Obtain the sequences corresponding to edges in the Miniasm assembly graphs in FASTA format.
 
 The assembly graph file (assembly_graph.gfa) should be provided as inputs.
 

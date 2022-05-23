@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_MEGAHIT.py: Visualise the binning result from on the MEGAHIT assembly graph.
+"""visualise_result_MEGAHIT.py: Visualise the binning result from on the MEGAHIT assembly graph.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial

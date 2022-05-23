@@ -5,9 +5,15 @@
 import os
 import sys
 
-from graphbin.utils import (graphbin_Canu, graphbin_Flye, graphbin_MEGAHIT,
-                            graphbin_Miniasm, graphbin_Options, graphbin_SGA,
-                            graphbin_SPAdes)
+from graphbin.utils import (
+    graphbin_Canu,
+    graphbin_Flye,
+    graphbin_MEGAHIT,
+    graphbin_Miniasm,
+    graphbin_Options,
+    graphbin_SGA,
+    graphbin_SPAdes,
+)
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

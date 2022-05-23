@@ -36,14 +36,6 @@ __email__ = "vijini.mallawaarachchi@anu.edu.au"
 __status__ = "Production"
 
 
-# Sample command
-# -------------------------------------------------------------------
-# python graphbin_Flye.py    --graph /path/to/graph_file.asqg
-#                            --binned /path/to/binning_result.csv
-#                            --output /path/to/output_folder
-# -------------------------------------------------------------------
-
-
 def run(args):
     # Setup logger
     # -----------------------

@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_SGA.py: Visualise the binning result from on the SGA assembly graph.
+"""visualise_result_SGA.py: Visualise the binning result from on the SGA assembly graph.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial

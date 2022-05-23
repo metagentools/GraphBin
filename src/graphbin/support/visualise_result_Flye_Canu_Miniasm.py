@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_Flye_Canu_Miniasm.py: Visualise the binning result from on the Flye, Canu and Miniasm assembly graphs.
+"""visualise_result_Flye_Canu_Miniasm.py: Visualise the binning result from on the Flye, Canu and Miniasm assembly graphs.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial

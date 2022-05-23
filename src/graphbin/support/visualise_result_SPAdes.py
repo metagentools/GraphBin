@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-"""visualiseResult_SPAdes.py: Visualise the binning result from on the SPAdes assembly graph.
+"""visualise_result_SPAdes.py: Visualise the binning result from on the SPAdes assembly graph.
 
 Visualize the binning result by denoting coloured contigs in the assembly
 graph according to their corresponding bins. You can visualise the initial
