@@ -22,10 +22,10 @@ import time
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin_utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin_utils.graphbin_Func import getClosestLabelledVertices
-from graphbin_utils.graphbin_Options import PARSER
-from graphbin_utils.labelpropagation.labelprop import LabelProp
+from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.utils.graphbin_Func import getClosestLabelledVertices
+from graphbin.utils.graphbin_Options import PARSER
+from graphbin.utils.labelpropagation.labelprop import LabelProp
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

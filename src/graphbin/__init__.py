@@ -5,7 +5,7 @@
 import os
 import sys
 
-from graphbin_utils import (graphbin_Canu, graphbin_Flye, graphbin_MEGAHIT,
+from graphbin.utils import (graphbin_Canu, graphbin_Flye, graphbin_MEGAHIT,
                             graphbin_Miniasm, graphbin_Options, graphbin_SGA,
                             graphbin_SPAdes)
 

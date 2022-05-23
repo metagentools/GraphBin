@@ -54,7 +54,7 @@ def test_graphbin_on_spades_dataset(tmp_dir):
     contigs = dir_name / "contigs.fasta"
     paths = dir_name / "contigs.paths"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
 
@@ -64,7 +64,7 @@ def test_graphbin_on_sga_dataset(tmp_dir):
     graph = dir_name / "default-graph.asqg"
     contigs = dir_name / "default-contigs.fa"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler sga --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler sga --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
 
@@ -74,7 +74,7 @@ def test_graphbin_on_megahit_dataset(tmp_dir):
     graph = dir_name / "final.gfa"
     contigs = dir_name / "final.contigs.fa"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler megahit --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler megahit --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
 
@@ -85,7 +85,7 @@ def test_graphbin_on_flye_dataset(tmp_dir):
     contigs = dir_name / "assembly.fasta"
     paths = dir_name / "assembly_info.txt"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler flye --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler flye --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
 
@@ -95,7 +95,7 @@ def test_graphbin_on_canu_dataset(tmp_dir):
     graph = dir_name / "1y3b.contigs.gfa"
     contigs = dir_name / "1y3b.contigs.fasta"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler canu --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler canu --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
 
 
@@ -105,5 +105,5 @@ def test_graphbin_on_miniasm_dataset(tmp_dir):
     graph = dir_name / "reads.gfa"
     contigs = dir_name / "unitigs.fasta"
     binned = dir_name / "initial_binning_res.csv"
-    cmd = f"{EXEC_ROOTDIR}/graphbin --assembler miniasm --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    cmd = f"graphbin --assembler miniasm --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_command(cmd)
