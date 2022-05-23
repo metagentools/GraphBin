@@ -26,14 +26,10 @@ classifiers = [
     ]
 dynamic = ["version", "description"]
 
-[project.metadata.urls]
+[project.urls]
 Documentation = "https://graphbin.readthedocs.io/en/latest/"
 "Bug Tracker" = "https://github.com/metagentools/GraphBin/issues"
 "Source Code" = "https://github.com/metagentools/GraphBin/"
-
-[project.sdist]
-include = ["docs/", "requirements.txt", "src/*", "pyproject.toml"]
-exclude = ["docs/*.html"]
 
 [project.scripts]
 graphbin = "graphbin:main"
@@ -56,6 +52,10 @@ dev = [
     "pytest-cov",
     "pytest-xdist",
 ]
+
+[tool.flit.sdist]
+include = ["docs/", "requirements.txt", "src/*", "pyproject.toml"]
+exclude = ["docs/*.html"]
 
 [tool.pytest.ini_options]
 addopts = ["--strict-config", "-ra"]
