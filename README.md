@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="GraphBin_logo.png" width="400" title="Final Labelling" alt="Final Labelling">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/GraphBin_logo.png" width="400" title="Final Labelling" alt="Final Labelling">
 </p>
 
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
@@ -70,27 +70,27 @@ graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/
 
 ### Initial Assembly Graph
 <p align="center">
-  <img src="images/3G_SPAdes_graph_plot.png" width="400" title="Initial assembly graph" alt="Initial assembly graph">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/3G_SPAdes_graph_plot.png" width="400" title="Initial assembly graph" alt="Initial assembly graph">
 </p>
 
 ### TAXAassign Labelling
 <p align="center">
-  <img src="images/3G_SPAdes_taxaassign_graph_plot.png" width="400" title="TAXAassign Labelling" alt="TAXAassign Labelling">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/3G_SPAdes_taxaassign_graph_plot.png" width="400" title="TAXAassign Labelling" alt="TAXAassign Labelling">
 </p>
 
 ### Original MaxBin Labelling with 2 Mis-binned Contigs
 <p align="center">
-  <img src="images/3G_SPAdes_maxbin_graph_plot_edit.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/3G_SPAdes_maxbin_graph_plot_edit.png" width="400" title="MaxBin Labelling" alt="MaxBin Labelling">
 </p>
 
 ### Refined Labels
 <p align="center">
-  <img src="images/3G_SPAdes_maxbin_graph_plot_correct.png" width="400" title="Refined Labels" alt="Refined Labels">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/3G_SPAdes_maxbin_graph_plot_correct.png" width="400" title="Refined Labels" alt="Refined Labels">
 </p>
 
 ### Final Labelling of GraphBin
 <p align="center">
-  <img src="images/3G_SPAdes_after_label_prop_graph_plot.png" width="400" title="Final Labelling" alt="Final Labelling">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/3G_SPAdes_after_label_prop_graph_plot.png" width="400" title="Final Labelling" alt="Final Labelling">
 </p>
 
 
