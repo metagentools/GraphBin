@@ -22,7 +22,9 @@ GraphBin installation requires python 3 (tested on Python 3.6 and 3.7). The foll
 * [biopython](https://biopython.org/) - version 1.74
 * [cairocffi](https://pypi.org/project/cairocffi/)
 
-## Downloading GraphBin
+## Installing GraphBin
+
+### Using Conda
 
 You can install GraphBin via [Conda](https://docs.conda.io/en/latest/). You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
 
@@ -37,7 +39,15 @@ conda activate graphbin
 graphbin -h
 ```
 
-For development purposes, please clone the repository and install via [flit](https://pypi.org/project/flit/).
+### Using pip
+
+You can install GraphBin using pip.
+
+```
+pip install graphbin
+```
+
+For ***development*** purposes, please clone the repository and install via [flit](https://pypi.org/project/flit/).
 
 ```
 # clone repository to your local machine
