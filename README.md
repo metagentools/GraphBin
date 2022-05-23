@@ -37,6 +37,22 @@ conda activate graphbin
 graphbin -h
 ```
 
+For development purposes, please clone the repository and install via [flit](https://pypi.org/project/flit/).
+
+```
+# clone repository to your local machine
+git clone https://github.com/metagentools/GraphBin.git
+
+# go to repo direcotry
+cd GraphBin
+
+# install flit
+pip install flit
+
+# install graphbin via flit
+flit install -s --python `which python`
+```
+
 ## Example Usage
 
 ```
