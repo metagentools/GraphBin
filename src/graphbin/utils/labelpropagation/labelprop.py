@@ -101,14 +101,6 @@ class LabelProp:
                         arr.append(0.0)
             self.vertex_f_map.setdefault(v, arr)
 
-    def load_data_from_file(self, filename):
-        import ast
-
-        with open(filename, "rb") as f:
-            lines = [ast.literal_eval(_.strip()) for _ in f.readlines()]
-            self.vertex_size = len(lines)
-            self.load_data_from_mem(lines)
-
     def load_data_from_mem(self, data):
         self.initialize_env()
         self.vertex_size = len(data)
@@ -121,21 +113,17 @@ class LabelProp:
         # unlabeled vertex if vertexLabel == 0
         # i.e. [2, 1, [[1, 1.0], [3, 1.0]]]
 
-        try:
-            vertex_id = line[0]
-            vertex_label = line[1]
-            edges = line[2]
-            edge_list = []
-            self.vertex_label_map.setdefault(vertex_id, vertex_label)
-            for edge in edges:
-                dest_vertex_id = int(edge[0])
-                edge_weight = float(edge[1])
-                edge_list.append(Edge(vertex_id, dest_vertex_id, edge_weight))
-            self.vertex_adj_map.setdefault(vertex_id, edge_list)
+        vertex_id = line[0]
+        vertex_label = line[1]
+        edges = line[2]
+        edge_list = []
+        self.vertex_label_map.setdefault(vertex_id, vertex_label)
+        for edge in edges:
+            dest_vertex_id = int(edge[0])
+            edge_weight = float(edge[1])
+            edge_list.append(Edge(vertex_id, dest_vertex_id, edge_weight))
+        self.vertex_adj_map.setdefault(vertex_id, edge_list)
 
-        except Exception as e:
-
-            raise Exception("Coundn't parse vertex from line")
 
     ################################################################################
     #   Label Propagation
