@@ -6,6 +6,7 @@ This code has been modified from the source found at https://github.com/ZwEin27/
 
 import logging
 
+
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Lingzhe Teng", "Vijini Mallawaarachchi"]
@@ -123,7 +124,6 @@ class LabelProp:
             edge_weight = float(edge[1])
             edge_list.append(Edge(vertex_id, dest_vertex_id, edge_weight))
         self.vertex_adj_map.setdefault(vertex_id, edge_list)
-
 
     ################################################################################
     #   Label Propagation

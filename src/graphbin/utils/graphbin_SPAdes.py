@@ -18,6 +18,7 @@ import re
 import subprocess
 import sys
 import time
+
 from collections import defaultdict
 
 from cogent3.parse.fasta import MinimalFastaParser
@@ -27,6 +28,7 @@ from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from graphbin.utils.graphbin_Func import getClosestLabelledVertices
 from graphbin.utils.graphbin_Options import PARSER
 from graphbin.utils.labelpropagation.labelprop import LabelProp
+
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

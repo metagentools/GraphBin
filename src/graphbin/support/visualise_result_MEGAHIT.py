@@ -21,6 +21,7 @@ from bidirectionalmap.bidirectionalmap import BidirectionalMap
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
+
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]

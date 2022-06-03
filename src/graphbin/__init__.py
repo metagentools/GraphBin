@@ -15,6 +15,7 @@ from graphbin.utils import (
     graphbin_SPAdes,
 )
 
+
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
@@ -52,9 +53,7 @@ def main():
         help="path to the contigs.paths file, only needed for SPAdes",
     )
     parser.add_argument(
-        "--contigs",
-        default=None,
-        help="path to the contigs.fa file.",
+        "--contigs", default=None, help="path to the contigs.fa file.",
     )
     parser.add_argument(
         "--delimiter",
