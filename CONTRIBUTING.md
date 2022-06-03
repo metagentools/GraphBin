@@ -7,6 +7,8 @@ We love to have your contributions to the GraphBin project, whether it's:
 
 ## Clone and install GraphBin onto your machine
 
+First, make sure you have [git](https://github.com/git-guides/install-git) installed on your machine.
+
 On GitHub, [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the GraphBin repository and [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) it to your machine.
 
 ```
