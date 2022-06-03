@@ -7,14 +7,14 @@ We love to have your contributions to the GraphBin project, whether it's:
 
 ## Clone and install GraphBin onto your machine
 
-On GitHub, [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the GraphBin repository and clone it to your machine.
+On GitHub, [fork](https://docs.github.com/en/get-started/quickstart/fork-a-repo) the GraphBin repository and [clone](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) it to your machine.
 
 ```
 # clone repository to your local machine
 git clone https://github.com/metagentools/GraphBin.git
 ```
 
-Move to the GraphBin directory, install via [flit](https://pypi.org/project/flit/).
+Move to the GraphBin directory and install GraphBin via [flit](https://pypi.org/project/flit/).
 
 ```
 # go to repo direcotry
@@ -39,7 +39,7 @@ pytest
 
 We adhere to the [PEP 8](https://peps.python.org/pep-0008/) style guide. 
 
-Before committing, run [`black`](https://pypi.org/project/black/) and [`isort`](https://pypi.org/project/isort/) before committing.
+Before committing, make sure to run [`black`](https://pypi.org/project/black/) and [`isort`](https://pypi.org/project/isort/).
 
 ## Report bugs using Github's issues
 
