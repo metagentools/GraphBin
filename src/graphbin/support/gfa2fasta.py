@@ -13,6 +13,7 @@ import sys
 
 from cogent3 import make_unaligned_seqs
 
+
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]

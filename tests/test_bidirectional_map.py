@@ -1,8 +1,11 @@
 import subprocess
-import pytest
 
 from pathlib import Path
+
+import pytest
+
 from graphbin.utils.bidirectionalmap.bidirectionalmap import *
+
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"

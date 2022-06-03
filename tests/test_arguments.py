@@ -1,7 +1,9 @@
 import subprocess
+
 from pathlib import Path
 
 import pytest
+
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
@@ -45,6 +47,7 @@ def test_graphbin_assembler(tmp_dir):
     cmd = f"graphbin --assembler spa --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
 
+
 def test_graphbin_graph(tmp_dir):
     """test graphbin on wrong graph file"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
@@ -54,6 +57,7 @@ def test_graphbin_graph(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
+
 
 def test_graphbin_contigs(tmp_dir):
     """test graphbin on wrong contigs file"""
@@ -65,6 +69,7 @@ def test_graphbin_contigs(tmp_dir):
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
 
+
 def test_graphbin_paths(tmp_dir):
     """test graphbin on wrong paths file"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
@@ -74,6 +79,7 @@ def test_graphbin_paths(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
+
 
 def test_graphbin_binned(tmp_dir):
     """test graphbin on wrong binned result file"""
@@ -85,6 +91,7 @@ def test_graphbin_binned(tmp_dir):
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
 
+
 def test_graphbin_spades_path(tmp_dir):
     """test graphbin spades without paths"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
@@ -93,6 +100,7 @@ def test_graphbin_spades_path(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
+
 
 def test_graphbin_no_contigs(tmp_dir):
     """test graphbin with no contigs"""
@@ -103,6 +111,7 @@ def test_graphbin_no_contigs(tmp_dir):
     cmd = f"graphbin --assembler spades --graph {graph} --paths {paths} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
 
+
 def test_graphbin_prefix(tmp_dir):
     """test graphbin with prefix"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
@@ -112,6 +121,7 @@ def test_graphbin_prefix(tmp_dir):
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir} --prefix test"
     exec_wrong_command(cmd)
+
 
 def test_graphbin_delimiter(tmp_dir):
     """test graphbin with wrong delimiter"""
@@ -124,6 +134,7 @@ def test_graphbin_delimiter(tmp_dir):
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir} --delimiter {delimiter}"
     exec_wrong_command(cmd)
 
+
 def test_graphbin_max_iteration(tmp_dir):
     """test graphbin with wrong max_iteration"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
@@ -134,6 +145,7 @@ def test_graphbin_max_iteration(tmp_dir):
     max_iteration = -10
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --paths {paths} --binned {binned} --output {tmp_dir} --max_iteration {max_iteration}"
     exec_wrong_command(cmd)
+
 
 def test_graphbin_diff_threshold(tmp_dir):
     """test graphbin with wrong diff_threshold"""

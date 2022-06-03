@@ -26,6 +26,7 @@ from graphbin.utils.graphbin_Func import getClosestLabelledVertices
 from graphbin.utils.graphbin_Options import PARSER
 from graphbin.utils.labelpropagation.labelprop import LabelProp
 
+
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Anuradha Wickramarachchi", "Yu Lin"]
