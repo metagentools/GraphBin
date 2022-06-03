@@ -7,7 +7,6 @@
 [![CI](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml)
 [![codecov](https://codecov.io/gh/metagentools/GraphBin/branch/develop/graph/badge.svg?token=0S310F6QXJ)](https://codecov.io/gh/metagentools/GraphBin)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/installer/conda.svg)](https://anaconda.org/bioconda/graphbin)
 [![Language grade: Python](https://img.shields.io/lgtm/grade/python/g/Vini2/GraphBin.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/Vini2/GraphBin/context:python)
 [![Documentation Status](https://readthedocs.org/projects/graphbin/badge/?version=latest)](https://graphbin.readthedocs.io/en/latest/?badge=latest)
 

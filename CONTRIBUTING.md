@@ -1,8 +1,7 @@
 # Contributing to GraphBin project
 
-We love to have your contributions to the GraphBin, whether it's:
+We love to have your contributions to the GraphBin project, whether it's:
 * Reporting a bug
-* Discussing the current state of the code
 * Submitting a fix
 * Proposing new features
 
@@ -30,7 +29,7 @@ flit install -s --python `which python`
 
 ## Test GraphBin installation
 
-Run the following command and the all the tests should pass.
+Use the following command to run [pytest](https://docs.pytest.org/en/7.1.x/) and the all the tests should pass.
 
 ```
 pytest
