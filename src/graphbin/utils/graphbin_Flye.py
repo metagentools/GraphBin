@@ -18,6 +18,8 @@ import subprocess
 import sys
 import time
 
+from collections import defaultdict
+
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
