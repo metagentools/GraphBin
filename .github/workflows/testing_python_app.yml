@@ -14,16 +14,16 @@ jobs:
 
     strategy:
       matrix:
-        os: [macos-latest, ubuntu-latest]
+        os: [macos-12, ubuntu-latest]
         python-version: ["3.8", "3.9", "3.10"]
 
     steps:
-      - uses: "actions/checkout@v2"
+      - uses: "actions/checkout@v3"
         with:
           fetch-depth: 0
 
       # Setup env
-      - uses: "actions/setup-python@v2"
+      - uses: "actions/setup-python@v3"
         with:
             python-version: "${{ matrix.python-version }}"
 
@@ -38,7 +38,8 @@ jobs:
           pytest --cov=graphbin --cov-report=xml --cov-append
           
       - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v2
+        uses: codecov/codecov-action@v3
         with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           file: coverage.xml
           fail_ci_if_error: true
