@@ -27,7 +27,8 @@ GraphBin installation requires python 3 to run. The following dependencies are r
 
 ### Using Conda
 
-You can install GraphBin via [Conda](https://docs.conda.io/en/latest/). You can download [Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains Conda.
+You can install GraphBin using the [bioconda](https://anaconda.org/bioconda/graphbin) distribution. You can download 
+[Anaconda](https://www.anaconda.com/distribution/) or [Miniconda](https://docs.conda.io/en/latest/miniconda.html) which contains `conda`.
 
 ```
 # add channels
@@ -50,7 +51,7 @@ graphbin -h
 
 ### Using pip
 
-You can install GraphBin using [pip](https://pypi.org/project/graphbin/).
+You can install GraphBin using `pip` from the [PyPI](https://pypi.org/project/graphbin/) distribution.
 
 ```
 pip install graphbin
