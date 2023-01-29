@@ -4,11 +4,13 @@
 
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
+[![PyPI version](https://badge.fury.io/py/graphbin.svg)](https://badge.fury.io/py/graphbin)
+[![Downloads](https://static.pepy.tech/badge/graphbin)](https://pepy.tech/project/graphbin)
+
 [![CI](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml)
 [![codecov](https://codecov.io/gh/metagentools/GraphBin/branch/develop/graph/badge.svg?token=0S310F6QXJ)](https://codecov.io/gh/metagentools/GraphBin)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
-[![PyPI version](https://badge.fury.io/py/graphbin.svg)](https://badge.fury.io/py/graphbin)
-[![Downloads](https://static.pepy.tech/badge/graphbin)](https://pepy.tech/project/graphbin)
 [![CodeQL](https://github.com/metagentools/GraphBin/actions/workflows/codeql.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/codeql.yml)
 [![Documentation Status](https://readthedocs.org/projects/graphbin/badge/?version=latest)](https://graphbin.readthedocs.io/en/latest/?badge=latest)
 
