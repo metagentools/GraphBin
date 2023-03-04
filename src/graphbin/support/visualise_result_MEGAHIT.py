@@ -232,10 +232,8 @@ links = []
 my_map = BidirectionalMap()
 
 try:
-
     # Get links from .gfa file
     with open(assembly_graph_file) as file:
-
         for line in file.readlines():
             line = line.strip()
 

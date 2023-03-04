@@ -210,7 +210,6 @@ links = []
 try:
     # Get contig connections from .gfa file
     with open(assembly_graph_file) as file:
-
         for line in file.readlines():
             line = line.strip()
 
@@ -224,7 +223,6 @@ try:
 
             # Identify lines with link information
             elif line.startswith("L"):
-
                 link = []
                 strings = line.split("\t")
 
@@ -251,7 +249,6 @@ contigs_map_rev = my_map.inverse
 # -------------------------------
 
 try:
-
     # Create the graph
     assembly_graph = Graph()
 

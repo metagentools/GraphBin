@@ -49,7 +49,6 @@ class LabelProp:
         self.labelled_size = 0
 
     def setup_env(self):
-
         # initialize vertex_in_adj_map
         for vertex_id in self.vertex_adj_map.keys():
             if vertex_id not in self.vertex_in_adj_map:

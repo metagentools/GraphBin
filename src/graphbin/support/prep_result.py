@@ -128,7 +128,6 @@ if not os.path.isdir(output_path):
 # Validate prefix
 # ---------------------------------------------------
 try:
-
     if args["prefix"] != "":
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
@@ -160,11 +159,8 @@ print("\nFormatting initial binning results")
 contig_bins = []
 
 for bin_file in files:
-
     if bin_file.lower().endswith((".fasta", ".fa", ".fna")):
-
         for contig_name, _ in MinimalFastaParser(contig_bins_folder + bin_file):
-
             line = [contig_name, str(bin_file)]
             contig_bins.append(line)
 
