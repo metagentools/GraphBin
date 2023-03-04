@@ -84,7 +84,6 @@ if not os.path.isdir(output_path):
 # Validate prefix
 # ---------------------------------------------------
 try:
-
     if args["prefix"] != "":
         if args["prefix"].endswith("_"):
             prefix = args["prefix"]
@@ -106,12 +105,10 @@ print("\nObtaining edge sequences")
 
 sequences = {}
 with open(assembly_graph_file) as file:
-
     for line in file.readlines():
         line = line.strip()
 
         if line.startswith("S"):
-
             strings = line.split("\t")
 
             print(strings)

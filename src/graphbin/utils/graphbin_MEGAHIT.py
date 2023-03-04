@@ -11,21 +11,18 @@ discarded due to short length.
 graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
 """
 
-import csv
 import logging
-import os
-import re
-import subprocess
-import sys
 import time
 
-from cogent3.parse.fasta import MinimalFastaParser
-from igraph import *
-
-from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
-from graphbin.utils.graphbin_Func import getClosestLabelledVertices
+from graphbin.utils.graphbin_Func import graphbin_main
 from graphbin.utils.graphbin_Options import PARSER
-from graphbin.utils.labelpropagation.labelprop import LabelProp
+from graphbin.utils.parsers import get_initial_bin_count
+from graphbin.utils.parsers.megahit_parser import (
+    parse_graph,
+    get_initial_binning_result,
+    get_contig_descriptors,
+    write_output,
+)
 
 
 __author__ = "Vijini Mallawaarachchi"
@@ -88,460 +85,46 @@ def run(args):
     # Get the number of bins from the initial binning result
     # --------------------------------------------------------
 
-    n_bins = 0
-
-    try:
-        all_bins_list = []
-
-        with open(contig_bins_file) as csvfile:
-            readCSV = csv.reader(csvfile, delimiter=delimiter)
-            for row in readCSV:
-                all_bins_list.append(row[1])
-
-        bins_list = list(set(all_bins_list))
-        bins_list.sort()
-
-        n_bins = len(bins_list)
-        logger.info(
-            "Number of bins available in the initial binning result: " + str(n_bins)
-        )
-
-    except BaseException as err:
-        logger.error(f"Unexpected {err}")
-        logger.error(
-            "Please make sure that the correct path to the initial binning result file is provided and it is having the correct format."
-        )
-        logger.info("Exiting GraphBin... Bye...!")
-        sys.exit(1)
-
-    logger.info("Constructing the assembly graph")
+    n_bins, bins_list = get_initial_bin_count(contig_bins_file, delimiter)
 
     # Get original contig IDs
     # -------------------------------
 
-    original_contigs = {}
-    contig_descriptions = {}
-    for label, seq in MinimalFastaParser(contigs_file):
-        name = label.split()[0]
-        original_contigs[name] = seq
-        contig_descriptions[name] = label
+    original_contigs = get_contig_descriptors(contigs_file)
 
-    # Construct the assembly graph
-    # -------------------------------
+    # Get assembly graph
+    # --------------------
 
-    node_count = 0
-
-    graph_contigs = {}
-
-    links = []
-
-    my_map = BidirectionalMap()
-
-    try:
-
-        # Get links from .gfa file
-        with open(assembly_graph_file) as file:
-
-            for line in file.readlines():
-                line = line.strip()
-
-                # Identify lines with link information
-                if line.startswith("L"):
-                    link = []
-
-                    strings = line.split("\t")
-
-                    start_1 = "NODE_"
-                    end_1 = "_length"
-
-                    link1 = int(
-                        re.search("%s(.*)%s" % (start_1, end_1), strings[1]).group(1)
-                    )
-
-                    start_2 = "NODE_"
-                    end_2 = "_length"
-
-                    link2 = int(
-                        re.search("%s(.*)%s" % (start_2, end_2), strings[3]).group(1)
-                    )
-
-                    link.append(link1)
-                    link.append(link2)
-                    links.append(link)
-
-                elif line.startswith("S"):
-                    strings = line.split()
-
-                    start = "NODE_"
-                    end = "_length"
-
-                    contig_num = int(
-                        re.search("%s(.*)%s" % (start, end), strings[1]).group(1)
-                    )
-
-                    my_map[node_count] = int(contig_num)
-
-                    graph_contigs[contig_num] = strings[2]
-
-                    node_count += 1
-
-        logger.info("Total number of contigs available: " + str(node_count))
-
-        contigs_map = my_map
-        contigs_map_rev = my_map.inverse
-
-        # Create graph
-        assembly_graph = Graph()
-
-        # Add vertices
-        assembly_graph.add_vertices(node_count)
-
-        # Create list of edges
-        edge_list = []
-
-        for i in range(node_count):
-            assembly_graph.vs[i]["id"] = i
-            assembly_graph.vs[i]["label"] = str(contigs_map[i])
-
-        # Iterate links
-        for link in links:
-            # Remove self loops
-            if link[0] != link[1]:
-                # Add edge to list of edges
-                edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
-
-        # Add edges to the graph
-        assembly_graph.add_edges(edge_list)
-        assembly_graph.simplify(multiple=True, loops=False, combine_edges=None)
-
-    except BaseException as err:
-        logger.error(f"Unexpected {err}")
-        logger.error(
-            "Please make sure that the correct path to the assembly graph file is provided."
-        )
-        logger.info("Exiting GraphBin... Bye...!")
-        sys.exit(1)
-
-    logger.info("Total number of edges in the assembly graph: " + str(len(edge_list)))
-
-    # Map original contig IDs to contig IDS of assembly graph
-    # --------------------------------------------------------
-
-    graph_to_contig_map = BidirectionalMap()
-
-    for (n, m), (n2, m2) in zip(graph_contigs.items(), original_contigs.items()):
-        if m == m2:
-            graph_to_contig_map[n] = n2
-
-    graph_to_contig_map_rev = graph_to_contig_map.inverse
+    assembly_graph, graph_to_contig_map, contigs_map, node_count = parse_graph(
+        assembly_graph_file, original_contigs
+    )
 
     # Get initial binning result
     # ----------------------------
 
-    logger.info("Obtaining the initial binning result")
-
-    bins = [[] for x in range(n_bins)]
-
-    try:
-        with open(contig_bins_file) as contig_bins:
-            readCSV = csv.reader(contig_bins, delimiter=delimiter)
-            for row in readCSV:
-                contig_num = contigs_map_rev[int(graph_to_contig_map_rev[row[0]])]
-
-                bin_num = bins_list.index(row[1])
-                bins[bin_num].append(contig_num)
-
-    except BaseException as err:
-        logger.error(f"Unexpected {err}")
-        logger.error(
-            "Please make sure that you have provided the correct assembler type and the correct path to the binning result file in the correct format."
-        )
-        logger.info("Exiting GraphBin... Bye...!")
-        sys.exit(1)
-
-    # Remove labels of ambiguous vertices
-    # -------------------------------------
-
-    logger.info("Determining ambiguous vertices")
-
-    remove_by_bin = {}
-
-    remove_labels = []
-
-    neighbours_have_same_label_list = []
-
-    for b in range(n_bins):
-
-        for i in bins[b]:
-
-            my_bin = b
-
-            # Get set of closest labelled vertices with distance = 1
-            closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
-
-            # Determine whether all the closest labelled vertices have the same label as its own
-            neighbours_have_same_label = True
-
-            neighbours_binned = False
-
-            for neighbour in closest_neighbours:
-                for k in range(n_bins):
-                    if neighbour in bins[k]:
-                        neighbours_binned = True
-                        if k != my_bin:
-                            neighbours_have_same_label = False
-                            break
-
-            if not neighbours_have_same_label:
-                if my_bin in remove_by_bin:
-                    if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
-                        remove_labels.append(i)
-                        remove_by_bin[my_bin].append(i)
-                else:
-                    if len(bins[my_bin]) >= MIN_BIN_COUNT:
-                        remove_labels.append(i)
-                        remove_by_bin[my_bin] = [i]
-
-            elif neighbours_binned:
-                neighbours_have_same_label_list.append(i)
-
-    for i in remove_labels:
-        for n in range(n_bins):
-            if i in bins[n]:
-                bins[n].remove(i)
-
-    # Further remove labels of ambiguous vertices
-    binned_contigs = []
-
-    for n in range(n_bins):
-        binned_contigs = sorted(binned_contigs + bins[n])
-
-    for b in range(n_bins):
-
-        for i in bins[b]:
-
-            if i not in neighbours_have_same_label_list:
-
-                my_bin = b
-
-                # Get set of closest labelled vertices
-                closest_neighbours = getClosestLabelledVertices(
-                    assembly_graph, i, binned_contigs
-                )
-
-                if len(closest_neighbours) > 0:
-
-                    # Determine whether all the closest labelled vertices have the same label as its own
-                    neighbours_have_same_label = True
-
-                    for neighbour in closest_neighbours:
-                        for k in range(n_bins):
-                            if neighbour in bins[k]:
-                                if k != my_bin:
-                                    neighbours_have_same_label = False
-                                    break
-
-                    if not neighbours_have_same_label and i not in remove_labels:
-                        if my_bin in remove_by_bin:
-                            if (
-                                len(bins[my_bin]) - len(remove_by_bin[my_bin])
-                                >= MIN_BIN_COUNT
-                            ):
-                                remove_labels.append(i)
-                                remove_by_bin[my_bin].append(i)
-                        else:
-                            if len(bins[my_bin]) >= MIN_BIN_COUNT:
-                                remove_labels.append(i)
-                                remove_by_bin[my_bin] = [i]
-
-    logger.info("Removing labels of ambiguous vertices")
-
-    # Remove labels of ambiguous vertices
-    for i in remove_labels:
-        for n in range(n_bins):
-            if i in bins[n]:
-                bins[n].remove(i)
-
-    logger.info("Obtaining refined binning result")
-
-    # Get vertices which are not isolated and not in components without any labels
-    # -----------------------------------------------------------------------------
-
-    logger.info(
-        "Deteremining vertices which are not isolated and not in components without any labels"
+    bins = get_initial_binning_result(
+        n_bins,
+        bins_list,
+        contig_bins_file,
+        contigs_map.inverse,
+        graph_to_contig_map.inverse,
+        delimiter,
     )
 
-    non_isolated = []
-
-    for i in range(node_count):
-
-        if i not in non_isolated and i in binned_contigs:
-
-            component = []
-            component.append(i)
-            length = len(component)
-            neighbours = assembly_graph.neighbors(i, mode=ALL)
-
-            for neighbor in neighbours:
-                if neighbor not in component:
-                    component.append(neighbor)
-
-            component = list(set(component))
-
-            while length != len(component):
-
-                length = len(component)
-
-                for j in component:
-
-                    neighbours = assembly_graph.neighbors(j, mode=ALL)
-
-                    for neighbor in neighbours:
-                        if neighbor not in component:
-                            component.append(neighbor)
-
-            labelled = False
-            for j in component:
-                if j in binned_contigs:
-                    labelled = True
-                    break
-
-            if labelled:
-                for j in component:
-                    if j not in non_isolated:
-                        non_isolated.append(j)
-
-    logger.info("Number of non-isolated contigs: " + str(len(non_isolated)))
-
-    # Run label propagation
-    # -----------------------
-
-    data = []
-
-    for contig in range(node_count):
-
-        # Consider vertices that are not isolated
-
-        if contig in non_isolated:
-            line = []
-            line.append(contig)
-
-            assigned = False
-
-            for i in range(n_bins):
-                if contig in bins[i]:
-                    line.append(i + 1)
-                    assigned = True
-
-            if not assigned:
-                line.append(0)
-
-            neighbours = assembly_graph.neighbors(contig, mode=ALL)
-
-            neighs = []
-
-            for neighbour in neighbours:
-                n = []
-                n.append(neighbour)
-                n.append(1.0)
-                neighs.append(n)
-
-            line.append(neighs)
-
-            data.append(line)
-
-    # Check if initial binning result consists of contigs belonging to multiple bins
-
-    multiple_bins = False
-
-    for item in data:
-        if type(item[1]) is int and type(item[2]) is int:
-            multiple_bins = True
-            break
-
-    if multiple_bins:
-        logger.error(
-            "Initial binning result consists of contigs belonging to multiple bins. Please make sure that each contig in the initial binning result belongs to only one bin."
-        )
-        logger.info("Exiting GraphBin... Bye...!")
-        sys.exit(1)
-
-    # Label propagation
-
-    lp = LabelProp()
-
-    lp.load_data_from_mem(data)
-
-    logger.info(
-        "Starting label propagation with eps="
-        + str(diff_threshold)
-        + " and max_iteration="
-        + str(max_iteration)
-    )
-
-    ans = lp.run(diff_threshold, max_iteration, show_log=True, clean_result=False)
-
-    logger.info("Obtaining Label Propagation result")
-
-    for l in ans:
-        for i in range(n_bins):
-            if l[1] == i + 1 and l[0] not in bins[i]:
-                bins[i].append(l[0])
-
-    # Remove labels of ambiguous vertices
+    # Run GraphBin logic
     # -------------------------------------
 
-    logger.info("Determining ambiguous vertices")
-
-    remove_by_bin = {}
-
-    remove_labels = []
-
-    for b in range(n_bins):
-
-        for i in bins[b]:
-
-            my_bin = b
-
-            closest_neighbours = assembly_graph.neighbors(i, mode=ALL)
-
-            # Determine whether all the closest labelled vertices have the same label as its own
-            neighbours_have_same_label = True
-
-            for neighbour in closest_neighbours:
-                for k in range(n_bins):
-                    if neighbour in bins[k]:
-                        if k != my_bin:
-                            neighbours_have_same_label = False
-                            break
-
-            if not neighbours_have_same_label:
-                if my_bin in remove_by_bin:
-                    if len(bins[my_bin]) - len(remove_by_bin[my_bin]) >= MIN_BIN_COUNT:
-                        remove_labels.append(i)
-                        remove_by_bin[my_bin].append(i)
-                else:
-                    if len(bins[my_bin]) >= MIN_BIN_COUNT:
-                        remove_labels.append(i)
-                        remove_by_bin[my_bin] = [i]
-
-    logger.info("Removing labels of ambiguous vertices")
-
-    # Remove labels of ambiguous vertices
-    for i in remove_labels:
-        for n in range(n_bins):
-            if i in bins[n]:
-                bins[n].remove(i)
+    final_bins, remove_labels, non_isolated = graphbin_main(
+        n_bins,
+        bins,
+        bins_list,
+        assembly_graph,
+        node_count,
+        diff_threshold,
+        max_iteration,
+    )
 
     elapsed_time = time.time() - start_time
-
-    logger.info("Obtaining the Final Refined Binning result")
-
-    final_bins = {}
-
-    for i in range(n_bins):
-        for contig in bins[i]:
-            final_bins[contig] = bins_list[i]
 
     # Print elapsed time for the process
     logger.info("Elapsed time: " + str(elapsed_time) + " seconds")
@@ -549,73 +132,20 @@ def run(args):
     # Write result to output file
     # -----------------------------
 
-    logger.info("Writing the Final Binning result to file")
-
-    output_bins = []
-
-    output_bins_path = output_path + prefix + "bins/"
-    output_file = output_path + prefix + "graphbin_output.csv"
-
-    if not os.path.isdir(output_bins_path):
-        subprocess.run("mkdir -p " + output_bins_path, shell=True)
-
-    bin_files = {}
-
-    for bin_name in set(final_bins.values()):
-        bin_files[bin_name] = open(
-            output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
-        )
-
-    for label, seq in MinimalFastaParser(
-        contigs_file, label_to_name=lambda x: x.split()[0]
-    ):
-
-        contig_num = contigs_map_rev[graph_to_contig_map_rev[label]]
-
-        if contig_num in final_bins:
-            bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
-
-    # Close output files
-    for c in set(final_bins.values()):
-        bin_files[c].close()
-
-    for b in range(len(bins)):
-
-        for contig in bins[b]:
-            line = []
-            line.append(graph_to_contig_map[contigs_map[contig]])
-            line.append(bins_list[b])
-            output_bins.append(line)
-
-    with open(output_file, mode="w") as out_file:
-        output_writer = csv.writer(
-            out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL
-        )
-        for row in output_bins:
-            output_writer.writerow(row)
-
-    logger.info("Final binning results can be found in " + str(output_bins_path))
-
-    unbinned_contigs = []
-
-    for i in range(node_count):
-        if i in remove_labels or i not in non_isolated:
-            line = []
-            line.append(graph_to_contig_map[contigs_map[i]])
-            unbinned_contigs.append(line)
-
-    if len(unbinned_contigs) != 0:
-        unbinned_file = output_path + prefix + "graphbin_unbinned.csv"
-
-        with open(unbinned_file, mode="w") as out_file:
-            output_writer = csv.writer(
-                out_file, delimiter=delimiter, quotechar='"', quoting=csv.QUOTE_MINIMAL
-            )
-
-            for row in unbinned_contigs:
-                output_writer.writerow(row)
-
-        logger.info("Unbinned contigs can be found at " + unbinned_file)
+    write_output(
+        output_path,
+        prefix,
+        final_bins,
+        contigs_file,
+        graph_to_contig_map,
+        bins,
+        contigs_map,
+        bins_list,
+        delimiter,
+        node_count,
+        remove_labels,
+        non_isolated,
+    )
 
     # Exit program
     # --------------

@@ -219,7 +219,6 @@ try:
         path = file.readline()
 
         while name != "" and path != "":
-
             while ";" in path:
                 path = path[:-2] + "," + file.readline()
 

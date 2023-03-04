@@ -245,7 +245,6 @@ node_count = n_contigs
 # -------------------------------
 
 try:
-
     # Create the graph
     assembly_graph = Graph()
 

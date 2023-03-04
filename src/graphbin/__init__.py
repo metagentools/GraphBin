@@ -53,7 +53,9 @@ def main():
         help="path to the contigs.paths file, only needed for SPAdes",
     )
     parser.add_argument(
-        "--contigs", default=None, help="path to the contigs.fa file.",
+        "--contigs",
+        default=None,
+        help="path to the contigs.fa file.",
     )
     parser.add_argument(
         "--delimiter",
