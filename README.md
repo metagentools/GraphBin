@@ -6,6 +6,7 @@
 
 [![DOI](https://img.shields.io/badge/DOI-10.1093/bioinformatics/btaa180-informational)](https://doi.org/10.1093/bioinformatics/btaa180)
 [![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
+[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/downloads.svg)](https://anaconda.org/bioconda/graphbin)
 [![PyPI version](https://badge.fury.io/py/graphbin.svg)](https://badge.fury.io/py/graphbin)
 [![Downloads](https://static.pepy.tech/badge/graphbin)](https://pepy.tech/project/graphbin)
 
