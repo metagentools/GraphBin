@@ -140,3 +140,11 @@ Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binn
     eprint = {https://academic.oup.com/bioinformatics/article-pdf/36/11/3307/33329097/btaa180.pdf},
 }
 ```
+
+## Funding
+
+GraphBin is funded by a [Essential Open Source Software for Science Grant](https://chanzuckerberg.com/eoss/proposals/cogent3-python-apis-for-iq-tree-and-graphbin-via-a-plug-in-architecture/) from the Chan Zuckerberg Initiative.
+
+<p align="left">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/czi-logo.png" width="300">
+</p>
