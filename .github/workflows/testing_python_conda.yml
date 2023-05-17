@@ -1,4 +1,4 @@
-name: CI
+name: CI conda
 
 on:
   push:
@@ -44,9 +44,3 @@ jobs:
           pip install pytest pytest-cov
           pytest --cov=graphbin --cov-report=xml --cov-append
           
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
-          fail_ci_if_error: true

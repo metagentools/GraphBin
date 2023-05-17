@@ -1,7 +1,8 @@
 name: graphbin
 channels:
   - bioconda
-  - defaults
+  - conda-forge
+  - anaconda
 dependencies:
   - python>=3.7.1
   - cogent3
