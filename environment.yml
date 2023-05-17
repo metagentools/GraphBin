@@ -7,5 +7,5 @@ dependencies:
   - python>=3.7.1
   - cogent3
   - cairocffi
-  - python-igraph>=0.7.1
+  - python-igraph
   - click
