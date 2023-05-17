@@ -102,6 +102,16 @@ def test_graphbin_spades_path(tmp_dir):
     exec_wrong_command(cmd)
 
 
+def test_graphbin_flye_path(tmp_dir):
+    """test graphbin on flye assembly"""
+    dir_name = TEST_ROOTDIR / "data" / "1Y3B_Flye"
+    graph = dir_name / "assembly_graph.gfa"
+    contigs = dir_name / "assembly.fasta"
+    binned = dir_name / "initial_binning_res.csv"
+    cmd = f"graphbin --assembler flye --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    exec_wrong_command(cmd)
+
+
 def test_graphbin_no_contigs(tmp_dir):
     """test graphbin with no contigs"""
     dir_name = TEST_ROOTDIR / "data" / "ESC_metaSPAdes"
