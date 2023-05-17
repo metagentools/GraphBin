@@ -26,6 +26,7 @@ GraphBin installation requires python 3 to run. The following dependencies are r
 * [python-igraph](https://igraph.org/python/)
 * [cogent3](https://cogent3.org/)
 * [cairocffi](https://pypi.org/project/cairocffi/)
+* [click](https://click.palletsprojects.com/)
 
 ## Installing GraphBin
 
