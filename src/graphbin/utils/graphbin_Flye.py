@@ -15,11 +15,10 @@ import logging
 import time
 
 from graphbin.utils.graphbin_Func import graphbin_main
-from graphbin.utils.graphbin_Options import PARSER
 from graphbin.utils.parsers import get_initial_bin_count
 from graphbin.utils.parsers.flye_parser import (
-    parse_graph,
     get_initial_binning_result,
+    parse_graph,
     write_output,
 )
 
@@ -33,19 +32,11 @@ __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "vijini.mallawaarachchi@anu.edu.au"
 __status__ = "Production"
 
+# create logger
+logger = logging.getLogger("GraphBin %s" % __version__)
+
 
 def run(args):
-    # Setup logger
-    # -----------------------
-
-    logger = logging.getLogger("GraphBin %s" % __version__)
-    logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
-    consoleHeader = logging.StreamHandler()
-    consoleHeader.setFormatter(formatter)
-    consoleHeader.setLevel(logging.INFO)
-    logger.addHandler(consoleHeader)
-
     start_time = time.time()
 
     assembly_graph_file = args.graph
@@ -58,14 +49,6 @@ def run(args):
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
 
-    # Setup output path for log file
-    # ---------------------------------------------------
-
-    fileHandler = logging.FileHandler(output_path + "/" + prefix + "graphbin.log")
-    fileHandler.setLevel(logging.DEBUG)
-    fileHandler.setFormatter(formatter)
-    logger.addHandler(fileHandler)
-
     logger.info(
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
@@ -73,12 +56,12 @@ def run(args):
         "This version of GraphBin makes use of the assembly graph produced by Flye which is a long reads assembler based on the de Bruijn graph approach."
     )
 
-    logger.info("Assembly graph file: " + assembly_graph_file)
-    logger.info("Existing binning output file: " + contig_bins_file)
-    logger.info("Contig paths file: " + contig_paths)
-    logger.info("Final binning output file: " + output_path)
-    logger.info("Maximum number of iterations: " + str(max_iteration))
-    logger.info("Difference threshold: " + str(diff_threshold))
+    logger.info(f"Assembly graph file: {assembly_graph_file}")
+    logger.info(f"Existing binning output file: {contig_bins_file}")
+    logger.info(f"Contig paths file: {contig_paths}")
+    logger.info(f"Final binning output file: {output_path}")
+    logger.info(f"Maximum number of iterations: {max_iteration}")
+    logger.info(f"Difference threshold: {diff_threshold}")
 
     logger.info("GraphBin started")
 
@@ -117,7 +100,7 @@ def run(args):
     elapsed_time = time.time() - start_time
 
     # Print elapsed time for the process
-    logger.info("Elapsed time: " + str(elapsed_time) + " seconds")
+    logger.info(f"Elapsed time: {elapsed_time} seconds")
 
     # Write result to output file
     # -----------------------------
@@ -138,20 +121,8 @@ def run(args):
     )
     logger.info("Writing the Final Binning result to file")
 
-    # Exit program
-    # --------------
 
-    logger.info("Thank you for using GraphBin! Bye...!")
-
-    logger.removeHandler(fileHandler)
-    logger.removeHandler(consoleHeader)
-
-
-def main():
-    # Setup argument parser
-    # -----------------------
-    ap = PARSER
-    args = ap.parse_args()
+def main(args):
     run(args)
 
 

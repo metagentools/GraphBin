@@ -113,7 +113,7 @@ def parse_graph(assembly_graph_file, original_contigs):
 
                     node_count += 1
 
-        logger.info("Total number of contigs available: " + str(node_count))
+        logger.info(f"Total number of contigs available: {node_count}")
 
         contigs_map = my_map
         contigs_map_rev = my_map.inverse
@@ -150,7 +150,7 @@ def parse_graph(assembly_graph_file, original_contigs):
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
-    logger.info("Total number of edges in the assembly graph: " + str(len(edge_list)))
+    logger.info(f"Total number of edges in the assembly graph: {len(edge_list)}")
 
     # Map original contig IDs to contig IDS of assembly graph
     # --------------------------------------------------------
@@ -184,17 +184,17 @@ def write_output(
     graph_to_contig_map_rev = graph_to_contig_map.inverse
     contigs_map_rev = contigs_map.inverse
 
-    output_bins_path = output_path + prefix + "bins/"
-    output_file = output_path + prefix + "graphbin_output.csv"
+    output_bins_path = f"{output_path}{prefix}bins/"
+    output_file = f"{output_path}{prefix}graphbin_output.csv"
 
     if not os.path.isdir(output_bins_path):
-        subprocess.run("mkdir -p " + output_bins_path, shell=True)
+        subprocess.run(f"mkdir -p {output_bins_path}", shell=True)
 
     bin_files = {}
 
     for bin_name in set(final_bins.values()):
         bin_files[bin_name] = open(
-            output_bins_path + prefix + "bin_" + bin_name + ".fasta", "w+"
+            f"{output_bins_path}{prefix}bin_{bin_name}.fasta", "w+"
         )
 
     for label, seq in MinimalFastaParser(
@@ -223,7 +223,7 @@ def write_output(
         for row in output_bins:
             output_writer.writerow(row)
 
-    logger.info("Final binning results can be found in " + str(output_bins_path))
+    logger.info(f"Final binning results can be found in {output_bins_path}")
 
     unbinned_contigs = []
 
@@ -234,7 +234,7 @@ def write_output(
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs) != 0:
-        unbinned_file = output_path + prefix + "graphbin_unbinned.csv"
+        unbinned_file = f"{output_path}{prefix}graphbin_unbinned.csv"
 
         with open(unbinned_file, mode="w") as out_file:
             output_writer = csv.writer(
@@ -244,7 +244,7 @@ def write_output(
             for row in unbinned_contigs:
                 output_writer.writerow(row)
 
-        logger.info("Unbinned contigs can be found at " + unbinned_file)
+        logger.info(f"Unbinned contigs can be found at {unbinned_file}")
 
 
 def get_contig_descriptors(contigs_file):

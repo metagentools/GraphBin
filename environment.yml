@@ -9,3 +9,4 @@ dependencies:
     - cogent3
     - cairocffi
     - python-igraph>=0.7.1
+    - click
