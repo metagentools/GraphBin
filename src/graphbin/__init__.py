@@ -165,6 +165,12 @@ def main(
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
 
+    # Check if paths files is provided when the assembler type is Flye
+    if assembler.lower() == "flye" and paths is None:
+        logger.error("Please make sure to provide the path to the contigs.paths file.")
+        logger.info("Exiting GraphBin... Bye...!")
+        sys.exit(1)
+
     # Validate prefix
     if prefix != None:
         if not prefix.endswith("_"):
