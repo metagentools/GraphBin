@@ -5,7 +5,8 @@ channels:
   - anaconda
 dependencies:
   - python>=3.7.1
-  - cogent3
   - cairocffi
   - python-igraph
   - click
+  - pip
+    - cogent3
