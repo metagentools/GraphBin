@@ -9,4 +9,5 @@ dependencies:
   - python-igraph
   - click
   - pip
+  - pip:
     - cogent3
