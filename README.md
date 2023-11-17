@@ -1,5 +1,6 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/GraphBin_logo.png" width="400" title="GraphBin logo" alt="GraphBin logo">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/GraphBin_logo_light.png#gh-light-mode-only" width="400" title="GraphBin logo" alt="GraphBin logo">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/GraphBin_logo_dark.png#gh-dark-mode-only" width="400" title="GraphBin logo" alt="GraphBin logo">
 </p>
 
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
