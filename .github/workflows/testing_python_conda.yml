@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         os: [macos-12, ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10"]
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
 
     steps:
       - uses: "actions/checkout@v3"
@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       # Setup conda env
-      - uses: conda-incubator/setup-miniconda@v2
+      - uses: conda-incubator/setup-miniconda@v3
         with:
           activate-environment: graphbin
           environment-file: environment.yml
