@@ -6,11 +6,11 @@
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
 [![DOI](https://img.shields.io/badge/DOI-10.1093/bioinformatics/btaa180-informational)](https://doi.org/10.1093/bioinformatics/btaa180)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/downloads.svg)](https://anaconda.org/bioconda/graphbin)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/graphbin/README.html)
+[![Conda](https://img.shields.io/conda/v/bioconda/graphbin)](https://anaconda.org/bioconda/graphbin)
+[![Conda](https://img.shields.io/conda/dn/bioconda/graphbin)](https://anaconda.org/bioconda/graphbin)
 [![PyPI version](https://badge.fury.io/py/graphbin.svg)](https://badge.fury.io/py/graphbin)
 [![Downloads](https://static.pepy.tech/badge/graphbin)](https://pepy.tech/project/graphbin)
-
 [![CI](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml)
 [![codecov](https://codecov.io/gh/metagentools/GraphBin/branch/develop/graph/badge.svg?token=0S310F6QXJ)](https://codecov.io/gh/metagentools/GraphBin)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
