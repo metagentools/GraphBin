@@ -4,42 +4,34 @@
 You can see the usage options of GraphBin by typing `graphbin -h` on the command line. For example,
 
 ```
-usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED]
-                [--output OUTPUT] [--prefix PREFIX]
-                [--max_iteration MAX_ITERATION]
-                [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
-                [--paths PATHS] [--contigs CONTIGS] [--delimiter DELIMITER]
+Usage: graphbin [OPTIONS]
 
-GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
-the contig connectivity information from the assembly graph to bin contigs. It
-utilizes the binning result of an existing binning tool and a label
-propagation algorithm to correct mis-binned contigs and predict the labels of
-contigs which are discarded due to short length.
+  GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --version
-  --graph GRAPH         path to the assembly graph file
-  --binned BINNED       path to the .csv file with the initial binning output
-                        from an existing tool
-  --output OUTPUT       path to the output folder
-  --prefix PREFIX       prefix for the output file
-  --max_iteration MAX_ITERATION
-                        maximum number of iterations for label propagation
-                        algorithm. [default: 100]
-  --diff_threshold DIFF_THRESHOLD
-                        difference threshold for label propagation algorithm.
-                        [default: 0.1]
-  --assembler ASSEMBLER
-                        name of the assembler used (SPAdes, SGA or MEGAHIT).
-                        GraphBin supports Flye, Canu and Miniasm long-read
-                        assemblies as well.
-  --paths PATHS         path to the contigs.paths file, only needed for SPAdes
-  --contigs CONTIGS     path to the contigs.fa file.
-  --delimiter DELIMITER
-                        delimiter for input/output results. Supports a comma
-                        (,), a semicolon (;), a tab ($'\t'), a space (" ") and
-                        a pipe (|) [default: , (comma)]
+Options:
+  --assembler [spades|sga|megahit|flye|canu|miniasm]
+                                  name of the assembler used (SPAdes, SGA or
+                                  MEGAHIT). GraphBin supports Flye, Canu and
+                                  Miniasm long-read assemblies as well.
+                                  [required]
+  --graph PATH                    path to the assembly graph file  [required]
+  --contigs PATH                  path to the contigs file  [required]
+  --paths PATH                    path to the contigs.paths (metaSPAdes) or
+                                  assembly.info (metaFlye) file
+  --binned PATH                   path to the .csv file with the initial
+                                  binning output from an existing tool
+                                  [required]
+  --output PATH                   path to the output folder  [required]
+  --prefix TEXT                   prefix for the output file
+  --max_iteration INTEGER         maximum number of iterations for label
+                                  propagation algorithm  [default: 100]
+  --diff_threshold FLOAT RANGE    difference threshold for label propagation
+                                  algorithm  [default: 0.1; 0<=x<=1]
+  --delimiter [,|;|$'\t'|" "]     delimiter for input/output results. Supports
+                                  a comma (,), a semicolon (;), a tab ($'\t'),
+                                  a space (" ") and a pipe (|)  [default: ,]
+  -v, --version                   Show the version and exit.
+  --help                          Show this message and exit.
 ```
 
 `max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
