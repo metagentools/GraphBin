@@ -127,6 +127,14 @@ graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/
 # metaFlye assembly
 graphbin --assembler flye --graph /path/to/assembly_graph.gfa --contigs /path/to/assembly.fasta --paths /path/to/assembly_info.txt --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
+```
+# Canu assembly
+graphbin --assembler canu --graph /path/to/assembly.contigs.gfa --contigs /path/to/assembly.contigs.fasta --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+```
+# Miniasm assembly
+graphbin --assembler miniasm --graph /path/to/reads.gfa --contigs /path/to/unitigs.fasta --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
 
 ## Output
 
