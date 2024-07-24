@@ -4,42 +4,34 @@
 You can see the usage options of GraphBin by typing `graphbin -h` on the command line. For example,
 
 ```
-usage: graphbin [-h] [--version] [--graph GRAPH] [--binned BINNED]
-                [--output OUTPUT] [--prefix PREFIX]
-                [--max_iteration MAX_ITERATION]
-                [--diff_threshold DIFF_THRESHOLD] [--assembler ASSEMBLER]
-                [--paths PATHS] [--contigs CONTIGS] [--delimiter DELIMITER]
+Usage: graphbin [OPTIONS]
 
-GraphBin Help. GraphBin is a metagenomic contig binning tool that makes use of
-the contig connectivity information from the assembly graph to bin contigs. It
-utilizes the binning result of an existing binning tool and a label
-propagation algorithm to correct mis-binned contigs and predict the labels of
-contigs which are discarded due to short length.
+  GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
-optional arguments:
-  -h, --help            show this help message and exit
-  --version
-  --graph GRAPH         path to the assembly graph file
-  --binned BINNED       path to the .csv file with the initial binning output
-                        from an existing tool
-  --output OUTPUT       path to the output folder
-  --prefix PREFIX       prefix for the output file
-  --max_iteration MAX_ITERATION
-                        maximum number of iterations for label propagation
-                        algorithm. [default: 100]
-  --diff_threshold DIFF_THRESHOLD
-                        difference threshold for label propagation algorithm.
-                        [default: 0.1]
-  --assembler ASSEMBLER
-                        name of the assembler used (SPAdes, SGA or MEGAHIT).
-                        GraphBin supports Flye, Canu and Miniasm long-read
-                        assemblies as well.
-  --paths PATHS         path to the contigs.paths file, only needed for SPAdes
-  --contigs CONTIGS     path to the contigs.fa file.
-  --delimiter DELIMITER
-                        delimiter for input/output results. Supports a comma
-                        (,), a semicolon (;), a tab ($'\t'), a space (" ") and
-                        a pipe (|) [default: , (comma)]
+Options:
+  --assembler [spades|sga|megahit|flye|canu|miniasm]
+                                  name of the assembler used (SPAdes, SGA or
+                                  MEGAHIT). GraphBin supports Flye, Canu and
+                                  Miniasm long-read assemblies as well.
+                                  [required]
+  --graph PATH                    path to the assembly graph file  [required]
+  --contigs PATH                  path to the contigs file  [required]
+  --paths PATH                    path to the contigs.paths (metaSPAdes) or
+                                  assembly.info (metaFlye) file
+  --binned PATH                   path to the .csv file with the initial
+                                  binning output from an existing tool
+                                  [required]
+  --output PATH                   path to the output folder  [required]
+  --prefix TEXT                   prefix for the output file
+  --max_iteration INTEGER         maximum number of iterations for label
+                                  propagation algorithm  [default: 100]
+  --diff_threshold FLOAT RANGE    difference threshold for label propagation
+                                  algorithm  [default: 0.1; 0<=x<=1]
+  --delimiter [,|;|$'\t'|" "]     delimiter for input/output results. Supports
+                                  a comma (,), a semicolon (;), a tab ($'\t'),
+                                  a space (" ") and a pipe (|)  [default: ,]
+  -v, --version                   Show the version and exit.
+  --help                          Show this message and exit.
 ```
 
 `max_iteration` and `diff_threshold` parameters are set by default to `100` and `0.1` respectively. However, the user can specify them when running GraphBin.
@@ -49,8 +41,8 @@ optional arguments:
 For the SPAdes version, `graphbin` takes in 3 files as inputs (required).
 
 * Assembly graph file (in `.gfa` format)
-* Contigs file (in FASTA format)
-* Paths of contigs (in `.paths` format)
+* Contigs file (`contigs.fasta` file in FASTA format)
+* Paths of contigs (`contigs.paths` file)
 * Binning output from an existing tool (in `.csv` format)
 
 For the SGA version, `graphbin` takes in 2 files as inputs (required).
@@ -63,6 +55,13 @@ For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 
 * Assembly graph file (in `.gfa` format. To convert fastg to gfa refer [here](https://github.com/Vini2/GraphBin/blob/master/support/README.md#fastg2gfa))
 * Contigs file (in FASTA format)
+* Binning output from an existing tool (in `.csv` format)
+
+For the Flye version, `graphbin` takes in 3 files as inputs (required).
+
+* Assembly graph file (in `.gfa` format)
+* Contigs file (`assembly.fasta` file in FASTA format)
+* Paths of contigs (`assembly_info.txt` file)
 * Binning output from an existing tool (in `.csv` format)
 
 **Note:** Make sure that the initial binning result consists of contigs belonging to only one bin. GraphBin is designed to handle initial contigs which belong to only one bin. Multiple bins for the initial contigs are not supported.
@@ -98,18 +97,35 @@ k99_18709,bin_1
 k99_15596,bin_2
 ...
 ```
+Example Flye binned input
+```
+contig_1,bin_1
+contig_2,bin_1
+contig_3,bin_2
+contig_4,bin_1
+contig_5,bin_2
+...
+```
+
 Make sure to follow the steps provided in the [preprocessing section](https://graphbin.readthedocs.io/en/latest/preprocess/) to prepare the initial binning result.
 
 ## Example Usage
 
 ```
+# metaSPAdes assembly
 graphbin --assembler spades --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fasta --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
+# SGA assembly
 graphbin --assembler sga --graph /path/to/graph_file.asqg --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
+# MEGAHIT assembly
 graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+```
+# metaFlye assembly
+graphbin --assembler flye --graph /path/to/assembly_graph.gfa --contigs /path/to/assembly.fasta --paths /path/to/assembly_info.txt --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Output
