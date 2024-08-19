@@ -17,7 +17,7 @@ __email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Production"
 
 # create logger
-logger = logging.getLogger("GraphBin %s" % __version__)
+logger = logging.getLogger(f"GraphBin {__version__}")
 
 
 class Edge:
@@ -29,7 +29,7 @@ class Edge:
 
 class LabelProp:
     def __init__(self):
-        self.logger = logging.getLogger("GraphBin %s" % __version__)
+        self.logger = logging.getLogger(f"GraphBin {__version__}")
         self.logger.info("Creating an instance of LabelProp")
         self.initialize_env()
 

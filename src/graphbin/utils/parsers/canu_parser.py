@@ -22,7 +22,7 @@ __email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Production"
 
 
-logger = logging.getLogger("GraphBin %s" % __version__)
+logger = logging.getLogger(f"GraphBin {__version__}")
 
 
 def get_initial_binning_result(

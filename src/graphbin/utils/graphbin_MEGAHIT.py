@@ -34,7 +34,7 @@ __email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Production"
 
 # create logger
-logger = logging.getLogger("GraphBin %s" % __version__)
+logger = logging.getLogger(f"GraphBin {__version__}")
 
 
 def run(args):
