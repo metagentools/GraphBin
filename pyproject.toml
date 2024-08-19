@@ -5,8 +5,8 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "graphbin"
 authors = [
-    { name = "Vijini Mallawaarachchi", email = "Vijini.Mallawaarachchi@anu.edu.au"},
-    { name = "Anuradha Wickramarachchi", email = "Anuradha.Wickramarachchi@anu.edu.au"},
+    { name = "Vijini Mallawaarachchi", email = "viji.mallawaarachchi@gmail.com"},
+    { name = "Anuradha Wickramarachchi", email = "anuradhawick@gmail.com"},
     { name = "Yu Lin", email = "yu.lin@anu.edu.au"},
 ]
 keywords = ["genomics", "bioinformatics"]
