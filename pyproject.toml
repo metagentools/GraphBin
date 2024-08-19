@@ -32,7 +32,7 @@ Documentation = "https://graphbin.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/metagentools/GraphBin/"
 
 [project.scripts]
-graphbin = "graphbin:main"
+graphbin = "graphbin.cli:main"
 
 [project.optional-dependencies]
 test = [
