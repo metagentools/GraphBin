@@ -156,6 +156,10 @@ def main(
     fileHandler.setFormatter(formatter)
     logger.addHandler(fileHandler)
 
+    logger.info(
+        "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
+    )
+
     # Validate options
     # ---------------------------------------------------
 
@@ -189,14 +193,6 @@ def main(
         logger.error("Please enter a valid number for diff_threshold")
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
-
-    # # Remove previous files if they exist
-    # if os.path.exists(f"{output}{prefix}graphbin.log"):
-    #     os.remove(f"{output}{prefix}graphbin.log")
-    # if os.path.exists(f"{output}{prefix}graphbin_output.csv"):
-    #     os.remove(f"{output}{prefix}graphbin_output.csv")
-    # if os.path.exists(f"{output}{prefix}graphbin_unbinned.csv"):
-    #     os.remove(f"{output}{prefix}graphbin_unbinned.csv")
 
     # Make args object
     args = ArgsObj(

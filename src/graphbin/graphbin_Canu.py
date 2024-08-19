@@ -32,9 +32,6 @@ __maintainer__ = "Vijini Mallawaarachchi"
 __email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Production"
 
-# create logger
-logger = logging.getLogger(f"GraphBin {__version__}")
-
 
 def run(args):
     start_time = time.time()
@@ -49,9 +46,20 @@ def run(args):
     diff_threshold = args.diff_threshold
     MIN_BIN_COUNT = 10
 
-    logger.info(
-        "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
-    )
+    # Setup logger
+    logger = logging.getLogger(f"GraphBin {__version__}")
+    logger.setLevel(logging.DEBUG)
+    formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+    consoleHeader = logging.StreamHandler()
+    consoleHeader.setFormatter(formatter)
+    consoleHeader.setLevel(logging.INFO)
+    logger.addHandler(consoleHeader)
+
+    fileHandler = logging.FileHandler(f"{output_path}{prefix}graphbin.log")
+    fileHandler.setLevel(logging.DEBUG)
+    fileHandler.setFormatter(formatter)
+    logger.addHandler(fileHandler)
+
     logger.info(
         "This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach."
     )
