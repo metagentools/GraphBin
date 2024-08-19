@@ -9,9 +9,9 @@ __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Gavin Huttley"]
 __license__ = "BSD-3"
-__version__ = "1.6.1"
+__version__ = "1.7.3"
 __maintainer__ = "Vijini Mallawaarachchi"
-__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Development"
 
 
@@ -99,6 +99,16 @@ def test_graphbin_spades_path(tmp_dir):
     contigs = dir_name / "contigs.fasta"
     binned = dir_name / "initial_binning_res.csv"
     cmd = f"graphbin --assembler spades --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
+    exec_wrong_command(cmd)
+
+
+def test_graphbin_flye_path(tmp_dir):
+    """test graphbin on flye assembly"""
+    dir_name = TEST_ROOTDIR / "data" / "1Y3B_Flye"
+    graph = dir_name / "assembly_graph.gfa"
+    contigs = dir_name / "assembly.fasta"
+    binned = dir_name / "initial_binning_res.csv"
+    cmd = f"graphbin --assembler flye --graph {graph} --contigs {contigs} --binned {binned} --output {tmp_dir}"
     exec_wrong_command(cmd)
 
 

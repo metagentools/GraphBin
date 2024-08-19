@@ -4,16 +4,16 @@ from pathlib import Path
 
 import pytest
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import *
+from graphbin.bidirectionalmap.bidirectionalmap import *
 
 
 __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Vijini Mallawaarachchi", "Gavin Huttley"]
 __license__ = "BSD-3"
-__version__ = "1.6.1"
+__version__ = "1.7.3"
 __maintainer__ = "Vijini Mallawaarachchi"
-__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Development"
 
 

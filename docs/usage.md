@@ -41,8 +41,8 @@ Options:
 For the SPAdes version, `graphbin` takes in 3 files as inputs (required).
 
 * Assembly graph file (in `.gfa` format)
-* Contigs file (in FASTA format)
-* Paths of contigs (in `.paths` format)
+* Contigs file (`contigs.fasta` file in FASTA format)
+* Paths of contigs (`contigs.paths` file)
 * Binning output from an existing tool (in `.csv` format)
 
 For the SGA version, `graphbin` takes in 2 files as inputs (required).
@@ -55,6 +55,13 @@ For the MEGAHIT version, `graphbin` takes in 3 files as inputs (required).
 
 * Assembly graph file (in `.gfa` format. To convert fastg to gfa refer [here](https://github.com/Vini2/GraphBin/blob/master/support/README.md#fastg2gfa))
 * Contigs file (in FASTA format)
+* Binning output from an existing tool (in `.csv` format)
+
+For the Flye version, `graphbin` takes in 3 files as inputs (required).
+
+* Assembly graph file (in `.gfa` format)
+* Contigs file (`assembly.fasta` file in FASTA format)
+* Paths of contigs (`assembly_info.txt` file)
 * Binning output from an existing tool (in `.csv` format)
 
 **Note:** Make sure that the initial binning result consists of contigs belonging to only one bin. GraphBin is designed to handle initial contigs which belong to only one bin. Multiple bins for the initial contigs are not supported.
@@ -90,18 +97,43 @@ k99_18709,bin_1
 k99_15596,bin_2
 ...
 ```
+Example Flye binned input
+```
+contig_1,bin_1
+contig_2,bin_1
+contig_3,bin_2
+contig_4,bin_1
+contig_5,bin_2
+...
+```
+
 Make sure to follow the steps provided in the [preprocessing section](https://graphbin.readthedocs.io/en/latest/preprocess/) to prepare the initial binning result.
 
 ## Example Usage
 
 ```
+# metaSPAdes assembly
 graphbin --assembler spades --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fasta --paths /path/to/paths_file.paths --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
+# SGA assembly
 graphbin --assembler sga --graph /path/to/graph_file.asqg --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 ```
+# MEGAHIT assembly
 graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/contigs.fa --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+```
+# metaFlye assembly
+graphbin --assembler flye --graph /path/to/assembly_graph.gfa --contigs /path/to/assembly.fasta --paths /path/to/assembly_info.txt --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+```
+# Canu assembly
+graphbin --assembler canu --graph /path/to/assembly.contigs.gfa --contigs /path/to/assembly.contigs.fasta --binned /path/to/binning_result.csv --output /path/to/output_folder
+```
+```
+# Miniasm assembly
+graphbin --assembler miniasm --graph /path/to/reads.gfa --contigs /path/to/unitigs.fasta --binned /path/to/binning_result.csv --output /path/to/output_folder
 ```
 
 ## Output

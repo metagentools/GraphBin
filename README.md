@@ -1,15 +1,16 @@
 <p align="center">
-  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/GraphBin_logo.png" width="400" title="GraphBin logo" alt="GraphBin logo">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/develop/GraphBin_logo_light.png#gh-light-mode-only" width="400" title="GraphBin logo" alt="GraphBin logo">
+  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/develop/GraphBin_logo_dark.png#gh-dark-mode-only" width="400" title="GraphBin logo" alt="GraphBin logo">
 </p>
 
 # GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs
 
 [![DOI](https://img.shields.io/badge/DOI-10.1093/bioinformatics/btaa180-informational)](https://doi.org/10.1093/bioinformatics/btaa180)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/version.svg)](https://anaconda.org/bioconda/graphbin)
-[![Anaconda-Server Badge](https://anaconda.org/bioconda/graphbin/badges/downloads.svg)](https://anaconda.org/bioconda/graphbin)
+[![install with bioconda](https://img.shields.io/badge/install%20with-bioconda-brightgreen.svg?style=flat)](http://bioconda.github.io/recipes/graphbin/README.html)
+[![Conda](https://img.shields.io/conda/v/bioconda/graphbin)](https://anaconda.org/bioconda/graphbin)
+[![Conda](https://img.shields.io/conda/dn/bioconda/graphbin)](https://anaconda.org/bioconda/graphbin)
 [![PyPI version](https://badge.fury.io/py/graphbin.svg)](https://badge.fury.io/py/graphbin)
 [![Downloads](https://static.pepy.tech/badge/graphbin)](https://pepy.tech/project/graphbin)
-
 [![CI](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml/badge.svg)](https://github.com/metagentools/GraphBin/actions/workflows/testing_python_app.yml)
 [![codecov](https://codecov.io/gh/metagentools/GraphBin/branch/develop/graph/badge.svg?token=0S310F6QXJ)](https://codecov.io/gh/metagentools/GraphBin)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
@@ -26,6 +27,7 @@ GraphBin installation requires python 3 to run. The following dependencies are r
 * [python-igraph](https://igraph.org/python/)
 * [cogent3](https://cogent3.org/)
 * [cairocffi](https://pypi.org/project/cairocffi/)
+* [click](https://click.palletsprojects.com/)
 
 ## Installing GraphBin
 
@@ -121,7 +123,7 @@ graphbin --assembler megahit --graph /path/to/graph_file.gfa --contigs /path/to/
 ## Citation
 If you use GraphBin in your work, please cite GraphBin as,
 
-Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binning of metagenomic contigs using assembly graphs. Bioinformatics, Volume 36, Issue 11, June 2020, Pages 3307–3313, DOI: [10.1093/bioinformatics/btaa180](http://dx.doi.org/10.1093/bioinformatics/btaa180)
+> Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binning of metagenomic contigs using assembly graphs. Bioinformatics, Volume 36, Issue 11, June 2020, Pages 3307–3313, DOI: [https://doi.org/10.1093/bioinformatics/btaa180](https://doi.org/10.1093/bioinformatics/btaa180)
 
 ```bibtex
 @article{10.1093/bioinformatics/btaa180,
@@ -143,8 +145,8 @@ Vijini Mallawaarachchi, Anuradha Wickramarachchi, Yu Lin. GraphBin: Refined binn
 
 ## Funding
 
-GraphBin is funded by a [Essential Open Source Software for Science Grant](https://chanzuckerberg.com/eoss/proposals/cogent3-python-apis-for-iq-tree-and-graphbin-via-a-plug-in-architecture/) from the Chan Zuckerberg Initiative.
+GraphBin is funded by an [Essential Open Source Software for Science Grant](https://chanzuckerberg.com/eoss/proposals/cogent3-python-apis-for-iq-tree-and-graphbin-via-a-plug-in-architecture/) from the Chan Zuckerberg Initiative.
 
 <p align="left">
-  <img src="https://raw.githubusercontent.com/metagentools/GraphBin/master/images/czi-logo.png" width="300">
+  <img src="https://chanzuckerberg.com/wp-content/themes/czi/img/logo.svg" width="300">
 </p>

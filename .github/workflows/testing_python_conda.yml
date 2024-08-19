@@ -1,4 +1,4 @@
-name: CI
+name: CI conda
 
 on:
   push:
@@ -12,27 +12,29 @@ jobs:
     name: "Python ${{ matrix.python-version }}"
     runs-on: ${{ matrix.os }}
 
+    defaults:
+      run:
+        shell: bash -el {0}
+
     strategy:
       matrix:
-<<<<<<< HEAD
-        os: [macos-12, ubuntu-latest]
-        python-version: ["3.8", "3.9", "3.10"]
-=======
         os: [macos-latest, ubuntu-latest]
         python-version: ["3.8", "3.9", "3.10", "3.11"]
->>>>>>> develop
 
     steps:
       - uses: "actions/checkout@v3"
         with:
           fetch-depth: 0
 
-      # Setup env
-      - uses: "actions/setup-python@v3"
+      # Setup conda env
+      - uses: conda-incubator/setup-miniconda@v3
         with:
-            python-version: "${{ matrix.python-version }}"
+          activate-environment: graphbin
+          environment-file: environment.yml
+          python-version: ${{ matrix.python-version }}
+          auto-activate-base: false
 
-      - name: "Install dependencies on ${{ matrix.os }} for Python ${{ matrix.python-version }}"
+      - name: "Setup graphbin on ${{ matrix.os }} for Python ${{ matrix.python-version }}"
         run: |
           python -m pip install --upgrade pip
           pip install .
@@ -42,9 +44,3 @@ jobs:
           pip install pytest pytest-cov
           pytest --cov=graphbin --cov-report=xml --cov-append
           
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: coverage.xml
-          fail_ci_if_error: true

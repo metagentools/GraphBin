@@ -11,13 +11,13 @@ __author__ = "Vijini Mallawaarachchi"
 __copyright__ = "Copyright 2019-2022, GraphBin Project"
 __credits__ = ["Lingzhe Teng", "Vijini Mallawaarachchi"]
 __license__ = "BSD-3"
-__version__ = "1.6.1"
+__version__ = "1.7.3"
 __maintainer__ = "Vijini Mallawaarachchi"
-__email__ = "vijini.mallawaarachchi@anu.edu.au"
+__email__ = "viji.mallawaarachchi@gmail.com"
 __status__ = "Production"
 
 # create logger
-logger = logging.getLogger("GraphBin %s" % __version__)
+logger = logging.getLogger(f"GraphBin {__version__}")
 
 
 class Edge:
@@ -29,7 +29,7 @@ class Edge:
 
 class LabelProp:
     def __init__(self):
-        self.logger = logging.getLogger("GraphBin %s" % __version__)
+        self.logger = logging.getLogger(f"GraphBin {__version__}")
         self.logger.info("Creating an instance of LabelProp")
         self.initialize_env()
 

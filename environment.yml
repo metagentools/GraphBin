@@ -1,11 +1,13 @@
 name: graphbin
 channels:
   - bioconda
-  - defaults
+  - conda-forge
+  - anaconda
 dependencies:
   - python>=3.7.1
+  - flit
+  - cairocffi
+  - python-igraph
+  - click
   - pip
-  - pip:
-    - cogent3
-    - cairocffi
-    - python-igraph>=0.7.1
+  - cogent3

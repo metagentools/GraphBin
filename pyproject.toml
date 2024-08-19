@@ -5,15 +5,15 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "graphbin"
 authors = [
-    { name = "Vijini Mallawaarachchi", email = "Vijini.Mallawaarachchi@anu.edu.au"},
-    { name = "Anuradha Wickramarachchi", email = "Anuradha.Wickramarachchi@anu.edu.au"},
+    { name = "Vijini Mallawaarachchi", email = "viji.mallawaarachchi@gmail.com"},
+    { name = "Anuradha Wickramarachchi", email = "anuradhawick@gmail.com"},
     { name = "Yu Lin", email = "yu.lin@anu.edu.au"},
 ]
 keywords = ["genomics", "bioinformatics"]
 readme = "README.md"
 license = { file = "LICENSE" }
 requires-python = ">=3.7"
-dependencies = ["python-igraph", "cogent3", "cairocffi"]
+dependencies = ["igraph", "cogent3", "cairocffi", "click"]
 classifiers = [
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Science/Research",
@@ -32,7 +32,7 @@ Documentation = "https://graphbin.readthedocs.io/en/latest/"
 "Source Code" = "https://github.com/metagentools/GraphBin/"
 
 [project.scripts]
-graphbin = "graphbin:main"
+graphbin = "graphbin.cli:main"
 
 [project.optional-dependencies]
 test = [
