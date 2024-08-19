@@ -8,7 +8,7 @@ import sys
 
 import click
 
-from graphbin.utils import (
+from graphbin import (
     graphbin_Canu,
     graphbin_Flye,
     graphbin_MEGAHIT,

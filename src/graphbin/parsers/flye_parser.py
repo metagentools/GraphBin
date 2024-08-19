@@ -11,7 +11,7 @@ from collections import defaultdict
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 
 __author__ = "Vijini Mallawaarachchi"

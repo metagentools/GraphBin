@@ -17,7 +17,7 @@ import re
 import subprocess
 import sys
 
-from bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 

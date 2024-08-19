@@ -3,7 +3,7 @@
 import logging
 import sys
 
-from graphbin.utils.labelpropagation.labelprop import LabelProp
+from graphbin.labelpropagation.labelprop import LabelProp
 
 
 __author__ = "Vijini Mallawaarachchi"

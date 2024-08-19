@@ -9,7 +9,7 @@ import sys
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 
 __author__ = "Vijini Mallawaarachchi"
@@ -150,9 +150,8 @@ def write_output(
     prefix,
     final_bins,
     contigs_file,
-    contigs_map_rev,
-    bins,
     contigs_map,
+    bins,
     bins_list,
     delimiter,
     node_count,
@@ -162,6 +161,7 @@ def write_output(
     logger.info("Writing the Final Binning result to file")
 
     output_bins = []
+    contigs_map_rev = contigs_map.inverse
 
     output_bins_path = f"{output_path}{prefix}bins/"
     output_file = f"{output_path}{prefix}graphbin_output.csv"
@@ -176,9 +176,7 @@ def write_output(
             f"{output_bins_path}{prefix}bin_{bin_name}.fasta", "w+"
         )
 
-    for label, seq in MinimalFastaParser(
-        contigs_file, label_to_name=lambda x: x.split()[0]
-    ):
+    for label, seq in MinimalFastaParser(contigs_file):
         contig_num = contigs_map_rev[label]
 
         if contig_num in final_bins:

@@ -3,16 +3,13 @@
 import csv
 import logging
 import os
-import re
 import subprocess
 import sys
-
-from collections import defaultdict
 
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 
 __author__ = "Vijini Mallawaarachchi"
@@ -39,11 +36,7 @@ def get_initial_binning_result(
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=delimiter)
             for row in readCSV:
-                start = "NODE_"
-                end = "_length_"
-                contig_num = contigs_map_rev[
-                    int(re.search("%s(.*)%s" % (start, end), row[0]).group(1))
-                ]
+                contig_num = contigs_map_rev[row[0]]
 
                 bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
@@ -59,56 +52,48 @@ def get_initial_binning_result(
     return bins
 
 
-def parse_graph(assembly_graph_file, contig_paths):
-    paths = {}
-    segment_contigs = {}
-    node_count = 0
-
-    contig_names = BidirectionalMap()
+def parse_graph(assembly_graph_file):
+    # Get the links from the .gfa file
+    # -----------------------------------
 
     my_map = BidirectionalMap()
 
-    current_contig_num = ""
+    node_count = 0
+
+    nodes = []
+
+    links = []
 
     try:
-        with open(contig_paths) as file:
-            name = file.readline()
-            path = file.readline()
+        # Get contig connections from .gfa file
+        with open(assembly_graph_file) as file:
+            for line in file.readlines():
+                line = line.strip()
 
-            while name != "" and path != "":
-                while ";" in path:
-                    path = path[:-2] + "," + file.readline()
-
-                start = "NODE_"
-                end = "_length_"
-                contig_num = str(
-                    int(re.search("%s(.*)%s" % (start, end), name).group(1))
-                )
-
-                segments = path.rstrip().split(",")
-
-                if current_contig_num != contig_num:
-                    my_map[node_count] = int(contig_num)
-                    current_contig_num = contig_num
-                    contig_names[node_count] = name.strip()
+                # Count the number of contigs
+                if line.startswith("S"):
+                    strings = line.split("\t")
+                    my_node = strings[1]
+                    my_map[node_count] = my_node
+                    nodes.append(my_node)
                     node_count += 1
 
-                if contig_num not in paths:
-                    paths[contig_num] = [segments[0], segments[-1]]
+                # Identify lines with link information
+                elif line.startswith("L"):
+                    link = []
+                    strings = line.split("\t")
 
-                for segment in segments:
-                    if segment not in segment_contigs:
-                        segment_contigs[segment] = set([contig_num])
-                    else:
-                        segment_contigs[segment].add(contig_num)
-
-                name = file.readline()
-                path = file.readline()
+                    if strings[1] != strings[3]:
+                        start = strings[1]
+                        end = strings[3]
+                        link.append(start)
+                        link.append(end)
+                        links.append(link)
 
     except BaseException as err:
         logger.error(f"Unexpected {err}")
         logger.error(
-            "Please make sure that the correct path to the contig paths file is provided."
+            "Please make sure that the correct path to the assembly graph file is provided."
         )
         logger.info("Exiting GraphBin... Bye...!")
         sys.exit(1)
@@ -118,78 +103,30 @@ def parse_graph(assembly_graph_file, contig_paths):
 
     logger.info(f"Total number of contigs available: {node_count}")
 
-    links = []
-    links_map = defaultdict(set)
-
     ## Construct the assembly graph
     # -------------------------------
 
     try:
-        # Get links from assembly_graph_with_scaffolds.gfa
-        with open(assembly_graph_file) as file:
-            for line in file.readlines():
-                line = line.strip()
-
-                # Identify lines with link information
-                if line.startswith("L"):
-                    strings = line.split("\t")
-                    f1, f2 = strings[1] + strings[2], strings[3] + strings[4]
-                    links_map[f1].add(f2)
-                    links_map[f2].add(f1)
-                    links.append(
-                        strings[1] + strings[2] + " " + strings[3] + strings[4]
-                    )
-
-        # Create graph
+        # Create the graph
         assembly_graph = Graph()
-
-        # Add vertices
-        assembly_graph.add_vertices(node_count)
 
         # Create list of edges
         edge_list = []
 
+        # Add vertices
+        assembly_graph.add_vertices(node_count)
+
         # Name vertices
-        for i in range(node_count):
+        for i in range(len(assembly_graph.vs)):
             assembly_graph.vs[i]["id"] = i
             assembly_graph.vs[i]["label"] = str(contigs_map[i])
 
-        for i in range(len(paths)):
-            segments = paths[str(contigs_map[i])]
-
-            start = segments[0]
-            start_rev = ""
-
-            if start.endswith("+"):
-                start_rev = start[:-1] + "-"
-            else:
-                start_rev = start[:-1] + "+"
-
-            end = segments[1]
-            end_rev = ""
-
-            if end.endswith("+"):
-                end_rev = end[:-1] + "-"
-            else:
-                end_rev = end[:-1] + "+"
-
-            new_links = []
-
-            if start in links_map:
-                new_links.extend(list(links_map[start]))
-            if start_rev in links_map:
-                new_links.extend(list(links_map[start_rev]))
-            if end in links_map:
-                new_links.extend(list(links_map[end]))
-            if end_rev in links_map:
-                new_links.extend(list(links_map[end_rev]))
-
-            for new_link in new_links:
-                if new_link in segment_contigs:
-                    for contig in segment_contigs[new_link]:
-                        if i != contigs_map_rev[int(contig)]:
-                            # Add edge to list of edges
-                            edge_list.append((i, contigs_map_rev[int(contig)]))
+        # Iterate links
+        for link in links:
+            # Remove self loops
+            if link[0] != link[1]:
+                # Add edge to list of edges
+                edge_list.append((contigs_map_rev[link[0]], contigs_map_rev[link[1]]))
 
         # Add edges to the graph
         assembly_graph.add_edges(edge_list)
@@ -205,7 +142,7 @@ def parse_graph(assembly_graph_file, contig_paths):
 
     logger.info(f"Total number of edges in the assembly graph: {len(edge_list)}")
 
-    return assembly_graph, contigs_map, contig_names, node_count
+    return assembly_graph, contigs_map, node_count
 
 
 def write_output(
@@ -213,9 +150,9 @@ def write_output(
     prefix,
     final_bins,
     contigs_file,
-    contig_names_rev,
+    contigs_map_rev,
     bins,
-    contig_names,
+    contigs_map,
     bins_list,
     delimiter,
     node_count,
@@ -239,8 +176,10 @@ def write_output(
             f"{output_bins_path}{prefix}bin_{bin_name}.fasta", "w+"
         )
 
-    for label, seq in MinimalFastaParser(contigs_file):
-        contig_num = contig_names_rev[label]
+    for label, seq in MinimalFastaParser(
+        contigs_file, label_to_name=lambda x: x.split()[0]
+    ):
+        contig_num = contigs_map_rev[label]
 
         if contig_num in final_bins:
             bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
@@ -252,7 +191,7 @@ def write_output(
     for b in range(len(bins)):
         for contig in bins[b]:
             line = []
-            line.append(contig_names[contig])
+            line.append(str(contigs_map[contig]))
             line.append(bins_list[b])
             output_bins.append(line)
 
@@ -270,7 +209,7 @@ def write_output(
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append(contig_names[i])
+            line.append(str(contigs_map[i]))
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs) != 0:

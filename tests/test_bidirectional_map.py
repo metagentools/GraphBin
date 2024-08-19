@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import *
+from graphbin.bidirectionalmap.bidirectionalmap import *
 
 
 __author__ = "Vijini Mallawaarachchi"

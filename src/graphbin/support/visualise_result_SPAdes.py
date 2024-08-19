@@ -17,7 +17,7 @@ import re
 import subprocess
 import sys
 
-from bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 from igraph import *
 
 

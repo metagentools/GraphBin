@@ -3,13 +3,14 @@
 import csv
 import logging
 import os
+import re
 import subprocess
 import sys
 
 from cogent3.parse.fasta import MinimalFastaParser
 from igraph import *
 
-from graphbin.utils.bidirectionalmap.bidirectionalmap import BidirectionalMap
+from graphbin.bidirectionalmap.bidirectionalmap import BidirectionalMap
 
 
 __author__ = "Vijini Mallawaarachchi"
@@ -36,7 +37,11 @@ def get_initial_binning_result(
         with open(contig_bins_file) as contig_bins:
             readCSV = csv.reader(contig_bins, delimiter=delimiter)
             for row in readCSV:
-                contig_num = contigs_map_rev[row[0]]
+                start = "contig-"
+                end = ""
+                contig_num = contigs_map_rev[
+                    int(re.search("%s(.*)%s" % (start, end), row[0]).group(1))
+                ]
 
                 bin_num = bins_list.index(row[1])
                 bins[bin_num].append(contig_num)
@@ -53,42 +58,39 @@ def get_initial_binning_result(
 
 
 def parse_graph(assembly_graph_file):
-    # Get the links from the .gfa file
-    # -----------------------------------
+    links = []
+
+    contig_names = BidirectionalMap()
 
     my_map = BidirectionalMap()
 
     node_count = 0
 
-    nodes = []
-
-    links = []
-
     try:
-        # Get contig connections from .gfa file
+        # Get contig connections from .asqg file
         with open(assembly_graph_file) as file:
             for line in file.readlines():
                 line = line.strip()
 
                 # Count the number of contigs
-                if line.startswith("S"):
-                    strings = line.split("\t")
-                    my_node = strings[1]
-                    my_map[node_count] = my_node
-                    nodes.append(my_node)
+                if line.startswith("VT"):
+                    start = "contig-"
+                    end = ""
+                    contig_name = str(line.split()[1])
+                    contig_num = int(
+                        re.search("%s(.*)%s" % (start, end), contig_name).group(1)
+                    )
+                    my_map[node_count] = contig_num
+                    contig_names[node_count] = contig_name.strip()
                     node_count += 1
 
                 # Identify lines with link information
-                elif line.startswith("L"):
+                elif line.startswith("ED"):
                     link = []
-                    strings = line.split("\t")
-
-                    if strings[1] != strings[3]:
-                        start = strings[1]
-                        end = strings[3]
-                        link.append(start)
-                        link.append(end)
-                        links.append(link)
+                    strings = line.split("\t")[1].split()
+                    link.append(int(strings[0][7:]))
+                    link.append(int(strings[1][7:]))
+                    links.append(link)
 
     except BaseException as err:
         logger.error(f"Unexpected {err}")
@@ -101,10 +103,9 @@ def parse_graph(assembly_graph_file):
     contigs_map = my_map
     contigs_map_rev = my_map.inverse
 
-    logger.info(f"Total number of contigs available: {node_count}")
+    contig_names_rev = contig_names.inverse
 
-    ## Construct the assembly graph
-    # -------------------------------
+    logger.info(f"Total number of contigs available: {node_count}")
 
     try:
         # Create the graph
@@ -142,7 +143,7 @@ def parse_graph(assembly_graph_file):
 
     logger.info(f"Total number of edges in the assembly graph: {len(edge_list)}")
 
-    return assembly_graph, contigs_map, node_count
+    return assembly_graph, contigs_map, contig_names, node_count
 
 
 def write_output(
@@ -150,18 +151,19 @@ def write_output(
     prefix,
     final_bins,
     contigs_file,
-    contigs_map,
+    contig_names_rev,
     bins,
+    contig_names,
     bins_list,
     delimiter,
     node_count,
     remove_labels,
     non_isolated,
+    contig_descriptions,
 ):
     logger.info("Writing the Final Binning result to file")
 
     output_bins = []
-    contigs_map_rev = contigs_map.inverse
 
     output_bins_path = f"{output_path}{prefix}bins/"
     output_file = f"{output_path}{prefix}graphbin_output.csv"
@@ -176,8 +178,10 @@ def write_output(
             f"{output_bins_path}{prefix}bin_{bin_name}.fasta", "w+"
         )
 
-    for label, seq in MinimalFastaParser(contigs_file):
-        contig_num = contigs_map_rev[label]
+    for label, seq in MinimalFastaParser(
+        contigs_file, label_to_name=lambda x: x.split()[0]
+    ):
+        contig_num = contig_names_rev[label]
 
         if contig_num in final_bins:
             bin_files[final_bins[contig_num]].write(f">{label}\n{seq}\n")
@@ -189,7 +193,7 @@ def write_output(
     for b in range(len(bins)):
         for contig in bins[b]:
             line = []
-            line.append(str(contigs_map[contig]))
+            line.append(contig_descriptions[contig_names[contig]])
             line.append(bins_list[b])
             output_bins.append(line)
 
@@ -207,7 +211,7 @@ def write_output(
     for i in range(node_count):
         if i in remove_labels or i not in non_isolated:
             line = []
-            line.append(str(contigs_map[i]))
+            line.append(contig_names[i])
             unbinned_contigs.append(line)
 
     if len(unbinned_contigs) != 0:
@@ -222,3 +226,13 @@ def write_output(
                 output_writer.writerow(row)
 
         logger.info(f"Unbinned contigs can be found at {unbinned_file}")
+
+
+def get_contig_descriptions(contigs_file):
+    contig_descriptions = {}
+
+    for label, _ in MinimalFastaParser(contigs_file):
+        name = label.split()[0]
+        contig_descriptions[name] = label
+
+    return contig_descriptions

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_Canu.py: Refined binning of metagenomic contigs using Canu assembly graphs.
+"""graphbin_SPAdes.py: Refined binning of metagenomic contigs using SPAdes assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,15 +8,15 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Canu.py makes use of the assembly graphs produced by Canu long read assembler.
+graphbin_SPAdes.py makes use of the assembly graphs produced by SPAdes.
 """
 
 import logging
 import time
 
-from graphbin.utils.graphbin_Func import graphbin_main
-from graphbin.utils.parsers import get_initial_bin_count
-from graphbin.utils.parsers.canu_parser import (
+from graphbin.graphbin_Func import graphbin_main
+from graphbin.parsers import get_initial_bin_count
+from graphbin.parsers.spades_parser import (
     get_initial_binning_result,
     parse_graph,
     write_output,
@@ -41,22 +41,24 @@ def run(args):
 
     assembly_graph_file = args.graph
     contigs_file = args.contigs
+    contig_paths = args.paths
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
     delimiter = args.delimiter
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
-    MIN_BIN_COUNT = 10
 
     logger.info(
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
     logger.info(
-        "This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach."
+        "This version of GraphBin makes use of the assembly graph produced by SPAdes which is based on the de Bruijn graph approach."
     )
 
+    logger.info("Input arguments:")
     logger.info(f"Assembly graph file: {assembly_graph_file}")
+    logger.info(f"Contig paths file: {contig_paths}")
     logger.info(f"Existing binning output file: {contig_bins_file}")
     logger.info(f"Final binning output file: {output_path}")
     logger.info(f"Maximum number of iterations: {max_iteration}")
@@ -65,14 +67,16 @@ def run(args):
     logger.info("GraphBin started")
 
     # Get the number of bins from the initial binning result
-    # --------------------------------------------------------
+    # ---------------------------------------------------
 
     n_bins, bins_list = get_initial_bin_count(contig_bins_file, delimiter)
 
     # Get assembly graph
     # --------------------
 
-    assembly_graph, contigs_map, node_count = parse_graph(assembly_graph_file)
+    assembly_graph, contigs_map, contig_names, node_count = parse_graph(
+        assembly_graph_file, contig_paths
+    )
 
     # Get initial binning result
     # ----------------------------
@@ -107,9 +111,9 @@ def run(args):
         prefix,
         final_bins,
         contigs_file,
-        contigs_map.inverse,
+        contig_names.inverse,
         bins,
-        contigs_map,
+        contig_names,
         bins_list,
         delimiter,
         node_count,

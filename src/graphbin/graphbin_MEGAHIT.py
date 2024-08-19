@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_SGA.py: Refined binning of metagenomic contigs using SGA assembly graphs.
+"""graphbin_MEGAHIT.py: Refined binning of metagenomic contigs using MEGAHIT assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,16 +8,16 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_SGA.py makes use of the assembly graphs produced by SGA (String Graph Assembler).
+graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
 """
 
 import logging
 import time
 
-from graphbin.utils.graphbin_Func import graphbin_main
-from graphbin.utils.parsers import get_initial_bin_count
-from graphbin.utils.parsers.sga_parser import (
-    get_contig_descriptions,
+from graphbin.graphbin_Func import graphbin_main
+from graphbin.parsers import get_initial_bin_count
+from graphbin.parsers.megahit_parser import (
+    get_contig_descriptors,
     get_initial_binning_result,
     parse_graph,
     write_output,
@@ -48,12 +48,13 @@ def run(args):
     delimiter = args.delimiter
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
+    MIN_BIN_COUNT = 10
 
     logger.info(
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
     logger.info(
-        "This version of GraphBin makes use of the assembly graph produced by SGA which is based on the OLC (more recent string graph) approach."
+        "This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach."
     )
 
     logger.info(f"Assembly graph file: {assembly_graph_file}")
@@ -69,21 +70,29 @@ def run(args):
 
     n_bins, bins_list = get_initial_bin_count(contig_bins_file, delimiter)
 
+    # Get original contig IDs
+    # -------------------------------
+
+    original_contigs = get_contig_descriptors(contigs_file)
+
     # Get assembly graph
     # --------------------
 
-    assembly_graph, contigs_map, contig_names, node_count = parse_graph(
-        assembly_graph_file
+    assembly_graph, graph_to_contig_map, contigs_map, node_count = parse_graph(
+        assembly_graph_file, original_contigs
     )
 
     # Get initial binning result
     # ----------------------------
 
     bins = get_initial_binning_result(
-        n_bins, bins_list, contig_bins_file, contigs_map.inverse, delimiter
+        n_bins,
+        bins_list,
+        contig_bins_file,
+        contigs_map.inverse,
+        graph_to_contig_map.inverse,
+        delimiter,
     )
-
-    contig_descriptions = get_contig_descriptions(contigs_file)
 
     # Run GraphBin logic
     # -------------------------------------
@@ -111,15 +120,14 @@ def run(args):
         prefix,
         final_bins,
         contigs_file,
-        contig_names.inverse,
+        graph_to_contig_map,
         bins,
-        contig_names,
+        contigs_map,
         bins_list,
         delimiter,
         node_count,
         remove_labels,
         non_isolated,
-        contig_descriptions,
     )
 
 

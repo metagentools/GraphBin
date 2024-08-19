@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_Miniasm.py: Refined binning of metagenomic contigs using Miniasm assembly graphs.
+"""graphbin_Canu.py: Refined binning of metagenomic contigs using Canu assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,15 +8,15 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_Miniasm.py makes use of the assembly graphs produced by Miniasm long read assembler.
+graphbin_Canu.py makes use of the assembly graphs produced by Canu long read assembler.
 """
 
 import logging
 import time
 
-from graphbin.utils.graphbin_Func import graphbin_main
-from graphbin.utils.parsers import get_initial_bin_count
-from graphbin.utils.parsers.miniasm_parser import (
+from graphbin.graphbin_Func import graphbin_main
+from graphbin.parsers import get_initial_bin_count
+from graphbin.parsers.canu_parser import (
     get_initial_binning_result,
     parse_graph,
     write_output,
@@ -53,7 +53,7 @@ def run(args):
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
     logger.info(
-        "This version of GraphBin makes use of the assembly graph produced by Miniasm."
+        "This version of GraphBin makes use of the assembly graph produced by Canu which is a long reads assembler based on the OLC approach."
     )
 
     logger.info(f"Assembly graph file: {assembly_graph_file}")
@@ -107,8 +107,9 @@ def run(args):
         prefix,
         final_bins,
         contigs_file,
-        contigs_map,
+        contigs_map.inverse,
         bins,
+        contigs_map,
         bins_list,
         delimiter,
         node_count,

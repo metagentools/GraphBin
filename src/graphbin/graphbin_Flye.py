@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-"""graphbin_MEGAHIT.py: Refined binning of metagenomic contigs using MEGAHIT assembly graphs.
+"""graphbin_Flye.py: Refined binning of metagenomic contigs using Flye assembly graphs.
 
 GraphBin is a metagenomic contig binning tool that makes use of the contig 
 connectivity information from the assembly graph to bin contigs. It utilizes 
@@ -8,16 +8,15 @@ the binning result of an existing binning tool and a label propagation algorithm
 to correct mis-binned contigs and predict the labels of contigs which are 
 discarded due to short length.
 
-graphbin_MEGAHIT.py makes use of the assembly graphs produced by MEGAHIT assembler.
+graphbin_Flye.py makes use of the assembly graphs produced by Flye long read assembler.
 """
 
 import logging
 import time
 
-from graphbin.utils.graphbin_Func import graphbin_main
-from graphbin.utils.parsers import get_initial_bin_count
-from graphbin.utils.parsers.megahit_parser import (
-    get_contig_descriptors,
+from graphbin.graphbin_Func import graphbin_main
+from graphbin.parsers import get_initial_bin_count
+from graphbin.parsers.flye_parser import (
     get_initial_binning_result,
     parse_graph,
     write_output,
@@ -42,23 +41,24 @@ def run(args):
 
     assembly_graph_file = args.graph
     contigs_file = args.contigs
+    contig_paths = args.paths
     contig_bins_file = args.binned
     output_path = args.output
     prefix = args.prefix
     delimiter = args.delimiter
     max_iteration = args.max_iteration
     diff_threshold = args.diff_threshold
-    MIN_BIN_COUNT = 10
 
     logger.info(
         "Welcome to GraphBin: Refined Binning of Metagenomic Contigs using Assembly Graphs."
     )
     logger.info(
-        "This version of GraphBin makes use of the assembly graph produced by MEGAHIT which is based on the de Bruijn graph approach."
+        "This version of GraphBin makes use of the assembly graph produced by Flye which is a long reads assembler based on the de Bruijn graph approach."
     )
 
     logger.info(f"Assembly graph file: {assembly_graph_file}")
     logger.info(f"Existing binning output file: {contig_bins_file}")
+    logger.info(f"Contig paths file: {contig_paths}")
     logger.info(f"Final binning output file: {output_path}")
     logger.info(f"Maximum number of iterations: {max_iteration}")
     logger.info(f"Difference threshold: {diff_threshold}")
@@ -70,28 +70,18 @@ def run(args):
 
     n_bins, bins_list = get_initial_bin_count(contig_bins_file, delimiter)
 
-    # Get original contig IDs
-    # -------------------------------
-
-    original_contigs = get_contig_descriptors(contigs_file)
-
     # Get assembly graph
     # --------------------
 
-    assembly_graph, graph_to_contig_map, contigs_map, node_count = parse_graph(
-        assembly_graph_file, original_contigs
+    assembly_graph, contig_names, node_count = parse_graph(
+        assembly_graph_file, contig_paths
     )
 
     # Get initial binning result
     # ----------------------------
 
     bins = get_initial_binning_result(
-        n_bins,
-        bins_list,
-        contig_bins_file,
-        contigs_map.inverse,
-        graph_to_contig_map.inverse,
-        delimiter,
+        n_bins, bins_list, contig_bins_file, contig_names.inverse, delimiter
     )
 
     # Run GraphBin logic
@@ -120,15 +110,16 @@ def run(args):
         prefix,
         final_bins,
         contigs_file,
-        graph_to_contig_map,
+        contig_names.inverse,
         bins,
-        contigs_map,
+        contig_names,
         bins_list,
         delimiter,
         node_count,
         remove_labels,
         non_isolated,
     )
+    logger.info("Writing the Final Binning result to file")
 
 
 def main(args):
